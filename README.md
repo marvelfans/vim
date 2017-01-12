@@ -4,9 +4,8 @@
 1. 安装方法，尽可能vim版本>=7.4，有些插件需要在7.4以上版本才能有效.   
 2. linux, unix可以直接使用, windows和cygwin可能需要做些小小的修改.   
 3. 包含的插件功能:  
-> 界面美观  
-> NERDTree目录树  
-> Tlist实时标签  
-> bufExplorer缓冲区, 快速切换文件  
-> 强大的补全功能  
->
+>界面美观  
+>NERDTree目录树  
+>Tlist实时标签  
+>bufExplorer缓冲区, 快速切换文件  
+>强大的补全功能  
