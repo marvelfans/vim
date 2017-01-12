@@ -1,0 +1,988 @@
+" Environment {
+    " Identify  platform {
+        silent function! OSX()
+            return  has('macunix')
+        endfunction
+        silent function! LINUX()
+            return has('unix') && !has('maxunix') && !has('win32unix')
+        endfunction
+        silent function! WINDOWS()
+            return (has('win32') || has('win64'))
+        endfunction
+    " }
+    " BASIC {
+        set nocompatible
+        if !WINDOWS()
+            set shell=/bin/sh
+        endif
+    " }
+    " Windows Compatible {
+        " On Windows, also use .vim instead of vimfiles; this makes
+        " synchronization across  (heterogeneous) systems easier.
+        if WINDOWS()
+            set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after,$VIM/.vim/
+        endif
+    " }
+    " Windows Garbled {
+        set encoding=utf-8
+        set termencoding=utf-8
+        set fileencoding=utf-8
+        set fileencodings=ucs-bom,utf-8,chinese,cp930
+        " vim 提示信息乱码
+        if has('gui_running')
+            language message ZH_CH.UTF-8
+            set encoding=chinese
+            source $VIMRUNTIME/delmenu.vim
+            source $VIMRUNTIME/menu.vim
+        endif
+    " }
+
+
+    " Arrows Key Fix {
+        " https://github.com/spf13/spf13-vim/issures/780
+        if &term[:4] == 'xterm' || &term[:5] == 'screen' || &term[:3] == 'rxvt'
+            inoremap <silent> <C-[>OC <RIGHT>
+        endif
+    " }
+" }
+
+" USE bundle config {
+    if LINUX() || OSX()
+        if filereadable(expand("~/.vimrc.bundles"))
+            source ~/.vimrc.bundles
+        endif
+    else
+        if filewritable(expand("$VIM/.vimrc.bundles"))
+            source $VIM/.vimrc.bundles
+        endif
+    endif
+" }
+
+" General  {
+    set background=dark
+    function! ToggleBG()
+        let s:tbg = &background
+        if s:tbg == "dark"
+            set background=light
+        else
+            set background=dark
+        endif
+    endfunction
+    noremap <leader>bg :call ToggleBG()<CR>
+
+    filetype plugin indent on
+    syntax on
+    " gui模式下使用鼠标,非gui不使用鼠标方便复制
+    if has('gui_running')
+        set mouse=a
+    endif
+    set mousehide
+    set mouse=c     " 设置鼠标可用
+    scriptencoding utf-8
+
+    " 不要提示音 和 闪烁
+    set vb t_vb=
+
+    " set autowrite
+    set shortmess+=filmnrxoOtT
+    set viewoptions=folds,options,cursor,unix,slash
+    set virtualedit=onemore
+    set history=1000
+    set spell
+    set hidden
+    set iskeyword-=.
+    set iskeyword-=#
+    set iskeyword-=-
+    set clipboard+=unnamed
+    set confirm   " 在处理只读 未保存文件时，弹出确认
+
+    " Setting up the directories {
+        " 不要备份文件, 备份 set backup
+        set nobackup
+        if has('persistent_undo')
+            set undofile
+            set undolevels=1000
+            set undoreload=10000
+        endif
+    " }
+" }
+
+" Vim UI {
+    let g:Solarized_path="~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"
+    if filereadable(expand(g:Solarized_path))
+        let g:solarized_termcolors=256
+        let g:solarized_termtrans=1
+        let g:solarized_contrast="normal"
+        let g:solarized_visibility="normal"
+        color solarized
+    endif
+
+    set tabpagemax=15
+    set showmode
+
+    set cursorline
+    set cursorcolumn
+
+    highlight clear SignColumn
+    highlight clear LineNr
+
+    if has('cmdline_info')
+        set ruler
+        set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
+        set showcmd
+    endif
+
+    if has('statusline')
+        set laststatus=2
+
+        set statusline=%<%F 
+        set statusline+=%w%h%m%r 
+
+        set statusline+=\ [%{&ff}/%Y]
+        set statusline+=\ [%{getcwd()}]
+        set statusline+=\ [%{strftime(\"%d/%m/%Y\ -\ %H:%M\")}]
+        set statusline+=%=%-14.(%l,%c%V%)\ %p%%
+    endif
+
+    set backspace=indent,eol,start
+    set linespace=0
+    set number
+    set showmatch
+    set incsearch
+    set hlsearch
+    set winminheight=0
+    set ignorecase
+    set smartcase
+    set wildmenu
+    set wildmode=list:longest,full
+    set whichwrap=b,s,h,l,<,>,[,]
+    set scrolljump=5
+    set scrolloff=3
+    set foldenable
+    set list
+    " 设置tab和空格样式
+    set lcs=tab:\|\ ,nbsp:%,trail:-
+    " 设定行首tab为灰色
+    highlight LeaderTab guifg=#666666
+    " 匹配行首tab
+    match LeaderTab /^\t/
+
+    " 如果是gui方式 设置字体和工具栏菜单栏
+    if has("gui_running")
+        set guifont=Courier_new:h14
+        " gui模式开启最大化
+        au GUIEnter * simalt ~x
+        if !WINDOWS()
+            set transparency=30 " 透明度设置
+        endif
+        if (OSX() || LINUX())
+            set guioptions+=T
+            set guioptions+=m
+        else
+            set go-=menu
+            set go+=Tools
+        endif
+    endif
+" }
+
+" Formatting {
+    set nowrap
+    set autoindent
+    set shiftwidth=4
+    set expandtab
+    set tabstop=4
+    set softtabstop=4
+    set nojoinspaces
+    set splitright
+    set splitbelow
+    autocmd FileType c,cpp,java,go,php,javascript,,puppet,python,rust,twig,xml,yml,perl,sql autocmd BufWritePre <buffer> if !exists('g:spf13_keep_trailing_whitespace') | call StripTrailingWhitespace() | endif
+    autocmd BufNewFile,BufRead *.html.twig set filetype=html.twig
+    autocmd FileType haskell,puppet,ruby,yml setlocal expandtab shiftwidth=2 softtabstop=2
+    autocmd BufNewFile,BufRead *.coffee set filetype=coffee
+" }
+
+" Key (re)Mappings {
+    if !exists('g:zjz_leader')
+        let mapleader = ','
+    else
+        let mapleader=g:zjz_leader
+    endif
+
+    if !exists('g:zjz_no_easyWindows')
+        map <C-J> <C-W>j<C-W>
+        map <C-L> <C-W>l<C-W>
+        map <C-H> <C-W>h<C-W>
+        map <C-K> <C-W>k<C-W>
+    endif
+
+    noremap j gj
+    noremap k gk
+
+    vnoremap < <gv
+    vnoremap > >gv
+
+    vnoremap . :normal .<CR>
+
+    nmap <Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr . "[\t"<CR>
+
+    nnoremap <slient> <leader>q gwip
+
+    map <slient> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
+
+    " Code folding options
+    noremap <leader>f0 :set foldlevel=0<CR>
+    noremap <leader>f1 :set foldlevel=1<CR>
+    noremap <leader>f2 :set foldlevel=2<CR>
+    noremap <leader>f3 :set foldlevel=3<CR>
+    noremap <leader>f4 :set foldlevel=4<CR>
+    noremap <leader>f5 :set foldlevel=5<CR>
+    noremap <leader>f6 :set foldlevel=6<CR>
+    noremap <leader>f7 :set foldlevel=7<CR>
+    noremap <leader>f8 :set foldlevel=8<CR>
+    noremap <leader>f9 :set foldlevel=9<CR>
+
+    " key mappings of F2-F12 {
+        " <F3>打开当前路径目录.
+        nmap        <F3>    <ESC>:vi ./<cr>
+        " <F2>开启列可视模式
+        nmap        <F2>    <ESC><C-v>
+        " <F5>打开所有折叠 F6关闭所有折叠
+        noremap     <F5>    zR
+        noremap     <F6>    zM
+        " <F7>快速缓冲区交换文件. 
+        noremap     <F7>    :vi #<cr>
+        " <F8>打开当前缓冲区所有文件，快速选择缓冲区文件
+        if v:version >= 704
+            noremap     <F8>    :BufExplorer<cr> 
+        endif
+        " <F9>快速插入desc
+        map <F9> O/*<CR>@brief: <CR>@date:[<Esc>:read !date<CR>kJ$a]<CR>@author:zjz<CR>@param: <CR>@return: <CR><tab>*/<ESC><s-i><backspace><ESC> 
+        " <F10>排版
+        noremap     <F10>   <ESC>gg=G<ESC>
+        " 有的文件对高亮不支持，手动打开
+        noremap     <F12>   <ESC>:set syntax=on<cr>
+    " }
+    " 清楚末尾空格
+    noremap cl  :%s/\s\+$//<cr>
+    " 快速移动到行头行尾
+    noremap     A       ^
+    noremap     E       $
+    " 粘贴
+    nmap    p       <s-p>
+    " 强制退出
+    nmap    q       <Esc>:q!<cr>
+    " 移动窗口
+    nmap    <tab>   <C-w><C-w>
+    " ` 保存，这个键发现挺方便也没其他用途
+    noremap     `       <Esc>:w!<cr>
+    " 上下翻页
+    noremap     f       <C-d>
+    noremap     F       <C-u>
+    " 用分号可以快速输入冒号，不用每次都shift
+    noremap     ;       :
+    " 快速回到上次插入位置
+    noremap     '   '^
+    "
+" }
+
+" Plugins {
+
+    " miniBufexplorer { 
+        if exists("g:Use_MiniBufExplorer")
+            let g:miniBufExplMapWindowNavArrows = 1  
+            let g:miniBufExplMapWindowNavVim = 1  
+            let g:miniBufExplMapCTabSwitchWindows = 1  
+            " let g:miniBufExplMapCTabSwitchBufs = 1   
+            let g:miniBufExplModSelTarget = 1  
+
+            "解决FileExplorer窗口变小问题  
+            let g:miniBufExplForceSyntaxEnable = 1  
+            let g:miniBufExplorerMoreThanOne=2 
+        endif
+    " }
+
+    " vim-indent-guides { 显示缩进
+        let g:Indent_guides = "~/.vim/bundle/vim-indent-guides/"
+        " if isdirectory(expand(g:Indent_guides))
+        "     " 0 自定义  1 默认
+        "     let g:indent_guides_auto_colors = 1
+        "     let g:indent_guides_auto_colors = 1
+        "     let g:indent_guides_start_level = 2
+        "     let g:indent_guides_guide_size = 1
+        "     let g:indent_guides_enable_on_vim_startup = 1
+        "     " 取消注释即可显示
+        "     autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
+        "     autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
+        "     hi IndentGuidesOdd guibg=red ctermbg=3
+        "     hi IndentGuidesEven guibg=green ctermbg=4
+        " endif
+    " }
+
+    " 对于大文件，显示很别扭，目前不用
+    " WinManager {
+        " let g:winManagerWindowLayout = "BufExplorer,FileExplorer|TagList"
+        " let g:winManagerWidth = 30
+        " let g:defaultExplorer = 0
+        " map wm :WMToggle<cr>
+        " map <c-w><c-t> :WMToggle<cr>
+    " }
+
+    " Ctags {
+        set tags=./tags;/,~/.vimtags,$VIM/vim74/,tags
+
+        let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
+        if gitroot != ''
+            let &tags = &tags . ',' . gitroot . '/.git/tags'
+        endif
+    " }
+
+    " SnipMate {
+        " Setting the author var
+        " If forking, please overwrite in your .vimrc.local file
+        " let g:snips_author = 'Steve Francia <steve.francia@gmail.com>'
+            let g:snips_author = 'zjz <314956355@qq.com>'
+        " }
+
+    " NerdTree {
+        let g:NERDTree_path = "~/.vim/bundle/nerdtree"
+        if isdirectory(expand(g:NERDTree_path))
+            " let NERDTreeShowBookmarks=1
+            let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
+            let NERDTreeChDirMode=0
+            " let NERDTreeQuitOnOpen=1 " 打开文件后关闭buffer
+            let NERDTreeMouseMode=2
+            let NERDTreeShowHidden=1
+            let NERDTreeKeepTreeInNewTab=1
+            let g:nerdtree_tabs_open_on_gui_startup=0
+            let g:NERDTreeWinPos="left"
+            let g:NERDTreeWinSize=25
+            let NERDTreeAutoDeleteBuffer=1
+            let NERDTreeMinimalUI=1
+            " vim 开启时 自动打开nerdtree
+            " 并且鼠标停留在文件编辑区
+            if has('gui_running')
+                autocmd VimEnter * NERDTree
+                wincmd w
+                autocmd VimEnter * wincmd w
+            endif
+
+            map <Leader>e <plug>NERDTreeTabsToggle<CR>
+        endif
+    " }
+
+    " Session List {
+        let g:Session_path = "~/.vim/bundle/sessionman.vim/""
+        set sessionoptions=blank,buffers,curdir,folds,tabpages,winsize
+        if isdirectory(expand(g:Session_path))
+            nmap <leader>sl :SessionList<CR>
+            nmap <leader>ss :SessionSave<CR>
+            nmap <leader>sc :SessionClose<CR>
+        endif
+    " }
+
+    " JSON {
+    " 并且鼠标停留在文件编辑区
+        nmap <leader>jt <Esc>:%!python -m json.tool<CR><Esc>:set filetype=json<CR>
+        let g:vim_json_syntax_conceal = 0
+    " }
+
+    " PyMode {
+        " Disable if python support not present
+        if !has('python') && !has('python3')
+            let g:pymode = 0
+        endif
+
+        let g:Python_mode_path = "~/.vim/bundle/python-mode/""
+        if isdirectory(expand(g:Python_mode_path))
+            let g:pymode_lint_checkers = ['pyflakes']
+            let g:pymode_trim_whitespaces = 0
+            let g:pymode_options = 0
+            let g:pymode_rope = 0
+        endif
+    " }
+
+    " ctrlp {
+        let g:Ctrlp_path = "~/.vim/bundle/ctrlp.vim/""
+        if isdirectory(expand(g:Ctrlp_path))
+            let g:ctrlp_working_path_mode = 'ra'
+            nnoremap <silent> <D-t> :CtrlP<CR>
+            nnoremap <silent> <D-r> :CtrlPMRU<CR>
+            let g:ctrlp_custom_ignore = {
+                \ 'dir':  '\.git$\|\.hg$\|\.svn$',
+                \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
+        
+            if executable('ag')
+                let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
+            elseif executable('ack-grep')
+                let s:ctrlp_fallback = 'ack-grep %s --nocolor -f'
+            elseif executable('ack')
+                let s:ctrlp_fallback = 'ack %s --nocolor -f'
+            " On Windows use "dir" as fallback command.
+            elseif WINDOWS()
+                let s:ctrlp_fallback = 'dir %s /-n /b /s /a-d'
+            else
+                let s:ctrlp_fallback = 'find %s -type f'
+            endif
+            if exists("g:ctrlp_user_command")
+                unlet g:ctrlp_user_command
+            endif
+            let g:ctrlp_user_command = {
+                \ 'types': {
+                    \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
+                    \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+                \ },
+                \ 'fallback': s:ctrlp_fallback
+            \ }
+
+            if WINDOWS()
+                let g:Ctrlp_funky_path = "$VIM/.vim/bundle/ctrlp-funky/"
+            else
+                let g:Ctrlp_funky_path = "~/.vim/bundle/ctrlp-funky/""
+            endif
+            if isdirectory(expand(g:Ctrlp_funky_path))
+                " CtrlP extensions
+                let g:ctrlp_extensions = ['funky']
+
+                "funky
+                nnoremap <Leader>fu :CtrlPFunky<Cr>
+            endif
+        endif
+    "}
+
+    " TagBar || Taglist{
+        " TagBar有一些bug，在开启TagBar时，使用BufExplorer会出现错误
+        " Tlist 窗口切换时，更新有些缓慢
+        let g:Use_Taglist = 1
+
+        let g:Tlist_path = "~/.vim/bundle/taglist.vim/"
+        let g:Tagbar_path = "~/.vim/bundle/tagbar/"
+        if g:Use_Taglist == 1
+            if isdirectory(expand(g:Tlist_path))
+                if has('gui_running')
+                    let g:Tlist_Show_One_File=1 " 只显示当前文件的tag
+                    let g:Tlist_Exit_OnlyWindow=1 " 如果最后只有Taglist窗口,则退出
+                    let g:Tlist_WinWidt=20
+                    let g:Tlist_Use_Right_Window=1
+                    let g:Tlist_Auto_Open=1   " 自动打开
+                    let g:Tlist_Process_File_Always=1 " 始终解析文件
+                else
+                    let Tlist_Show_One_File=1 " 只显示当前文件的tag
+                    let Tlist_Exit_OnlyWindow=1 " 如果最后只有Taglist窗口,则退出
+                    let Tlist_WinWidt=20
+                    let Tlist_Use_Right_Window=1
+                    let Tlist_Auto_Open=1   " 自动打开
+                    let Tlist_Process_File_Always=1 " 始终解析文件
+                endif
+
+
+                nnoremap <silent> <leader>t :Tlist<CR>
+            endif
+        else
+            if isdirectory(expand(g:Tagbar_path))
+                let tagbar_width=30
+                nnoremap <silent> <leader>t :TagbarToggle<CR>
+            endif
+        endif
+    "}
+
+    " Rainbow { 括号颜色
+        let g:Rainbow_path = "~/.vim/bundle/rainbow/""
+        if isdirectory(expand(g:Rainbow_path))
+            let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+        endif
+    "}
+
+    " FIXME: Isn't this for Syntastic to handle?
+    " Haskell post write lint and check with ghcmod
+    " $ `cabal install ghcmod` if missing and ensure
+    " ~/.cabal/bin is in your $PATH.
+    if !executable("ghcmod")
+        autocmd BufWritePost *.hs GhcModCheckAndLintAsync
+    endif
+
+    " UndoTree {
+        let g:UndoTree_path = "~/.vim/bundle/undotree/""
+        if isdirectory(expand(g:UndoTree_path))
+            nnoremap <Leader>u :UndotreeToggle<CR>
+            " If undotree is opened, it is likely one wants to interact with it.
+            let g:undotree_SetFocusWhenToggle=1
+        endif
+    " }
+
+    " Wildfire {
+    let g:wildfire_objects = {
+                \ "*" : ["i'", 'i"', "i)", "i]", "i}", "ip"],
+                \ "html,xml" : ["at"],
+                \ }
+    " }
+
+    " vim-airline {
+        " Set configuration options for the statusline plugin vim-airline.
+        " Use the powerline theme and optionally enable powerline symbols.
+        " To use the symbols , , , , , , and .in the statusline
+        " segments add the following to your .vimrc.before.local file:
+        "   let g:airline_powerline_fonts=1
+        " If the previous symbols do not render for you then install a
+        " powerline enabled font.
+
+        " See `:echo g:airline_theme_map` for some more choices
+        " Default in terminal vim is 'dark'
+        let g:Airline_path = "~/.vim/bundle/vim-airline-themes/""
+        if isdirectory(expand("~/.vim/bundle/vim-airline-themes/"))
+            if !exists('g:airline_theme')
+                let g:airline_theme = 'solarized'
+            endif
+            if !exists('g:airline_powerline_fonts')
+                " Use the default set of separators with a few customizations
+                let g:airline_left_sep='›'  " Slightly fancier than '>'
+                let g:airline_right_sep='‹' " Slightly fancier than '<'
+            endif
+        endif
+    " }
+
+    " auto completion {
+        " OmniComplete { 补全
+            if !exists('g:spf13_no_omni_complete')
+                if has("autocmd") && exists("+omnifunc")
+                    autocmd FileType *
+                                \if &omnifunc == "" |
+                                \setlocal omnifunc=syntaxcomplete#Complete |
+                                \endif
+                                \endif
+                endif
+            
+                hi Pmenu guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=Lightgray
+                hi PmenuSbar guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermfg=lightgray cterm=NONE
+                hi PmenuThumb guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermfg=darkcyan cterm=NONE
+            
+                if exists('g:spf13_map_cr_omni_complete')
+                    inoremap <expr> <CR>    pumvisible() ? "\<C-y>" : "\<CR>"
+                endif
+                inoremap <expr> <Down>  pumvisible() ? "\<C-n>" : "\<DOWN>"
+                inoremap <expr> <Up>    pumvisible() ? "\<C-p>" : "\<Up>"
+                inoremap <expr> <C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+                inoremap <expr> <C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+        
+                au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+                set completeopt=menu,preview,longest
+            endif
+        " }
+    
+        " YouCompleteMe {
+            if count(g:zjz_bundle_groups, 'youcompleteme')
+                let g:acp_enableAtStartup = 0
+    
+                " enable completion from tags
+                let g:ycm_collect_identifiers_from_tags_files = 1
+    
+                " remap Ultisnips for compatibility for YCM
+                let g:UltiSnipsExpandTrigger = '<C-j>'
+                let g:UltiSnipsJumpForwardTrigger = '<C-j>'
+                let g:UltiSnipsJumpBackwardTrigger = '<C-k>'
+    
+                " Enable omni completion.
+                autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+                autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+                autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+                autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+                autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+                autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+                autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+    
+                " Haskell post write lint and check with ghcmod
+                " $ `cabal install ghcmod` if missing and ensure
+                " ~/.cabal/bin is in your $PATH.
+                if !executable("ghcmod")
+                    autocmd BufWritePost *.hs GhcModCheckAndLintAsync
+                endif
+    
+                " For snippet_complete marker.
+                if !exists("g:spf13_no_conceal")
+                    if has('conceal')
+                        set conceallevel=2 concealcursor=i
+                    endif
+                endif
+    
+                " Disable the neosnippet preview candidate window
+                " When enabled, there can be too much visual noise
+                " especially when splits are used.
+                set completeopt-=preview
+            endif
+        " }
+    
+        " neocomplete {
+        if exists('g:use_neocomplete')
+            if count(g:zjz_bundle_groups, 'neocomplete')
+                let g:acp_enableAtStartup = 0
+                let g:neocomplete#enable_at_startup = 1
+                let g:neocomplete#enable_smart_case = 1
+                let g:neocomplete#enable_auto_delimiter = 1
+                let g:neocomplete#max_list = 15
+                let g:neocomplete#force_overwrite_completefunc = 1
+    
+    
+                " Define dictionary.
+                let g:neocomplete#sources#dictionary#dictionaries = {
+                            \ 'default' : '',
+                            \ 'vimshell' : $HOME.'/.vimshell_hist',
+                            \ 'scheme' : $HOME.'/.gosh_completions'
+                            \ }
+    
+                " Define keyword.
+                if !exists('g:neocomplete#keyword_patterns')
+                    let g:neocomplete#keyword_patterns = {}
+                endif
+                let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+    
+                " Plugin key-mappings {
+                " These two lines conflict with the default digraph mapping of <C-K>
+                if !exists('g:spf13_no_neosnippet_expand')
+                    imap <C-k> <Plug>(neosnippet_expand_or_jump)
+                    smap <C-k> <Plug>(neosnippet_expand_or_jump)
+                endif
+                if exists('g:spf13_noninvasive_completion')
+                    inoremap <CR> <CR>
+                    " <ESC> takes you out of insert mode
+                    inoremap <expr> <Esc>   pumvisible() ? "\<C-y>\<Esc>" : "\<Esc>"
+                    " <CR> accepts first, then sends the <CR>
+                    inoremap <expr> <CR>    pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+                    " <Down> and <Up> cycle like <Tab> and <S-Tab>
+                    inoremap <expr> <Down>  pumvisible() ? "\<C-n>" : "\<Down>"
+                    inoremap <expr> <Up>    pumvisible() ? "\<C-p>" : "\<Up>"
+                    " Jump up and down the list
+                    inoremap <expr> <C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+                    inoremap <expr> <C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+                else
+                    " <C-k> Complete Snippet
+                    " <C-k> Jump to next snippet point
+                    imap <silent><expr><C-k> neosnippet#expandable() ?
+                                \ "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ?
+                                \ "\<C-e>" : "\<Plug>(neosnippet_expand_or_jump)")
+                    smap <TAB> <Right><Plug>(neosnippet_jump_or_expand)
+    
+                    inoremap <expr><C-g> neocomplete#undo_completion()
+                    inoremap <expr><C-l> neocomplete#complete_common_string()
+                    "inoremap <expr><CR> neocomplete#complete_common_string()
+    
+                    " <CR>: close popup
+                    " <s-CR>: close popup and save indent.
+                    inoremap <expr><s-CR> pumvisible() ? neocomplete#smart_close_popup()."\<CR>" : "\<CR>"
+    
+                    function! CleverCr()
+                        if pumvisible()
+                            if neosnippet#expandable()
+                                let exp = "\<Plug>(neosnippet_expand)"
+                                return exp . neocomplete#smart_close_popup()
+                            else
+                                return neocomplete#smart_close_popup()
+                            endif
+                        else
+                            return "\<CR>"
+                        endif
+                    endfunction
+    
+                    " <CR> close popup and save indent or expand snippet
+                    imap <expr> <CR> CleverCr()
+                    " <C-h>, <BS>: close popup and delete backword char.
+                    inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+                    inoremap <expr><C-y> neocomplete#smart_close_popup()
+                endif
+                " <TAB>: completion.
+                inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+                inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
+    
+                " Courtesy of Matteo Cavalleri
+    
+                function! CleverTab()
+                    if pumvisible()
+                        return "\<C-n>"
+                    endif
+                    let substr = strpart(getline('.'), 0, col('.') - 1)
+                    let substr = matchstr(substr, '[^ \t]*$')
+                    if strlen(substr) == 0
+                        " nothing to match on empty string
+                        return "\<Tab>"
+                    else
+                        " existing text matching
+                        if neosnippet#expandable_or_jumpable()
+                            return "\<Plug>(neosnippet_expand_or_jump)"
+                        else
+                            return neocomplete#start_manual_complete()
+                        endif
+                    endif
+                endfunction
+    
+                imap <expr> <Tab> CleverTab()
+                " }
+    
+                " Enable heavy omni completion.
+                if !exists('g:neocomplete#sources#omni#input_patterns')
+                    let g:neocomplete#sources#omni#input_patterns = {}
+                endif
+                let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+                let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+                let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+                let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+                let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+            endif
+        " }
+        " neocomplcache {
+            elseif count(g:zjz_bundle_groups, 'neocomplcache')
+                let g:acp_enableAtStartup = 0
+                let g:neocomplcache_enable_at_startup = 1
+                let g:neocomplcache_enable_camel_case_completion = 1
+                let g:neocomplcache_enable_smart_case = 1
+                let g:neocomplcache_enable_underbar_completion = 1
+                let g:neocomplcache_enable_auto_delimiter = 1
+                let g:neocomplcache_max_list = 15
+                let g:neocomplcache_force_overwrite_completefunc = 1
+    
+                " Define dictionary.
+                let g:neocomplcache_dictionary_filetype_lists = {
+                            \ 'default' : '',
+                            \ 'vimshell' : $HOME.'/.vimshell_hist',
+                            \ 'scheme' : $HOME.'/.gosh_completions'
+                            \ }
+    
+                " Define keyword.
+                if !exists('g:neocomplcache_keyword_patterns')
+                    let g:neocomplcache_keyword_patterns = {}
+                endif
+                let g:neocomplcache_keyword_patterns._ = '\h\w*'
+    
+                " Plugin key-mappings {
+                    " These two lines conflict with the default digraph mapping of <C-K>
+                    imap <C-k> <Plug>(neosnippet_expand_or_jump)
+                    smap <C-k> <Plug>(neosnippet_expand_or_jump)
+                    if exists('g:spf13_noninvasive_completion')
+                        inoremap <CR> <CR>
+                        " <ESC> takes you out of insert mode
+                        inoremap <expr> <Esc>   pumvisible() ? "\<C-y>\<Esc>" : "\<Esc>"
+                        " <CR> accepts first, then sends the <CR>
+                        inoremap <expr> <CR>    pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+                        " <Down> and <Up> cycle like <Tab> and <S-Tab>
+                        inoremap <expr> <Down>  pumvisible() ? "\<C-n>" : "\<Down>"
+                        inoremap <expr> <Up>    pumvisible() ? "\<C-p>" : "\<Up>"
+                        " Jump up and down the list
+                        inoremap <expr> <C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+                        inoremap <expr> <C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+                    else
+                        imap <silent><expr><C-k> neosnippet#expandable() ?
+                                    \ "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ?
+                                    \ "\<C-e>" : "\<Plug>(neosnippet_expand_or_jump)")
+                        smap <TAB> <Right><Plug>(neosnippet_jump_or_expand)
+    
+                        inoremap <expr><C-g> neocomplcache#undo_completion()
+                        inoremap <expr><C-l> neocomplcache#complete_common_string()
+                        "inoremap <expr><CR> neocomplcache#complete_common_string()
+    
+                        function! CleverCr()
+                            if pumvisible()
+                                if neosnippet#expandable()
+                                    let exp = "\<Plug>(neosnippet_expand)"
+                                    return exp . neocomplcache#close_popup()
+                                else
+                                    return neocomplcache#close_popup()
+                                endif
+                            else
+                                return "\<CR>"
+                            endif
+                        endfunction
+    
+                        " <CR> close popup and save indent or expand snippet
+                        imap <expr> <CR> CleverCr()
+    
+                        " <CR>: close popup
+                        " <s-CR>: close popup and save indent.
+                        inoremap <expr><s-CR> pumvisible() ? neocomplcache#close_popup()."\<CR>" : "\<CR>"
+                        "inoremap <expr><CR> pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+    
+                        " <C-h>, <BS>: close popup and delete backword char.
+                        inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+                        inoremap <expr><C-y> neocomplcache#close_popup()
+                    endif
+                    " <TAB>: completion.
+                    inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+                    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
+                " }
+    
+                " Enable omni completion.
+                autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+                autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+                autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+                autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+                autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+                autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+                autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+    
+                " Enable heavy omni completion.
+                if !exists('g:neocomplcache_omni_patterns')
+                    let g:neocomplcache_omni_patterns = {}
+                endif
+                let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+                let g:neocomplcache_omni_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+                let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+                let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+                let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+                let g:neocomplcache_omni_patterns.go = '\h\w*\.\?'
+        " }
+        " Normal Vim omni-completion {
+        " To disable omni complete, add the following to your .vimrc.before.local file:
+        "   let g:zjz_no_omni_complete = 1
+            elseif !exists('g:zjz_no_omni_complete')
+                " Enable omni-completion.
+                autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+                autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+                autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+                autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+                autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+                autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+                autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+    
+            endif
+        " }
+    
+        " Snippets {
+            if count(g:zjz_bundle_groups, 'neocomplcache') ||
+                        \ count(g:zjz_bundle_groups, 'neocomplete')
+    
+                " Use honza's snippets.
+                let g:snippets_path = '~/.vim/bundle/vim-snippets/snippets'
+                let g:neosnippet#snippets_directory=g:snippets_path
+    
+                " Enable neosnippet snipmate compatibility mode
+                let g:neosnippet#enable_snipmate_compatibility = 1
+    
+                " For snippet_complete marker.
+                if !exists("g:spf13_no_conceal")
+                    if has('conceal')
+                        set conceallevel=2 concealcursor=i
+                    endif
+                endif
+    
+                " Enable neosnippets when using go
+                let g:go_snippet_engine = "neosnippet"
+    
+                " Disable the neosnippet preview candidate window
+                " When enabled, there can be too much visual noise
+                " especially when splits are used.
+                set completeopt-=preview
+            endif
+        " }
+    " }
+            
+" }
+"
+" Functions {
+
+    " Initialize directories {
+    function! InitializeDirectories()
+        let parent = $HOME
+        let prefix = 'vim'
+        let dir_list = {
+                    \ 'backup': 'backupdir',
+                    \ 'views': 'viewdir',
+                    \ 'swap': 'directory' }
+
+        if has('persistent_undo')
+            let dir_list['undo'] = 'undodir'
+        endif
+
+        " To specify a different directory in which to place the vimbackup,
+        " vimviews, vimundo, and vimswap files/directories, add the following to
+        " your .vimrc.before.local file:
+        "   let g:spf13_consolidated_directory = <full path to desired directory>
+        "   eg: let g:spf13_consolidated_directory = $HOME . '/.vim/'
+        if exists('g:spf13_consolidated_directory')
+            let common_dir = g:spf13_consolidated_directory . prefix
+        else
+            let common_dir = parent . '/.' . prefix
+        endif
+
+        for [dirname, settingname] in items(dir_list)
+            let directory = common_dir . dirname . '/'
+            if exists("*mkdir")
+                if !isdirectory(directory)
+                    call mkdir(directory)
+                endif
+            endif
+            if !isdirectory(directory)
+                echo "Warning: Unable to create backup directory: " . directory
+                echo "Try: mkdir -p " . directory
+            else
+                let directory = substitute(directory, " ", "\\\\ ", "g")
+                exec "set " . settingname . "=" . directory
+            endif
+        endfor
+    endfunction
+    call InitializeDirectories()
+    " }
+
+    " Initialize NERDTree as needed {
+    function! NERDTreeInitAsNeeded()
+        redir => bufoutput
+        buffers!
+        redir END
+        let idx = stridx(bufoutput, "NERD_tree")
+        if idx > -1
+            NERDTreeMirror
+            NERDTreeFind
+            wincmd l
+        endif
+    endfunction
+    " }
+
+    " Strip whitespace {
+    function! StripTrailingWhitespace()
+        " Preparation: save last search, and cursor position.
+        let _s=@/
+        let l = line(".")
+        let c = col(".")
+        " do the business:
+        %s/\s\+$//e
+        " clean up: restore previous search history, and cursor position
+        let @/=_s
+        call cursor(l, c)
+    endfunction
+    " }
+
+    " Shell command {
+    function! s:RunShellCommand(cmdline)
+        botright new
+
+        setlocal buftype=nofile
+        setlocal bufhidden=delete
+        setlocal nobuflisted
+        setlocal noswapfile
+        setlocal nowrap
+        setlocal filetype=shell
+        setlocal syntax=shell
+
+        call setline(1, a:cmdline)
+        call setline(2, substitute(a:cmdline, '.', '=', 'g'))
+        execute 'silent $read !' . escape(a:cmdline, '%#')
+        setlocal nomodifiable
+        1
+    endfunction
+
+    command! -complete=file -nargs=+ Shell call s:RunShellCommand(<q-args>)
+    " e.g. Grep current file for <search_term>: Shell grep -Hn <search_term> %
+    " }
+
+    function! s:IsSpf13Fork()
+        let s:is_fork = 0
+        let s:fork_files = ["~/.vimrc.fork", "~/.vimrc.before.fork", "~/.vimrc.bundles.fork"]
+        for fork_file in s:fork_files
+            if filereadable(expand(fork_file, ":p"))
+                let s:is_fork = 1
+                break
+            endif
+        endfor
+        return s:is_fork
+    endfunction
+
+    function! s:ExpandFilenameAndExecute(command, file)
+        execute a:command . " " . expand(a:file, ":p")
+    endfunction
+
+" }
