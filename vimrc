@@ -28,7 +28,7 @@
         set fileencoding=utf-8
         set fileencodings=ucs-bom,utf-8,chinese,cp930
         " vim 提示信息乱码
-        if has('gui_running')
+        if (has('gui_running') && WINDOWS())
             language message ZH_CH.UTF-8
             set encoding=chinese
             source $VIMRUNTIME/delmenu.vim
@@ -153,8 +153,8 @@
 
     " 如果是gui方式 设置字体和工具栏菜单栏
     if has("gui_running")
-        set guifont=Courier_new:h14
-        if (OSX() || LINUX())
+        " set guifont=Courier_new:h14
+        if OSX()
             set transparency=5 " 透明度设置
             set guioptions+=T
             set guioptions+=m

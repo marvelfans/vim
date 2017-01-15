@@ -55,7 +55,8 @@
             Bundle 'vim-scripts/taglist.vim'
         endif
         if v:version >= 704
-            Bundle 'jianzarotta/bufexplorer'
+            " Bundle 'jianzarotta/bufexplorer'
+            Bundle 'corntrace/bufexplorer'
         endif
         Bundle 'scrooloose/syntastic'
         Bundle 'jiangmiao/auto-pairs'
