@@ -44,14 +44,8 @@
 " }
 
 " 使用bundles配置文件 {
-    if LINUX() || OSX()
-        if filereadable(expand("~/.vimrc.bundles"))
-            source ~/.vimrc.bundles
-        endif
-    else
-        if filewritable(expand("$VIM/.vimrc.bundles"))
-            source $VIM/.vimrc.bundles
-        endif
+    if filewritable(expand("$HOME/.vimrc.bundles"))
+        source $HOME/.vimrc.bundles
     endif
 " }
 
@@ -73,25 +67,37 @@
     set mouse=a     " 设置鼠标可用
     scriptencoding utf-8
 
-    
-    set vb t_vb=   " 不要提示音 和 闪烁 
+    " 复制粘贴设置
+    if has('clipboard')
+        " 如果允许，使用 + register 来复制粘贴
+        if has('unnamedplus')
+            set clipboard=unnamed,unnamedplus
+        else         " On mac and Windows, use * register for copy-paste
+            " 在mac 和 windows 使用 * 寄存器来复制粘贴
+            set clipboard=unnamed
+        endif
+    endif
 
-    
+
+    set vb t_vb=   " 不要提示音 和 闪烁
+
+    " 避免自动切换到当前文件的目录
+    autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
+
     set shortmess+=filmnrxoOtT          " 自动保存
     set viewoptions=folds,options,cursor,unix,slash
     set virtualedit=onemore
     set history=1000
-    " set spell   " 拼写检查 会有下划线
+    set spell   " 拼写检查 会有下划线
     set iskeyword-=.
     set iskeyword-=#
     set iskeyword-=-
-    set clipboard+=unnamed
     set confirm   " 在处理只读 未保存文件时，弹出确认
-    set nobackup  " 不要配置文件
+    set nobackup  " 不要备份文件
 " }
 
 " Vim UI {
-    let g:Solarized_path="~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"
+    let g:Solarized_path="$HOME/.vim/bundle/vim-colors-solarized/colors/solarized.vim"
     if filereadable(expand(g:Solarized_path))
         let g:solarized_termcolors=256
         let g:solarized_termtrans=1
@@ -118,8 +124,8 @@
     if has('statusline')
         set laststatus=2
 
-        set statusline=%<%F 
-        set statusline+=%w%h%m%r 
+        set statusline=%<%F
+        set statusline+=%w%h%m%r
 
         set statusline+=\ [%{&ff}/%Y]
         set statusline+=\ [%{getcwd()}]
@@ -142,14 +148,8 @@
     set scrolljump=5
     set scrolloff=3
     set foldenable
-    set nolist
-    " 用竖线表示缩进，感觉用处不大
-    " 设置tab和空格样式
-    " set lcs=tab:\|\ ,nbsp:%,trail:-
-    " 设定行首tab为灰色
-    " highlight LeaderTab guifg=#666666
-    " 匹配行首tab
-    " match LeaderTab /^\t/
+    set list
+    set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespace
 
     " 如果是gui方式 设置字体和工具栏菜单栏
     if has("gui_running")
@@ -182,11 +182,11 @@
     " 设置leader键
     let mapleader = ','
     " 移动窗口
-    map <C-J> <C-W>j<C-W>
-    map <C-L> <C-W>l<C-W>
-    map <C-H> <C-W>h<C-W>
-    map <C-K> <C-W>k<C-W>
-    map    <tab>   <C-W>w
+    map <C-J> <C-W>j
+    map <C-L> <C-W>l
+    map <C-H> <C-W>h
+    map <C-K> <C-W>k
+    " map    <tab>   <C-W>w
     " 搜索关键词
     nmap <Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr . "[\t"<CR>
     " 显示屏幕 隐藏所有程序
@@ -201,14 +201,14 @@
         " <F5>打开所有折叠 F6关闭所有折叠
         noremap     <F5>    zR
         noremap     <F6>    zM
-        " <F7>快速缓冲区交换文件. 
+        " <F7>快速缓冲区交换文件.
         noremap     <F7>    :vi #<cr>
         " <F8>打开当前缓冲区所有文件，快速选择缓冲区文件
         if v:version >= 704
-            noremap     <F8>    :BufExplorer<cr> 
+            noremap     <F8>    :BufExplorer<cr>
         endif
         " <F9>快速插入desc
-        map <F9> O/*<CR>@brief: <CR>@date:[<Esc>:read !date<CR>kJ$a]<CR>@author:zjz<CR>@param: <CR>@return: <CR><tab>*/<ESC><s-i><backspace><ESC> 
+        map <F9> O/*<CR>@brief: <CR>@date:[<Esc>:read !date<CR>kJ$a]<CR>@author:zjz<CR>@param: <CR>@return: <CR><tab>*/<ESC><s-i><backspace><ESC>
         " <F10>排版
         noremap     <F10>   <ESC>gg=G<ESC>
         " 有的文件对高亮不支持，手动打开
@@ -248,51 +248,41 @@
 
     " NerdTree {
         " 显示目录树
-        let g:NERDTree_path = "~/.vim/bundle/nerdtree"
+        let g:NERDTree_path = "$HOME/.vim/bundle/nerdtree"
         if isdirectory(expand(g:NERDTree_path))
             " let NERDTreeShowBookmarks=1
             let NERDTreeIgnore=['\.py[cd]$', '\~$', '\.swo$', '\.swp$', '^\.git$', '^\.hg$', '^\.svn$', '\.bzr$']
             let NERDTreeChDirMode=0
-            " let NERDTreeQuitOnOpen=1 " 打开文件后关闭buffer
-            let NERDTreeMouseMode=2
-            let NERDTreeShowHidden=1
-            let NERDTreeKeepTreeInNewTab=1
+            " let g:NERDTreeQuitOnOpen=1 " 打开文件后关闭buffer
+            let g:NERDTreeMouseMode=2
+            let g:NERDTreeShowHidden=1
+            let g:NERDTreeKeepTreeInNewTab=1
             let g:nerdtree_tabs_open_on_gui_startup=0
             let g:NERDTreeWinPos="left"
             let g:NERDTreeWinSize=25
-            let NERDTreeAutoDeleteBuffer=1
-            let NERDTreeMinimalUI=1
+            let g:NERDTreeAutoDeleteBuffer=1
+            let g:NERDTreeMinimalUI=1
+            let g:NERDTreeDirArrows=0
             " vim 开启时 自动打开nerdtree
             " 并且鼠标停留在文件编辑区
-            " if has('gui_running')
-                autocmd VimEnter * NERDTree
-                wincmd w
-                autocmd VimEnter * wincmd w
-            " endif
+            autocmd VimEnter * NERDTree
+            wincmd l
+            autocmd VimEnter * wincmd l
 
-            map <Leader>e :NERDTreeToggle<CR>
+            map <Leader>e :NERDTreeToggle()<CR>
         endif
     " }
 
     " Taglist{
         " 显示Tag
-        let g:Tlist_path = "~/.vim/bundle/taglist.vim/"
+        let g:Tlist_path = "$HOME/.vim/bundle/taglist.vim/"
         if isdirectory(expand(g:Tlist_path))
-            if has('gui_running')
-                let g:Tlist_Show_One_File=1     " 只显示当前文件的tag
-                let g:Tlist_Exit_OnlyWindow=1   " 如果最后只有Taglist窗口,则退出
-                let g:Tlist_WinWidt=20          " 宽度
-                let g:Tlist_Use_Right_Window=1
-                " let g:Tlist_Auto_Open=1         " 自动打开
-                let g:Tlist_Process_File_Always=1 " 始终解析文件
-            else
-                let Tlist_Show_One_File=1       " 只显示当前文件的tag
-                let Tlist_Exit_OnlyWindow=1     " 如果最后只有Taglist窗口,则退出
-                let Tlist_WinWidt=20
-                let Tlist_Use_Right_Window=1
-                " let Tlist_Auto_Open=1           " 自动打开
-                let Tlist_Process_File_Always=1 " 始终解析文件
-            endif
+            let g:Tlist_Show_One_File=1     " 只显示当前文件的tag
+            let g:Tlist_Exit_OnlyWindow=1   " 如果最后只有Taglist窗口,则退出
+            let g:Tlist_WinWidt=20          " 宽度
+            let g:Tlist_Use_Right_Window=1  " 在右侧打开窗口
+            " let g:Tlist_Auto_Open=1         " 自动打开
+            let g:Tlist_Process_File_Always=1 " 始终解析文件
 
             nnoremap <silent> <leader>t :Tlist<CR>
         endif
@@ -300,7 +290,7 @@
 
     " vim-airline {
         " 下边栏的颜色样式
-        if isdirectory(expand("~/.vim/bundle/vim-airline-themes/"))
+        if isdirectory(expand("$HOME/.vim/bundle/vim-airline-themes/"))
             if !exists('g:airline_theme')
                 let g:airline_theme = 'solarized'
             endif
@@ -308,6 +298,30 @@
                 " Use the default set of separators with a few customizations
                 let g:airline_left_sep='›'  " Slightly fancier than '>'
                 let g:airline_right_sep='‹' " Slightly fancier than '<'
+                let g:airline_theme='dark'  " 设置颜色
+                " 设置一些颜色 不同模式 不同颜色
+                let g:airline_theme_patch_func = 'AirlineThemePatch'
+                function! AirlineThemePatch(palette)
+                  if g:airline_theme == 'badwolf'
+                    for colors in values(a:palette.inactive)
+                      let colors[3] = 245
+                    endfor
+                  endif
+                endfunction
+                " 模式名字
+                let g:airline_mode_map = {
+                    \ '__' : '-',
+                    \ 'n'  : 'N',
+                    \ 'i'  : 'I',
+                    \ 'R'  : 'R',
+                    \ 'c'  : 'C',
+                    \ 'v'  : 'V',
+                    \ 'V'  : 'V',
+                    \ '' : 'V',
+                    \ 's'  : 'S',
+                    \ 'S'  : 'S',
+                    \ '' : 'S',
+                    \ }
             endif
         endif
     " }
@@ -320,8 +334,60 @@
         let g:syntastic_enable_highlighting=1
     " }
 
+    " bufferline {
+        let g:bufferline_active_buffer_left = '['
+        let g:bufferline_active_buffer_right = ']'
+        let g:bufferline_modified = '+'
+        let g:bufferline_show_bufnr = 1
+        let g:bufferline_fname_mod = ':t'
+        let g:bufferline_active_highlight = 'StatusLine'
+        let g:bufferline_solo_highlight = 'StatusLine'
+        let g:bufferline_echo = 1
+        """""""
+        if isdirectory(expand("$HOME/.vim/bundle/vim-bufferline/"))
+            " 切换缓冲区 {
+                " 正常模式 {
+                    noremap <silent><leader>1 :b 1<cr>
+                    noremap <silent><leader>2 :b 2<cr>
+                    noremap <silent><leader>3 :b 3<cr>
+                    noremap <silent><leader>4 :b 4<cr>
+                    noremap <silent><leader>5 :b 5<cr>
+                    noremap <silent><leader>6 :b 6<cr>
+                    noremap <silent><leader>7 :b 7<cr>
+                    noremap <silent><leader>8 :b 8<cr>
+                    noremap <silent><leader>9 :b 9<cr>
+                    noremap <silent><leader><Tab> :bn<cr>
+                " }
+                " 插入模式 {
+                    inoremap <silent><leader>1 <ESC>:b 1<cr>
+                    inoremap <silent><leader>2 <ESC>:b 2<cr>
+                    inoremap <silent><leader>3 <ESC>:b 3<cr>
+                    inoremap <silent><leader>4 <ESC>:b 4<cr>
+                    inoremap <silent><leader>5 <ESC>:b 5<cr>
+                    inoremap <silent><leader>6 <ESC>:b 6<cr>
+                    inoremap <silent><leader>7 <ESC>:b 7<cr>
+                    inoremap <silent><leader>8 <ESC>:b 8<cr>
+                    inoremap <silent><leader>9 <ESC>:b 9<cr>
+                    inoremap <silent><leader><Tab> <ESC>:bn<cr>
+                " }
+                " 可视模式 {
+                    vnoremap <silent><leader>1 <ESC><ESC>:b 1<cr>
+                    vnoremap <silent><leader>2 <ESC><ESC>:b 2<cr>
+                    vnoremap <silent><leader>3 <ESC><ESC>:b 3<cr>
+                    vnoremap <silent><leader>4 <ESC><ESC>:b 4<cr>
+                    vnoremap <silent><leader>5 <ESC><ESC>:b 5<cr>
+                    vnoremap <silent><leader>6 <ESC><ESC>:b 6<cr>
+                    vnoremap <silent><leader>7 <ESC><ESC>:b 7<cr>
+                    vnoremap <silent><leader>8 <ESC><ESC>:b 8<cr>
+                    vnoremap <silent><leader>9 <ESC><ESC>:b 9<cr>
+                    vnoremap <silent><leader><Tab> <ESC><ESC>:bn<cr>
+                " }
+            " }
+        endif
+    " }
+
     " 自动补全 {
-        " OmniComplete 补全 { 
+        " OmniComplete 补全 {
             if has("autocmd") && exists("+omnifunc")
                 autocmd FileType *
                             \if &omnifunc == "" |
@@ -329,20 +395,20 @@
                             \endif
                             \endif
             endif
-        
+
             hi Pmenu guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=Lightgray
             hi PmenuSbar guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermfg=lightgray cterm=NONE
             hi PmenuThumb guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermfg=darkcyan cterm=NONE
-        
+
             inoremap <expr> <Down>  pumvisible() ? "\<C-n>" : "\<DOWN>"
             inoremap <expr> <Up>    pumvisible() ? "\<C-p>" : "\<Up>"
             inoremap <expr> <C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
             inoremap <expr> <C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-        
+
             au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
             set completeopt=menu,preview,longest
         " }
-    
+
         " neocomplcache {
             let g:acp_enableAtStartup = 0
             let g:neocomplcache_enable_at_startup = 1
@@ -352,20 +418,20 @@
             let g:neocomplcache_enable_auto_delimiter = 1
             let g:neocomplcache_max_list = 15
             let g:neocomplcache_force_overwrite_completefunc = 1
-    
+
             " Define dictionary.
             let g:neocomplcache_dictionary_filetype_lists = {
                         \ 'default' : '',
                         \ 'vimshell' : $HOME.'/.vimshell_hist',
                         \ 'scheme' : $HOME.'/.gosh_completions'
                         \ }
-    
+
             " Define keyword.
             if !exists('g:neocomplcache_keyword_patterns')
                 let g:neocomplcache_keyword_patterns = {}
             endif
             let g:neocomplcache_keyword_patterns._ = '\h\w*'
-    
+
             " Plugin key-mappings {
                 " These two lines conflict with the default digraph mapping of <C-K>
                 imap <C-k> <Plug>(neosnippet_expand_or_jump)
@@ -375,11 +441,11 @@
                             \ "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ?
                             \ "\<C-e>" : "\<Plug>(neosnippet_expand_or_jump)")
                 smap <TAB> <Right><Plug>(neosnippet_jump_or_expand)
-    
+
                 inoremap <expr><C-g> neocomplcache#undo_completion()
                 inoremap <expr><C-l> neocomplcache#complete_common_string()
                 " inoremap <expr><CR> neocomplcache#complete_common_string()
-    
+
                 function! CleverCr()
                     if pumvisible()
                         if neosnippet#expandable()
@@ -392,25 +458,25 @@
                         return "\<CR>"
                     endif
                 endfunction
-    
+
                 " <CR> close popup and save indent or expand snippet
                 imap <expr> <CR> CleverCr()
-    
+
                 " <CR>: close popup
                 " <s-CR>: close popup and save indent.
                 inoremap <expr><s-CR> pumvisible() ? neocomplcache#close_popup()."\<CR>" : "\<CR>"
                 "inoremap <expr><CR> pumvisible() ? neocomplcache#close_popup() : "\<CR>"
-                
+
                 " <C-h>, <BS>: close popup and delete backword char.
                 inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
                 inoremap <expr><C-y> neocomplcache#close_popup()
-                
+
                 " <TAB>: completion.
                 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
                 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
-                
+
             " }
-    
+
             " Enable omni completion.
             autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
             autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
@@ -419,7 +485,7 @@
             autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
             autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
             autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-    
+
             " Enable heavy omni completion.
             if !exists('g:neocomplcache_omni_patterns')
                 let g:neocomplcache_omni_patterns = {}

@@ -20,11 +20,7 @@
 "
 " 设置Bundle可用 {
     filetype off
-    if WINDOWS()
-        set rtp+=$VIM/.vim/bundle/vundle/
-    else
-        set rtp+=~/.vim/bundle/vundle/
-    endif
+    set rtp+=$HOME/.vim/bundle/Vundle.vim/
     call vundle#rc()
 " }
 
@@ -40,7 +36,7 @@
 
 " Bundle配置 {
     " vundle依赖插件 {
-        Bundle 'gmarik/vundle'
+        Bundle 'VundleVim/Vundle.vim'
         Bundle 'MarcWeber/vim-addon-mw-utils'
         Bundle 'tomtom/tlib_vim'
     " }
@@ -55,8 +51,9 @@
             Bundle 'vim-scripts/taglist.vim'
         endif
         if v:version >= 704
-            " Bundle 'jianzarotta/bufexplorer'
-            Bundle 'corntrace/bufexplorer'
+            " Bundle 'corntrace/bufexplorer'
+            " Bundle 'vim-scripts/minibufexplorerpp'
+            Bundle 'bling/vim-bufferline'
         endif
         Bundle 'scrooloose/syntastic'
         Bundle 'jiangmiao/auto-pairs'
