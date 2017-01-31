@@ -94,6 +94,7 @@
     set iskeyword-=-
     set confirm   " 在处理只读 未保存文件时，弹出确认
     set nobackup  " 不要备份文件
+    set helplang=cn    " 中文帮助文档
 " }
 
 " Vim UI {
@@ -127,10 +128,10 @@
         set statusline=%<%F
         set statusline+=%w%h%m%r
 
-        set statusline+=\ [%{&ff}/%Y]
+        " set statusline+=\ [%{&ff}/%Y]
         set statusline+=\ [%{getcwd()}]
-        set statusline+=\ [%{strftime(\"%d/%m/%Y\ -\ %H:%M\")}]
-        set statusline+=%=%-14.(%l,%c%V%)\ %p%%
+        " set statusline+=\ [%{strftime(\"%d/%m/%Y\ -\ %H:%M\")}]
+        " set statusline+=%=%-14.(%l,%c%V%)\ %p%%
     endif
 
     set backspace=indent,eol,start
@@ -153,16 +154,17 @@
 
     " 如果是gui方式 设置字体和工具栏菜单栏
     if has("gui_running")
-        " set guifont=Courier_new:h14
+        " set guifont=Courier_new:h11
         if OSX()
             set transparency=5 " 透明度设置
             set guioptions+=T
             set guioptions+=m
         else
             " gui模式开启最大化
-            au GUIEnter * simalt ~x
-            set go-=menu
-            set go+=Tools
+            " au GUIEnter * simalt ~x
+            " set go-=menu
+            " set go+=Tools
+            set go=
         endif
     endif
 " }
@@ -299,6 +301,19 @@
                 let g:airline_left_sep='›'  " Slightly fancier than '>'
                 let g:airline_right_sep='‹' " Slightly fancier than '<'
                 let g:airline_theme='dark'  " 设置颜色
+                let g:airline_detect_crypt=0 " 我也不知道是什么
+                let g:airline_detect_modified=0 " 修正修改
+                let g:airline_detect_paste=1    " 粘贴
+                let g:airline_detect_spell=1    " 拼写
+                let g:airline_detect_iminsert=1    " 不知道什么意思
+                let g:airline_inactive_collapse=0   " 不知道什么意思
+                let g:airline_powerline_fonts=0     " 不知道什么意思
+                let g:airline_exclude_filenames=[]
+                let g:airline_exclude_filetypes=[]
+                let g:airline_exclude_preview=0
+                let g:airline_skip_empty_section=0
+
+
                 " 设置一些颜色 不同模式 不同颜色
                 let g:airline_theme_patch_func = 'AirlineThemePatch'
                 function! AirlineThemePatch(palette)
