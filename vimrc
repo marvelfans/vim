@@ -302,17 +302,7 @@
                 let g:airline_right_sep='‹' " Slightly fancier than '<'
                 let g:airline_theme='dark'  " 设置颜色
                 let g:airline_detect_crypt=0 " 我也不知道是什么
-                let g:airline_detect_modified=0 " 修正修改
-                let g:airline_detect_paste=1    " 粘贴
-                let g:airline_detect_spell=1    " 拼写
-                let g:airline_detect_iminsert=1    " 不知道什么意思
-                let g:airline_inactive_collapse=0   " 不知道什么意思
-                let g:airline_powerline_fonts=0     " 不知道什么意思
-                let g:airline_exclude_filenames=[]
-                let g:airline_exclude_filetypes=[]
-                let g:airline_exclude_preview=0
-                let g:airline_skip_empty_section=0
-
+                let g:airline#extensions#whitespace#checks = []
 
                 " 设置一些颜色 不同模式 不同颜色
                 let g:airline_theme_patch_func = 'AirlineThemePatch'
