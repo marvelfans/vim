@@ -50,7 +50,6 @@
 " }
 
 " 基本配置  {
-    set background=dark
     function! ToggleBG()
         let s:tbg = &background
         if s:tbg == "dark"
@@ -110,11 +109,14 @@
     set tabpagemax=15
     set showmode        " 显示目前模式
 
-    set cursorline
-    set cursorcolumn
+    set cursorline      " 显示竖线
+    set cursorcolumn    " 显示横线
 
+    " 以条状显示，不是一条线
     highlight clear SignColumn
     highlight clear LineNr
+
+    set background=dark     " 背景黑色，这样行号可以和文本区分开
 
     if has('cmdline_info')
         set ruler
@@ -122,6 +124,8 @@
         set showcmd
     endif
 
+    " 尽量减少statusline的显示，腾出更多位置显示缓冲区文件名字
+    " 配合bufferline插件，很方便
     if has('statusline')
         set laststatus=2
 
@@ -183,44 +187,56 @@
 " Key (re)Mappings {
     " 设置leader键
     let mapleader = ','
-    " 移动窗口
-    map <C-J> <C-W>j
-    map <C-L> <C-W>l
-    map <C-H> <C-W>h
-    map <C-K> <C-W>k
-    " map    <tab>   <C-W>w
-    " 搜索关键词
-    nmap <Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr . "[\t"<CR>
-    " 显示屏幕 隐藏所有程序
-    map <slient> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
+    " 移动窗口 {
+        map <C-J> <C-W>j
+        map <C-L> <C-W>l
+        map <C-H> <C-W>h
+        map <C-K> <C-W>k
+    " }
     " F1-F12快捷键 {
-        " 关闭<F1>
+        " 关闭<F1>  vim windows下F1很麻烦，冲突严重
         map         <F1>    <Nop>
-        " <F3>打开当前路径目录.
-        nmap        <F3>    <ESC>:vi ./<cr>
+
         " <F2>开启列可视模式
         nmap        <F2>    <ESC><C-v>
+
+        " <F3>打开当前路径目录.
+        " nmap        <F3>    <ESC>:vi ./<cr>
+
         " <F5>打开所有折叠 F6关闭所有折叠
         noremap     <F5>    zR
         noremap     <F6>    zM
+
         " <F7>快速缓冲区交换文件.
         noremap     <F7>    :vi #<cr>
+
         " <F8>打开当前缓冲区所有文件，快速选择缓冲区文件
-        if v:version >= 704
+        if v:version >= 704 && isdirectory(expand('$HOME/.vim/bundle/bufexplorer'))
             noremap     <F8>    :BufExplorer<cr>
         endif
+
         " <F9>快速插入desc
         map <F9> O/*<CR>@brief: <CR>@date:[<Esc>:read !date<CR>kJ$a]<CR>@author:zjz<CR>@param: <CR>@return: <CR><tab>*/<ESC><s-i><backspace><ESC>
         " <F10>排版
         noremap     <F10>   <ESC>gg=G<ESC>
+
+        " 显示屏幕 隐藏所有程序
+        " map <slient> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
+
         " 有的文件对高亮不支持，手动打开
         noremap     <F12>   <ESC>:set syntax=on<cr>
     " }
     " 清楚末尾空格
     noremap cl  :%s/\s\+$//<cr>
-    " 快速移动到行头行尾
-    noremap     A       ^
-    noremap     E       $
+
+    " 搜索关键词
+    nmap <Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr . "[\t"<CR>
+
+    " 光标移动 {
+        " 快速移动到行头行尾
+        noremap     A       ^
+        noremap     E       $
+" }
     " 粘贴
     nmap    p       <s-p>
     " 强制退出
@@ -234,6 +250,8 @@
     noremap     ;       :
     " 快速回到上次插入位置
     noremap     '   '^
+    " 移动文件末尾 由G切换为<C-g>
+    noremap     <C-g>   G
     "
 " }
 
