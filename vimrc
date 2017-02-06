@@ -158,9 +158,9 @@
 
     " 如果是gui方式 设置字体和工具栏菜单栏
     if has("gui_running")
-        " set guifont=Courier_new:h11
+        set guifont=Monaco:h14
         if OSX()
-            set transparency=5 " 透明度设置
+            " set transparency=5 " 透明度设置
             set guioptions+=T
             set guioptions+=m
         else

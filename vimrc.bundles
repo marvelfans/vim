@@ -51,7 +51,7 @@
             Bundle 'vim-scripts/taglist.vim'
         endif
         if v:version >= 704
-            " Bundle 'corntrace/bufexplorer'
+            Bundle 'corntrace/bufexplorer'
             " Bundle 'vim-scripts/minibufexplorerpp'
             Bundle 'bling/vim-bufferline'
         endif
