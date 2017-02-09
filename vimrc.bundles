@@ -53,7 +53,7 @@
         if v:version >= 704
             Bundle 'corntrace/bufexplorer'
             " Bundle 'vim-scripts/minibufexplorerpp'
-            Bundle 'bling/vim-bufferline'
+            " Bundle 'bling/vim-bufferline'
         endif
         Bundle 'scrooloose/syntastic'
         Bundle 'jiangmiao/auto-pairs'
@@ -69,10 +69,6 @@
         endif
 "        Bundle 'SirVer/ultisnips'
         Bundle 'AutoComplPop'
-    " }
-    " markdown {
-    "    Bundle 'godlygeek/tabular'
-    "    Bundle 'plasticboy/vim-markdown'
     " }
 " }
 

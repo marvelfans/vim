@@ -150,11 +150,12 @@
     set wildmenu
     set wildmode=list:longest,full
     set whichwrap=b,s,h,l,<,>,[,]
-    set scrolljump=5
-    set scrolloff=3
+    " set scrolljump=5  " 到下边缘时，跳5行
+    " set scrolloff=3   " 在下边留3行，来滚动
     set foldenable
-    set list
-    set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespace
+	set foldmethod=indent
+    set nolist
+    " set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespace
 
     " 如果是gui方式 设置字体和工具栏菜单栏
     if has("gui_running")
@@ -177,7 +178,7 @@
     set wrap            " 自动折行
     set autoindent      " 自动缩进
     set shiftwidth=4
-    set expandtab
+    set noexpandtab       " expandtab tab 转化为空格 noexpandtab tab不转化为空格
     set tabstop=4
     set softtabstop=4
     " set splitright      " 在右边分割窗口
@@ -358,55 +359,55 @@
     " }
 
     " bufferline {
-        let g:bufferline_active_buffer_left = '['
-        let g:bufferline_active_buffer_right = ']'
-        let g:bufferline_modified = '+'
-        let g:bufferline_show_bufnr = 1
-        let g:bufferline_fname_mod = ':t'
-        let g:bufferline_active_highlight = 'StatusLine'
-        let g:bufferline_solo_highlight = 'StatusLine'
-        let g:bufferline_echo = 1
-        """""""
-        if isdirectory(expand("$HOME/.vim/bundle/vim-bufferline/"))
-            " 切换缓冲区 {
-                " 正常模式 {
-                    noremap <silent><leader>1 :b 1<cr>
-                    noremap <silent><leader>2 :b 2<cr>
-                    noremap <silent><leader>3 :b 3<cr>
-                    noremap <silent><leader>4 :b 4<cr>
-                    noremap <silent><leader>5 :b 5<cr>
-                    noremap <silent><leader>6 :b 6<cr>
-                    noremap <silent><leader>7 :b 7<cr>
-                    noremap <silent><leader>8 :b 8<cr>
-                    noremap <silent><leader>9 :b 9<cr>
-                    noremap <silent><leader><Tab> :bn<cr>
-                " }
-                " 插入模式 {
-                    inoremap <silent><leader>1 <ESC>:b 1<cr>
-                    inoremap <silent><leader>2 <ESC>:b 2<cr>
-                    inoremap <silent><leader>3 <ESC>:b 3<cr>
-                    inoremap <silent><leader>4 <ESC>:b 4<cr>
-                    inoremap <silent><leader>5 <ESC>:b 5<cr>
-                    inoremap <silent><leader>6 <ESC>:b 6<cr>
-                    inoremap <silent><leader>7 <ESC>:b 7<cr>
-                    inoremap <silent><leader>8 <ESC>:b 8<cr>
-                    inoremap <silent><leader>9 <ESC>:b 9<cr>
-                    inoremap <silent><leader><Tab> <ESC>:bn<cr>
-                " }
-                " 可视模式 {
-                    vnoremap <silent><leader>1 <ESC><ESC>:b 1<cr>
-                    vnoremap <silent><leader>2 <ESC><ESC>:b 2<cr>
-                    vnoremap <silent><leader>3 <ESC><ESC>:b 3<cr>
-                    vnoremap <silent><leader>4 <ESC><ESC>:b 4<cr>
-                    vnoremap <silent><leader>5 <ESC><ESC>:b 5<cr>
-                    vnoremap <silent><leader>6 <ESC><ESC>:b 6<cr>
-                    vnoremap <silent><leader>7 <ESC><ESC>:b 7<cr>
-                    vnoremap <silent><leader>8 <ESC><ESC>:b 8<cr>
-                    vnoremap <silent><leader>9 <ESC><ESC>:b 9<cr>
-                    vnoremap <silent><leader><Tab> <ESC><ESC>:bn<cr>
-                " }
-            " }
-        endif
+    "    let g:bufferline_active_buffer_left = '['
+    "    let g:bufferline_active_buffer_right = ']'
+    "    let g:bufferline_modified = '+'
+    "    let g:bufferline_show_bufnr = 1
+    "    let g:bufferline_fname_mod = ':t'
+    "    let g:bufferline_active_highlight = 'StatusLine'
+    "    let g:bufferline_solo_highlight = 'StatusLine'
+    "    let g:bufferline_echo = 1
+    "    """""""
+    "    if isdirectory(expand("$HOME/.vim/bundle/vim-bufferline/"))
+    "        " 切换缓冲区 {
+    "            " 正常模式 {
+    "                noremap <silent><leader>1 :b 1<cr>
+    "                noremap <silent><leader>2 :b 2<cr>
+    "                noremap <silent><leader>3 :b 3<cr>
+    "                noremap <silent><leader>4 :b 4<cr>
+    "                noremap <silent><leader>5 :b 5<cr>
+    "                noremap <silent><leader>6 :b 6<cr>
+    "                noremap <silent><leader>7 :b 7<cr>
+    "                noremap <silent><leader>8 :b 8<cr>
+    "                noremap <silent><leader>9 :b 9<cr>
+    "                noremap <silent><leader><Tab> :bn<cr>
+    "            " }
+    "            " 插入模式 {
+    "                inoremap <silent><leader>1 <ESC>:b 1<cr>
+    "                inoremap <silent><leader>2 <ESC>:b 2<cr>
+    "                inoremap <silent><leader>3 <ESC>:b 3<cr>
+    "                inoremap <silent><leader>4 <ESC>:b 4<cr>
+    "                inoremap <silent><leader>5 <ESC>:b 5<cr>
+    "                inoremap <silent><leader>6 <ESC>:b 6<cr>
+    "                inoremap <silent><leader>7 <ESC>:b 7<cr>
+    "                inoremap <silent><leader>8 <ESC>:b 8<cr>
+    "                inoremap <silent><leader>9 <ESC>:b 9<cr>
+    "                inoremap <silent><leader><Tab> <ESC>:bn<cr>
+    "            " }
+    "            " 可视模式 {
+    "                vnoremap <silent><leader>1 <ESC><ESC>:b 1<cr>
+    "                vnoremap <silent><leader>2 <ESC><ESC>:b 2<cr>
+    "                vnoremap <silent><leader>3 <ESC><ESC>:b 3<cr>
+    "                vnoremap <silent><leader>4 <ESC><ESC>:b 4<cr>
+    "                vnoremap <silent><leader>5 <ESC><ESC>:b 5<cr>
+    "                vnoremap <silent><leader>6 <ESC><ESC>:b 6<cr>
+    "                vnoremap <silent><leader>7 <ESC><ESC>:b 7<cr>
+    "                vnoremap <silent><leader>8 <ESC><ESC>:b 8<cr>
+    "                vnoremap <silent><leader>9 <ESC><ESC>:b 9<cr>
+    "                vnoremap <silent><leader><Tab> <ESC><ESC>:bn<cr>
+    "            " }
+    "        " }
+    "    endif
     " }
 
     " 自动补全 {
