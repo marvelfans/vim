@@ -64,6 +64,17 @@
     syntax on
     set mousehide   " 隐藏鼠标
     set mouse=a     " 设置鼠标可用
+	" 切换鼠标的模式，方便在终端用鼠标复制
+	function! SwitchMouseMode()
+		let s:smm = &mouse
+		if s:smm == 'a'
+			set mouse=c
+		else
+			set mouse=a
+		endif
+	endfunction
+	" noremap <F12> :call SwitchMouseMode()<CR>
+
     scriptencoding utf-8
 
     " 复制粘贴设置
@@ -152,8 +163,8 @@
     set whichwrap=b,s,h,l,<,>,[,]
     " set scrolljump=5  " 到下边缘时，跳5行
     " set scrolloff=3   " 在下边留3行，来滚动
-    set foldenable
-	set foldmethod=indent
+    " set foldenable
+	" set foldmethod=indent
     set nolist
     " set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespace
 
@@ -224,8 +235,8 @@
         " 显示屏幕 隐藏所有程序
         " map <slient> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
 
-        " 有的文件对高亮不支持，手动打开
-        noremap     <F12>   <ESC>:set syntax=on<cr>
+        " 切换鼠标模式	方便复制
+       noremap <F12> :call SwitchMouseMode()<CR> 
     " }
     " 清楚末尾空格
     noremap cl  :%s/\s\+$//<cr>
@@ -241,7 +252,7 @@
     " 粘贴
     nmap    p       <s-p>
     " 强制退出
-    nmap    q       <Esc>:q!<cr>
+    nmap    q       <Esc>:qa!<cr>
     " ` 保存，这个键发现挺方便也没其他用途
     noremap     `       <Esc>:w!<cr>
     " 上下翻页
