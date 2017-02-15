@@ -52,7 +52,6 @@ fi
 if [ -d "$HOME/.vimrc.bundles" ]; then
 	rm -rf $HOME/.vimrc.bundles
 fi
-
 ln -s $VIM_CONF_PATH/vimrc $HOME/.vimrc	
 ln -s $VIM_CONF_PATH/vimrc.bundles $HOME/.vimrc.bundles
 
@@ -74,7 +73,9 @@ do
 				FILE=`echo ${URL_PLUGIN##*/}`
 				URL=${URL_BASE}${URL_PLUGIN}
 			fi
-			$GIT_BIN clone $URL ${PLUGIN_PATH}${FILE}
+			if [ ! -d "${PLUGIN_PATH}${FILE}" ]; then
+				$GIT_BIN clone $URL ${PLUGIN_PATH}${FILE}
+			fi
 		fi
 	fi
 done < $VIM_CONF_PATH/vimrc.bundles
