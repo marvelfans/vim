@@ -128,6 +128,7 @@
     highlight clear LineNr
 
     set background=dark     " 背景黑色，这样行号可以和文本区分开
+    " set background=light     " 背景黑色，这样行号可以和文本区分开
 
     if has('cmdline_info')
         set ruler
@@ -170,7 +171,10 @@
 
     " 如果是gui方式 设置字体和工具栏菜单栏
     if has("gui_running")
-        set guifont=Monaco:h14
+		" 支持的字体
+        " set guifont=Monaco:h14
+		set guifont=Courier_New:h18
+
         if OSX()
             " set transparency=5 " 透明度设置
             set guioptions+=T
@@ -278,6 +282,24 @@
         endif
     " }
 
+	" Cscope Setting {
+		if has("cscope")
+			set csprg=/usr/local/bin/cscope		" linux 和 unix都是支持这个的
+			set cscopequickfix					" 使用quickfix来显示cscope的结果
+			set csto=0			" 0 优先查找cscope数据库	然后查找tag文件		1 先查找tag文件 然后查找cscope数据库
+			set cst				" 始终查找cscope数据库和tag文件
+			set nocsverb		" 不提示是否添加成功
+			if filereadable("cscope.out")
+				" 把当前目录下的cscope数据库加载到vim中
+				cs add cscope.out
+			elseif $CSCOPE_DB != ""
+				" 如果当前目录下没有，就把环境变量中的cscope加载到vim中
+				cs add $CSCOPE_DB
+			endif
+			set csverb			" 当增加一个数据库时, 显示添加是否成功
+		endif
+	" }
+
     " NerdTree {
         " 显示目录树
         let g:NERDTree_path = "$HOME/.vim/bundle/nerdtree"
@@ -330,7 +352,8 @@
                 " Use the default set of separators with a few customizations
                 let g:airline_left_sep='›'  " Slightly fancier than '>'
                 let g:airline_right_sep='‹' " Slightly fancier than '<'
-                let g:airline_theme='dark'  " 设置颜色
+                let g:airline_theme='dark'  " 设置颜色		配合终端的dark light 来选择, 达到很好的效果
+                " let g:airline_theme='light'  " 设置颜色
                 let g:airline_detect_crypt=0 " 我也不知道是什么
                 let g:airline#extensions#whitespace#checks = []
 
@@ -367,58 +390,6 @@
         let g:syntastic_check_on_open=1
         let g:syntastic_check_on_wq=0
         let g:syntastic_enable_highlighting=1
-    " }
-
-    " bufferline {
-    "    let g:bufferline_active_buffer_left = '['
-    "    let g:bufferline_active_buffer_right = ']'
-    "    let g:bufferline_modified = '+'
-    "    let g:bufferline_show_bufnr = 1
-    "    let g:bufferline_fname_mod = ':t'
-    "    let g:bufferline_active_highlight = 'StatusLine'
-    "    let g:bufferline_solo_highlight = 'StatusLine'
-    "    let g:bufferline_echo = 1
-    "    """""""
-    "    if isdirectory(expand("$HOME/.vim/bundle/vim-bufferline/"))
-    "        " 切换缓冲区 {
-    "            " 正常模式 {
-    "                noremap <silent><leader>1 :b 1<cr>
-    "                noremap <silent><leader>2 :b 2<cr>
-    "                noremap <silent><leader>3 :b 3<cr>
-    "                noremap <silent><leader>4 :b 4<cr>
-    "                noremap <silent><leader>5 :b 5<cr>
-    "                noremap <silent><leader>6 :b 6<cr>
-    "                noremap <silent><leader>7 :b 7<cr>
-    "                noremap <silent><leader>8 :b 8<cr>
-    "                noremap <silent><leader>9 :b 9<cr>
-    "                noremap <silent><leader><Tab> :bn<cr>
-    "            " }
-    "            " 插入模式 {
-    "                inoremap <silent><leader>1 <ESC>:b 1<cr>
-    "                inoremap <silent><leader>2 <ESC>:b 2<cr>
-    "                inoremap <silent><leader>3 <ESC>:b 3<cr>
-    "                inoremap <silent><leader>4 <ESC>:b 4<cr>
-    "                inoremap <silent><leader>5 <ESC>:b 5<cr>
-    "                inoremap <silent><leader>6 <ESC>:b 6<cr>
-    "                inoremap <silent><leader>7 <ESC>:b 7<cr>
-    "                inoremap <silent><leader>8 <ESC>:b 8<cr>
-    "                inoremap <silent><leader>9 <ESC>:b 9<cr>
-    "                inoremap <silent><leader><Tab> <ESC>:bn<cr>
-    "            " }
-    "            " 可视模式 {
-    "                vnoremap <silent><leader>1 <ESC><ESC>:b 1<cr>
-    "                vnoremap <silent><leader>2 <ESC><ESC>:b 2<cr>
-    "                vnoremap <silent><leader>3 <ESC><ESC>:b 3<cr>
-    "                vnoremap <silent><leader>4 <ESC><ESC>:b 4<cr>
-    "                vnoremap <silent><leader>5 <ESC><ESC>:b 5<cr>
-    "                vnoremap <silent><leader>6 <ESC><ESC>:b 6<cr>
-    "                vnoremap <silent><leader>7 <ESC><ESC>:b 7<cr>
-    "                vnoremap <silent><leader>8 <ESC><ESC>:b 8<cr>
-    "                vnoremap <silent><leader>9 <ESC><ESC>:b 9<cr>
-    "                vnoremap <silent><leader><Tab> <ESC><ESC>:bn<cr>
-    "            " }
-    "        " }
-    "    endif
     " }
 
     " 自动补全 {
