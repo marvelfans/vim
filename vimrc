@@ -285,7 +285,7 @@
 	" Cscope Setting {
 		if has("cscope")
 			set csprg=/usr/local/bin/cscope		" linux 和 unix都是支持这个的
-			set cscopequickfix					" 使用quickfix来显示cscope的结果
+			set cscopequickfix=s-,c-,d-,i-,t-,e-					" 使用quickfix来显示cscope的结果
 			set csto=0			" 0 优先查找cscope数据库	然后查找tag文件		1 先查找tag文件 然后查找cscope数据库
 			set cst				" 始终查找cscope数据库和tag文件
 			set nocsverb		" 不提示是否添加成功
