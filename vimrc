@@ -252,7 +252,7 @@
         " 快速移动到行头行尾
         noremap     A       ^
         noremap     E       $
-" }
+	" }
     " 粘贴
     nmap    p       <s-p>
     " 强制退出
@@ -269,6 +269,8 @@
     " 移动文件末尾 由G切换为<C-g>
     noremap     <C-g>   G
     "
+	" 发现vim的一个特别好用的快捷键, 打开一个buffertype窗口, 显示历史命令, 这样对于复杂的命令, 就不用重复敲了
+	noremap <C-f>	:<C-f>
 " }
 
 " Plugins {
@@ -297,6 +299,10 @@
 				cs add $CSCOPE_DB
 			endif
 			set csverb			" 当增加一个数据库时, 显示添加是否成功
+
+			" cscope 的快捷键 {
+			
+			" }
 		endif
 	" }
 
