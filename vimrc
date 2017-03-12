@@ -121,7 +121,7 @@
     set showmode        " 显示目前模式
 
     set cursorline      " 显示竖线
-    set cursorcolumn    " 显示横线
+    " set cursorcolumn    " 显示横线
 
     " 以条状显示，不是一条线
     highlight clear SignColumn
