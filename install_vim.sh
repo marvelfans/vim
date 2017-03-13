@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # DESC: Vim Version >= 7.04
 
