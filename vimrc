@@ -256,7 +256,7 @@
     " 粘贴
     nmap    p       <s-p>
     " 强制退出
-    nmap    q       <Esc>:qa!<cr>
+    nmap    q       <Esc>:q!<cr>
     " ` 保存，这个键发现挺方便也没其他用途
     noremap     `       <Esc>:w!<cr>
     " 上下翻页
