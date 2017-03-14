@@ -46,10 +46,10 @@ mv $CURRENT_PATH/vim/* $VIM_CONF_PATH
 rm -rf $CURRENT_PATH/vim
 
 # TODO:软链地址需要修改一下 在此仅为测试
-if [ -d "$HOME/.vimrc" ]; then
+if [ -f "$HOME/.vimrc" ]; then
 	rm -rf $HOME/.vimrc
 fi
-if [ -d "$HOME/.vimrc.bundles" ]; then
+if [ -f "$HOME/.vimrc.bundles" ]; then
 	rm -rf $HOME/.vimrc.bundles
 fi
 ln -s $VIM_CONF_PATH/vimrc $HOME/.vimrc	
