@@ -24,9 +24,10 @@
     " }
     " Windows 下乱码解决 {
         set encoding=utf-8
-        set termencoding=utf-8
+		set termencoding=gbk					" window cygwin下终端显示，不是gvim客户端	linux 和 unix设置为utf-8	
         set fileencoding=utf-8
-        set fileencodings=ucs-bom,utf-8,chinese,cp930
+        set fileencodings=ucs-bom,utf-8,chinese,cp930,GBK
+
         " vim 提示信息乱码
         if (has('gui_running') && WINDOWS())
             language message ZH_CH.UTF-8
