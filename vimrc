@@ -63,7 +63,7 @@
     filetype plugin indent on
     syntax on
     set mousehide   " 隐藏鼠标
-    set mouse=a     " 设置鼠标可用
+    set mouse=i     " 设置鼠标可用
 	" 切换鼠标的模式，方便在终端用鼠标复制
 	function! SwitchMouseMode()
 		let s:smm = &mouse
@@ -232,15 +232,15 @@
         endif
 
         " <F9>快速插入desc
-        map <F9> O/*<CR>@brief: <CR>@date:[<Esc>:read !date<CR>kJ$a]<CR>@author:zjz<CR>@param: <CR>@return: <CR><tab>*/<ESC><s-i><backspace><ESC>
+        map <F9> O/*<CR>@brief: <CR>@date:[<Esc>:read !date<CR>kJ$a]<CR>@author: zhaojingzhen<CR>@param: <CR>@return: <CR><tab>*/<ESC><s-i><backspace><ESC>
         " <F10>排版
         noremap     <F10>   <ESC>gg=G<ESC>
 
         " 显示屏幕 隐藏所有程序
         " map <slient> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
 
-        " 切换鼠标模式	方便复制
-       noremap <F12> :call SwitchMouseMode()<CR> 
+		" 切换鼠标模式	方便复制
+		noremap <F12> :call SwitchMouseMode()<CR> 
     " }
     " 清楚末尾空格
     noremap cl  :%s/\s\+$//<cr>
@@ -325,9 +325,11 @@
             let g:NERDTreeDirArrows=0
             " vim 开启时 自动打开nerdtree
             " 并且鼠标停留在文件编辑区
-            autocmd VimEnter * NERDTree
-            wincmd l
-            autocmd VimEnter * wincmd l
+			if has('gui_running')
+				autocmd VimEnter * NERDTree
+				wincmd l
+				autocmd VimEnter * wincmd l
+			endif
 
             map <Leader>e :NERDTreeToggle()<CR>
         endif
