@@ -28,7 +28,7 @@ noremap <C-f>   :<C-f>
 noremap ccl   :ccl<cr>
 
 " ===========================================
-" => General
+" => 基本设置
 " ===========================================
 " 显示行号
 set number	
@@ -37,10 +37,6 @@ set history=700
 " 根据文件类型 启用插件
 filetype plugin on
 filetype indent on
-
-" ===========================================
-" => VIM user interface
-" ===========================================
 " 移动时候，距离上下的距离
 set so=5
 " wildmenu 命令补全时候  C-p/n
@@ -60,7 +56,7 @@ set ignorecase
 set smartcase
 " 高亮搜索结果
 set hlsearch
-" 不知什么意思 
+" 搜索时 及时匹配
 set incsearch
 " 
 set lazyredraw
@@ -79,13 +75,16 @@ set tm=500
 set mouse=i
 " 鼠标隐藏
 set mousehide
-" 显示下划线
+" 显示下划线(会花屏)
 set cul
-
+highlight CursorLine  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green
+" 允许光标到最后一个位置
+set virtualedit=onemore
 
 " ===========================================
 " => Colors and Fonts
 " ===========================================
+" 打开语法检查
 syntax enable
 
 colorscheme desert
@@ -97,6 +96,13 @@ if has("gui_running")
 	set guioptions+=e
 	set t_Co=256
 	set guitablabel=%M\ %t
+    set guifont=Courier_New:h18
+    if OSX()
+        set guioptions-=T
+        set guioptions-=m
+    else
+        set go=
+    endif
 endif
 
 " 使用utf8编码
@@ -166,8 +172,18 @@ set viminfo^=%
 set laststatus=2
 
 " 状态栏显示格式 
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
-set statusline+=\ Time:\ [%{strftime(\"%Y/%m/%d\ %H:%M:%S\")}]
+set statusline=\ %1*\ CWD:\ %r%{getcwd()}%h
+set statusline+=\ %2*\ Time:[%{strftime(\"%Y/%m/%d\ %H:%M:%S\")}]
+set statusline+=\ %3*\ Line:%l
+set statusline+=\ %5*\ %F%m%r%h\ %w
+hi User1 cterm=bold ctermfg=232 ctermbg=179
+hi User2 cterm=None ctermfg=214 ctermbg=242
+hi User3 cterm=None ctermfg=251 ctermbg=240
+hi User4 cterm=bold ctermfg=169 ctermbg=239
+hi User5 cterm=None ctermfg=208 ctermbg=238
+hi User6 cterm=None ctermfg=246 ctermbg=237
+hi User7 cterm=None ctermfg=250 ctermbg=238
+hi User8 cterm=None ctermfg=249 ctermbg=240
 " ===========================================
 " => 函数
 " ===========================================
@@ -200,15 +216,6 @@ function! VisualSelection(direction) range
     let @" = l:saved_reg
 endfunction
 
-" 返回是不是粘贴模式 
-function! HasPaste()
-    if &paste
-        return 'PASTE MODE  '
-    en
-    return ''
-endfunction
-
-
 " 删除缓冲区时候 不退出 
 command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
@@ -240,3 +247,137 @@ endfunction
 silent function! WINDOWS()
     return (has('win32') || has('win64'))
 endfunction
+
+" ===========================================
+" => Bundle 及插件设置
+" ===========================================
+" 安装插件时候首先关闭文件类型检测 最后在打开 
+filetype off
+set rtp+=$HOME/.vim/bundle/Vundle.vim/
+call vundle#rc()
+" Vundle 插件管理
+Bundle 'VundleVim/Vundle.vim'
+" 语法检查
+Bundle 'scrooloose/syntastic'
+" 自动补全括号
+Bundle 'jiangmiao/auto-pairs'
+" 补全
+Bundle 'Shougo/neocomplcache'
+" 模板补全
+Bundle 'neosnippet'
+Bundle 'Shougo/neosnippet-snippets'
+Bundle 'honza/vim-snippets'
+" Bundle 'garbas/vim-snipmate'
+" 自动弹框
+Bundle 'AutoComplPop'
+
+"-------------------------------------------------
+" OmniComplete 补全
+if has("autocmd") && exists("+omnifunc")
+    autocmd FileType *
+                \if &omnifunc == "" |
+                \setlocal omnifunc=syntaxcomplete#Complete |
+                \endif
+                \endif
+endif
+
+hi Pmenu guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=Lightgray
+hi PmenuSbar guifg=#8A95A7 guibg=#F8F8F8 gui=NONE ctermfg=darkcyan ctermfg=lightgray cterm=NONE
+hi PmenuThumb guifg=#F8F8F8 guibg=#8A95A7 gui=NONE ctermfg=lightgray ctermfg=darkcyan cterm=NONE
+
+inoremap <expr> <Down>  pumvisible() ? "\<C-n>" : "\<DOWN>"
+inoremap <expr> <Up>    pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+inoremap <expr> <C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+
+au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+set completeopt=menu,preview,longest
+
+" neocomplcache 
+let g:acp_enableAtStartup = 0
+let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_enable_camel_case_completion = 1
+let g:neocomplcache_enable_smart_case = 1
+let g:neocomplcache_enable_underbar_completion = 1
+let g:neocomplcache_enable_auto_delimiter = 1
+let g:neocomplcache_max_list = 15
+let g:neocomplcache_force_overwrite_completefunc = 1
+
+" Define dictionary.
+let g:neocomplcache_dictionary_filetype_lists = {
+            \ 'default' : '',
+            \ 'vimshell' : $HOME.'/.vimshell_hist',
+            \ 'scheme' : $HOME.'/.gosh_completions'
+            \ }
+
+" Define keyword.
+if !exists('g:neocomplcache_keyword_patterns')
+    let g:neocomplcache_keyword_patterns = {}
+endif
+let g:neocomplcache_keyword_patterns._ = '\h\w*'
+
+" Plugin key-mappings {
+" These two lines conflict with the default digraph mapping of <C-K>
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+
+imap <silent><expr><C-k> neosnippet#expandable() ?
+            \ "\<Plug>(neosnippet_expand_or_jump)" : (pumvisible() ?
+            \ "\<C-e>" : "\<Plug>(neosnippet_expand_or_jump)")
+smap <TAB> <Right><Plug>(neosnippet_jump_or_expand)
+
+inoremap <expr><C-g> neocomplcache#undo_completion()
+inoremap <expr><C-l> neocomplcache#complete_common_string()
+" inoremap <expr><CR> neocomplcache#complete_common_string()
+
+function! CleverCr()
+    if pumvisible()
+        if neosnippet#expandable()
+            let exp = "\<Plug>(neosnippet_expand)"
+            return exp . neocomplcache#close_popup()
+        else
+            return neocomplcache#close_popup()
+        endif
+    else
+        return "\<CR>"
+    endif
+endfunction
+
+" <CR> close popup and save indent or expand snippet
+imap <expr> <CR> CleverCr()
+
+" <CR>: close popup
+" <s-CR>: close popup and save indent.
+inoremap <expr><s-CR> pumvisible() ? neocomplcache#close_popup()."\<CR>" : "\<CR>"
+"inoremap <expr><CR> pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y> neocomplcache#close_popup()
+
+" <TAB>: completion.
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+
+" Enable heavy omni completion.
+if !exists('g:neocomplcache_omni_patterns')
+    let g:neocomplcache_omni_patterns = {}
+endif
+let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.go = '\h\w*\.\?'
+
+" 打开文件类型检测 
+filetype on
