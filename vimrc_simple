@@ -26,7 +26,10 @@ noremap F   <C-u>
 noremap <C-f>   :<C-f>
 " 打开和关闭quickwindow
 noremap ccl   :ccl<cr>
-
+" 插入文件头 函数头
+noremap <F9>    :call Setfilehead()<cr>
+" 打开模板文件目录
+noremap <F5>    :vi $HOME/.vim/bundle/neosnippet/autoload/neosnippet/snippets/ <cr>
 " ===========================================
 " => 基本设置
 " ===========================================
@@ -58,13 +61,9 @@ set smartcase
 set hlsearch
 " 搜索时 及时匹配
 set incsearch
-" 
-set lazyredraw
-" 
-set magic
-"
+" 显示匹配括号
 set showmatch
-"
+" 2s闪烁一下
 set mat=2
 " 不要错误警告声
 set noerrorbells
@@ -176,6 +175,7 @@ set statusline=\ %1*\ CWD:\ %r%{getcwd()}%h
 set statusline+=\ %2*\ Time:[%{strftime(\"%Y/%m/%d\ %H:%M:%S\")}]
 set statusline+=\ %3*\ Line:%l
 set statusline+=\ %5*\ %F%m%r%h\ %w
+" 状态栏颜色
 hi User1 cterm=bold ctermfg=232 ctermbg=179
 hi User2 cterm=None ctermfg=214 ctermbg=242
 hi User3 cterm=None ctermfg=251 ctermbg=240
@@ -248,6 +248,17 @@ silent function! WINDOWS()
     return (has('win32') || has('win64'))
 endfunction
 
+" 模板函数
+func Setfilehead()
+    call append(line("."),  '/***********************************************')
+    call append(line(".")+1, '*        Author: zhaojingzhen@weidian.com')
+    call append(line(".")+2, '*        Create: '.strftime("%Y-%m-%d %H:%M:%S"))
+    call append(line(".")+3, '*   Description: ')
+    call append(line(".")+4, '*         Param: ')
+    call append(line(".")+5, '*        Return: ')
+    call append(line(".")+6, '***********************************************/')
+endfunc
+
 " ===========================================
 " => Bundle 及插件设置
 " ===========================================
@@ -265,13 +276,30 @@ Bundle 'jiangmiao/auto-pairs'
 Bundle 'Shougo/neocomplcache'
 " 模板补全
 Bundle 'neosnippet'
-Bundle 'Shougo/neosnippet-snippets'
-Bundle 'honza/vim-snippets'
-" Bundle 'garbas/vim-snipmate'
 " 自动弹框
 Bundle 'AutoComplPop'
+"  Tlist
+if executable('ctags')
+    Bundle 'vim-scripts/taglist.vim'
+endif
 
 "-------------------------------------------------
+" ctags 设置
+set tags=./tags;/,~/.vimtags,tags
+
+" Tlist设置
+let g:Tlist_path = "$HOME/.vim/bundle/taglist.vim/"
+if isdirectory(expand(g:Tlist_path))
+    let g:Tlist_Show_One_File=1     " 只显示当前文件的tag
+    let g:Tlist_Exit_OnlyWindow=1   " 如果最后只有Taglist窗口,则退出
+    let g:Tlist_WinWidt=20          " 宽度
+    let g:Tlist_Use_Right_Window=1  " 在右侧打开窗口
+    " let g:Tlist_Auto_Open=1         " 自动打开
+    let g:Tlist_Process_File_Always=1 " 始终解析文件
+
+    nnoremap <silent> <leader>t :Tlist<CR>
+endif
+
 " OmniComplete 补全
 if has("autocmd") && exists("+omnifunc")
     autocmd FileType *
