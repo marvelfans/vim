@@ -1,0 +1,239 @@
+" ===========================================
+" => 快捷键 
+" ===========================================
+" 设置leader
+let mapleader=","
+let g:mapleader=","
+" 快速保存
+noremap `	:w!<cr>
+" 快速退出
+noremap q   <ESC>:q!<CR>
+" 行首 行尾
+noremap A   ^
+noremap E   $
+" ; -> :
+noremap ; :
+" 打开交换文件
+noremap <F7>    :vi#<cr>
+" 打开当前目录
+noremap <F8>    :vi .<cr>
+" 翻页
+noremap f   <C-d>
+noremap F   <C-u>
+" 命令窗口 可输入命令
+noremap <C-f>   :<C-f>
+" 打开和关闭quickwindow
+noremap ccl   :ccl<cr>
+
+" ===========================================
+" => General
+" ===========================================
+" 显示行号
+set number	
+" 保存历史记录
+set history=700		
+" 根据文件类型 启用插件
+filetype plugin on
+filetype indent on
+
+" ===========================================
+" => VIM user interface
+" ===========================================
+" 移动时候，距离上下的距离
+set so=5
+" wildmenu 命令补全时候  C-p/n
+set wildmenu
+" wildmenu中忽略的文件类型
+set wildignore=*.o,*~,~.pyc
+" 显示当前位置
+set ruler
+" command bar高度
+set cmdheight=2
+" backspace可用
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+" 搜索忽略大小写
+set ignorecase
+" 智能搜索
+set smartcase
+" 高亮搜索结果
+set hlsearch
+" 不知什么意思 
+set incsearch
+" 
+set lazyredraw
+" 
+set magic
+"
+set showmatch
+"
+set mat=2
+" 不要错误警告声
+set noerrorbells
+set novisualbell
+set t_vb=
+set tm=500
+" 插入模式下可以滚屏 鼠标可用
+set mouse=i
+" 鼠标隐藏
+set mousehide
+
+
+
+" ===========================================
+" => Colors and Fonts
+" ===========================================
+syntax enable
+
+colorscheme desert
+set background=dark
+
+" gui界面设置
+if has("gui_running")
+	set guioptions-=T
+	set guioptions+=e
+	set t_Co=256
+	set guitablabel=%M\ %t
+endif
+
+" 使用utf8编码
+set encoding=utf-8
+set termencoding=utf-8  " 终端编码
+set fileencoding=utf-8
+set fileencodings=utf-8,ucs-bom,chinese,cp930,GBK
+
+" 默认文件类型unix
+set ffs=unix,dos,mac
+
+" ===========================================
+" => 文件，备份文件
+" ===========================================
+set nobackup
+set nowb
+set noswapfile
+
+" ===========================================
+" => 回车 缩紧 文本相关
+" ===========================================
+" 空格代替tabs
+set expandtab
+
+" 智能tab?
+set smarttab
+"tab = 4*spaces
+set shiftwidth=4
+set tabstop=4
+
+" 500字符换行
+set lbr
+set tw=500
+
+" 自动缩进 智能缩进 折行
+set ai
+set si
+set wrap
+" ===========================================
+" => 可视模式下相关设置
+" ===========================================
+vnoremap <silent> * :call VisualSelection('f')<cr>
+vnoremap <silent> # :call VisualSelection('b')<cr>
+vnoremap <silent>g  :call VisualSelection('gv')<cr>
+vnoremap <silent><leader>r :call VisualSelection('replace')<cr>
+" ===========================================
+" 窗口移动
+map <C-j>	<C-W>j
+map <C-k>	<C-W>k
+map <C-h>	<C-W>h
+map <C-l>	<C-W>l
+
+" 关闭当前缓冲区
+map <leader>bd	:Bclose<cr>
+" 关闭所有缓冲区
+map <leader>ba :1,1000 bd!<cr>
+
+" 回到上次编辑的地方
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
+" 关闭后记录buffer信息 
+set viminfo^=%
+
+" 总是显示状态栏
+set laststatus=2
+
+" 状态栏显示格式 
+set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+set statusline+=\ Time:\ [%{strftime(\"%Y/%m/%d\ %H:%M:%S\")}]
+" ===========================================
+" => 函数
+" ===========================================
+function! CmdLine(str)
+    exe "menu Foo.Bar :" . a:str
+    emenu Foo.Bar
+    unmenu Foo
+endfunction
+
+" 可视模式下搜索
+function! VisualSelection(direction) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+    elseif a:direction == 'gv'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' %')
+        :cw
+    elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+    elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
+
+" 返回是不是粘贴模式 
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE  '
+    en
+    return ''
+endfunction
+
+
+" 删除缓冲区时候 不退出 
+command! Bclose call <SID>BufcloseCloseIt()
+function! <SID>BufcloseCloseIt()
+   let l:currentBufNum = bufnr("%")
+   let l:alternateBufNum = bufnr("#")
+
+   if buflisted(l:alternateBufNum)
+     buffer #
+   else
+     bnext
+   endif
+
+   if bufnr("%") == l:currentBufNum
+     new
+   endif
+
+   if buflisted(l:currentBufNum)
+     execute("bdelete! ".l:currentBufNum)
+   endif
+endfunction
+
+" 操作系统、编码设置 
+silent function! OSX()
+    return  has('macunix')
+endfunction
+silent function! LINUX()
+    return has('unix') && !has('maxunix') && !has('win32unix')
+endfunction
+silent function! WINDOWS()
+    return (has('win32') || has('win64'))
+endfunction
