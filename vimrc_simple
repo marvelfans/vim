@@ -13,6 +13,8 @@ noremap A   ^
 noremap E   $
 " ; -> :
 noremap ; :
+" 可视列模式
+noremap <F2>    <C-v>
 " 打开交换文件
 noremap <F7>    :vi#<cr>
 " 打开当前目录
