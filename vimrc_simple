@@ -30,6 +30,8 @@ noremap ccl   :ccl<cr>
 noremap <F9>    :call Setfilehead()<cr>
 " 打开模板文件目录
 noremap <F5>    :vi $HOME/.vim/bundle/neosnippet/autoload/neosnippet/snippets/ <cr>
+" vimgrep 使用
+noremap <silent><leader>ff  [I:let nr = input("Which one: ")<Bar>execute "normal " . nr . "[\t"<CR>
 " ===========================================
 " => 基本设置
 " ===========================================
@@ -143,9 +145,9 @@ set wrap
 " ===========================================
 " => 可视模式下相关设置
 " ===========================================
-vnoremap <silent> * :call VisualSelection('f')<cr>
-vnoremap <silent> # :call VisualSelection('b')<cr>
-vnoremap <silent>g  :call VisualSelection('gv')<cr>
+vnoremap <silent>* :call VisualSelection('f')<cr>
+vnoremap <silent># :call VisualSelection('b')<cr>
+vnoremap <silent><leader>g  :call VisualSelection('gv')<cr>
 vnoremap <silent><leader>r :call VisualSelection('replace')<cr>
 " ===========================================
 " 窗口移动
@@ -204,8 +206,9 @@ function! VisualSelection(direction) range
     if a:direction == 'b'
         execute "normal ?" . l:pattern . "^M"
     elseif a:direction == 'gv'
-        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' %')
-        :cw
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' % <cr>')
+        ''
+        call CmdLine("copen <cr>")
     elseif a:direction == 'replace'
         call CmdLine("%s" . '/'. l:pattern . '/')
     elseif a:direction == 'f'
@@ -249,7 +252,7 @@ silent function! WINDOWS()
 endfunction
 
 " 模板函数
-func Setfilehead()
+function! Setfilehead()
     call append(line("."),  '/***********************************************')
     call append(line(".")+1, '*        Author: zhaojingzhen@weidian.com')
     call append(line(".")+2, '*        Create: '.strftime("%Y-%m-%d %H:%M:%S"))
