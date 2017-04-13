@@ -281,7 +281,7 @@ Bundle 'neosnippet'
 Bundle 'AutoComplPop'
 "  Tlist
 if executable('ctags')
-    Bundle 'vim-scripts/taglist.vim'
+    Bundle 'marvelfans/taglist.vim'
 endif
 " 目录配置
 Bundle 'scrooloose/nerdtree'
