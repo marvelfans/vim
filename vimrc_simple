@@ -24,14 +24,15 @@ noremap f   <C-d>
 noremap F   <C-u>
 " 命令窗口 可输入命令
 noremap <C-f>   :<C-f>
-" 打开和关闭quickwindow
-noremap ccl   :ccl<cr>
+" 关闭quickwindow
+noremap cl   :ccl<cr>
 " 插入文件头 函数头
 noremap <F9>    :call Setfilehead()<cr>
 " 打开模板文件目录
 noremap <F5>    :vi $HOME/.vim/bundle/neosnippet/autoload/neosnippet/snippets/ <cr>
 " vimgrep 使用
-noremap <silent><leader>ff  [I:let nr = input("Which one: ")<Bar>execute "normal " . nr . "[\t"<CR>
+" 查找当前光标的单词，并在quickfix窗口显示在什么地方出现了
+noremap <silent><leader>g   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:cw<cr>
 " ===========================================
 " => 基本设置
 " ===========================================
@@ -51,7 +52,7 @@ set wildignore=*.o,*~,~.pyc
 " 显示当前位置
 set ruler
 " command bar高度
-set cmdheight=2
+set cmdheight=1
 " backspace可用
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
@@ -76,9 +77,11 @@ set tm=500
 set mouse=i
 " 鼠标隐藏
 set mousehide
-" 显示下划线(会花屏)
-set cul
-highlight CursorLine  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green
+" 显示下划线(会花屏) 只在gui模式下使用
+if has('gui_running')
+    set cul
+    highlight CursorLine  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green
+endif
 " 允许光标到最后一个位置
 set virtualedit=onemore
 
@@ -105,6 +108,9 @@ if has("gui_running")
         set go=
     endif
 endif
+
+
+se modifiable
 
 " 使用utf8编码
 set encoding=utf-8
@@ -145,9 +151,7 @@ set wrap
 " ===========================================
 " => 可视模式下相关设置
 " ===========================================
-vnoremap <silent>* :call VisualSelection('f')<cr>
-vnoremap <silent># :call VisualSelection('b')<cr>
-vnoremap <silent><leader>g  :call VisualSelection('gv')<cr>
+vnoremap <silent><leader>g  :call VisualSelection('g')<cr>
 vnoremap <silent><leader>r :call VisualSelection('replace')<cr>
 " ===========================================
 " 窗口移动
@@ -173,10 +177,9 @@ set viminfo^=%
 set laststatus=2
 
 " 状态栏显示格式 
-set statusline=\ %1*\ CWD:\ %r%{getcwd()}%h
-set statusline+=\ %2*\ Time:[%{strftime(\"%Y/%m/%d\ %H:%M:%S\")}]
-set statusline+=\ %3*\ Line:%l
-set statusline+=\ %5*\ %F%m%r%h\ %w
+set statusline=\ %1*\ CWD:%r%{getcwd()}/%t%h
+set statusline+=\ %2*\ Time:%{strftime(\"%Y/%m/%d\ %H:%M:%S\")}
+set statusline+=\ %3*\ Line:%l,%c
 " 状态栏颜色
 hi User1 cterm=bold ctermfg=232 ctermbg=179
 hi User2 cterm=None ctermfg=214 ctermbg=242
@@ -203,16 +206,11 @@ function! VisualSelection(direction) range
     let l:pattern = escape(@", '\\/.*$^~[]')
     let l:pattern = substitute(l:pattern, "\n$", "", "")
 
-    if a:direction == 'b'
-        execute "normal ?" . l:pattern . "^M"
-    elseif a:direction == 'gv'
-        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' % <cr>')
-        ''
-        call CmdLine("copen <cr>")
+    if a:direction == 'g'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' %<cr>')
+        execute "normal copen<cr>"
     elseif a:direction == 'replace'
         call CmdLine("%s" . '/'. l:pattern . '/')
-    elseif a:direction == 'f'
-        execute "normal /" . l:pattern . "^M"
     endif
 
     let @/ = l:pattern
@@ -285,7 +283,8 @@ Bundle 'AutoComplPop'
 if executable('ctags')
     Bundle 'vim-scripts/taglist.vim'
 endif
-
+" 目录配置
+Bundle 'scrooloose/nerdtree'
 "-------------------------------------------------
 " ctags 设置
 set tags=./tags;/,~/.vimtags,tags
@@ -303,7 +302,13 @@ if isdirectory(expand(g:Tlist_path))
     nnoremap <silent> <leader>t :Tlist<CR>
 endif
 
-" OmniComplete 补全
+" NERDTree 设置
+" 只有nerdtree窗口时，关闭
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" ,e 打开目录，并移动光标到当前窗口
+noremap     <silent><leader>e   :NERDTreeToggle<Bar>execute "normal <C-l>"<CR>
+
+" OmniComplet 补全
 if has("autocmd") && exists("+omnifunc")
     autocmd FileType *
                 \if &omnifunc == "" |
