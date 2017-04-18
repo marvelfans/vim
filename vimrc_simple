@@ -4,38 +4,43 @@
 " 设置leader
 let mapleader=","
 let g:mapleader=","
+
 " 快速保存
 noremap `	:w!<cr>
+
 " 快速退出
 noremap q   <ESC>:q!<CR>
+
 " 行首 行尾
 noremap A   ^
 noremap E   $
 " ; -> :
 noremap ; :
+
 " 可视列模式
 noremap <F2>    <C-v>
+
 " 打开交换文件
 noremap <F7>    :vi#<cr>
-" 打开当前目录
-noremap <F8>    :vi .<cr>
-" 翻页
-noremap f   <C-d>
-noremap F   <C-u>
+
 " 命令窗口 可输入命令
 noremap <C-f>   :<C-f>
+
 " 关闭quickwindow
 noremap cl   :ccl<cr>
+
 " 插入文件头 函数头
 noremap <F9>    :call Setfilehead()<cr>
+
 " 插入日期
 noremap <F5>    o// Date: <Esc>:read !date<CR>kJ
 inoremap <F5>   <CR>// Date: <Esc>:read !date<CR>kJ
 
 " 查找当前光标的单词，并在quickfix窗口显示在什么地方出现了
-noremap <silent><leader>g   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:cw<cr>
-" 替换光标下单词
-noremap <silent><Leader>r   :%s/<C-R>=expand("<cword>")<CR>/
+noremap <silent><leader>g   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
+noremap <Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr . "[\t"<CR>
+
+
 " ===========================================
 " => 基本设置
 " ===========================================
