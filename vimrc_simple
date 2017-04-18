@@ -23,9 +23,6 @@ noremap <F2>    <C-v>
 " 打开交换文件
 noremap <F7>    :vi#<cr>
 
-" 命令窗口 可输入命令
-noremap <C-f>   :<C-f>
-
 " 关闭quickwindow
 noremap cl   :ccl<cr>
 
@@ -38,7 +35,11 @@ inoremap <F5>   <CR>// Date: <Esc>:read !date<CR>kJ
 
 " 查找当前光标的单词，并在quickfix窗口显示在什么地方出现了
 noremap <silent><leader>g   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
-noremap <Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr . "[\t"<CR>
+noremap <silent><Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr . "[\t"<CR>
+
+" 显示当前缓冲区
+noremap <F8>	:ls<CR>:let WinId = input("Which buffer: ")<Bar>exe "normal buffer " . WinId<CR>
+
 
 
 " ===========================================
@@ -86,11 +87,15 @@ set tm=500
 set mouse=i
 " 鼠标隐藏
 set mousehide
+
 " 显示下划线(会花屏) 只在gui模式下使用
+colorscheme desert
+set background=dark
 if has('gui_running')
-    set cul
-    highlight CursorLine  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green
+	set cul
+	highlight CursorLine  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green
 endif
+
 " 允许光标到最后一个位置
 set virtualedit=onemore
 " 中文文档
@@ -100,9 +105,6 @@ set helplang=cn
 " ===========================================
 " 打开语法检查
 syntax enable
-
-colorscheme desert
-set background=dark
 
 " gui界面设置
 if has("gui_running")
@@ -249,6 +251,27 @@ function! <SID>BufcloseCloseIt()
    endif
 endfunction
 
+" 关闭缓冲区 不关闭窗口
+command! Bclose call <SID>BufcloseCloseIt()
+function! <SID>BufcloseCloseIt()
+   let l:currentBufNum = bufnr("%")
+   let l:alternateBufNum = bufnr("#")
+
+   if buflisted(l:alternateBufNum)
+     buffer #
+   else
+     bnext
+   endif
+
+   if bufnr("%") == l:currentBufNum
+     new
+   endif
+
+   if buflisted(l:currentBufNum)
+     execute("bdelete! ".l:currentBufNum)
+   endif
+endfunction
+
 " 操作系统、编码设置 
 silent function! OSX()
     return  has('macunix')
@@ -296,11 +319,28 @@ if executable('ctags')
 endif
 " 目录配置
 Bundle 'scrooloose/nerdtree'
-"-------------------------------------------------
-" ctags 设置
+" 缓冲区设置
+Bundle 'vim-scripts/minibufexplorerpp'
+
+
+
+"=================================================
+"------插件设置-----------------------------------
+"=================================================
+
+
+" minibufexplorerpp 设置
+" 切换缓冲区
+map <C-n>	:bn<cr>
+map <C-f>	:bf<cr>
+" 关闭当前缓冲区
+map <leader>bd :Bclose<cr>
+
+
+" ----- ctags 设置
 set tags=./tags;/,~/.vimtags,tags
 
-" Tlist设置
+" ------------ Tlist设置
 let g:Tlist_path = "$HOME/.vim/bundle/taglist.vim/"
 if isdirectory(expand(g:Tlist_path))
     let g:Tlist_Show_One_File=1     " 只显示当前文件的tag
@@ -313,12 +353,17 @@ if isdirectory(expand(g:Tlist_path))
     nnoremap <silent> <leader>t :Tlist<CR>
 endif
 
-" NERDTree 设置
+
+
+" ------------  NERDTree 设置
 " 只有nerdtree窗口时，关闭
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " ,e 打开目录，并移动光标到当前窗口
 noremap     <silent><leader>e   :NERDTreeToggle<Bar>execute "normal <C-l>"<CR>
 
+" ================================================================
+" ======= 补全设置(勿动)
+" ================================================================
 " OmniComplet 补全
 if has("autocmd") && exists("+omnifunc")
     autocmd FileType *
