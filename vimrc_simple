@@ -332,9 +332,9 @@ Bundle 'vim-scripts/minibufexplorerpp'
 " minibufexplorerpp 设置
 " 切换缓冲区
 map <C-n>	:bn<cr>
-map <C-f>	:bf<cr>
+map <C-f>	:bp<cr>
 " 关闭当前缓冲区
-map <leader>bd :Bclose<cr>
+map <leader>dd :Bclose<cr>
 
 
 " ----- ctags 设置
