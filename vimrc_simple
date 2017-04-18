@@ -28,16 +28,20 @@ noremap <C-f>   :<C-f>
 noremap cl   :ccl<cr>
 " 插入文件头 函数头
 noremap <F9>    :call Setfilehead()<cr>
-" 打开模板文件目录
-noremap <F5>    :vi $HOME/.vim/bundle/neosnippet/autoload/neosnippet/snippets/ <cr>
-" vimgrep 使用
+" 插入日期
+noremap <F5>    o// Date: <Esc>:read !date<CR>kJ
+inoremap <F5>   <CR>// Date: <Esc>:read !date<CR>kJ
+
 " 查找当前光标的单词，并在quickfix窗口显示在什么地方出现了
 noremap <silent><leader>g   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:cw<cr>
+" 替换光标下单词
+noremap <silent><Leader>r   :%s/<C-R>=expand("<cword>")<CR>/
 " ===========================================
 " => 基本设置
 " ===========================================
 " 显示行号
 set number	
+highlight lineNr cterm=NONE ctermfg=249 ctermbg=240 guifg=LightYellow guibg=Grey
 " 保存历史记录
 set history=700		
 " 根据文件类型 启用插件
@@ -84,7 +88,8 @@ if has('gui_running')
 endif
 " 允许光标到最后一个位置
 set virtualedit=onemore
-
+" 中文文档
+set helplang=cn
 " ===========================================
 " => Colors and Fonts
 " ===========================================
@@ -132,8 +137,9 @@ set noswapfile
 " => 回车 缩紧 文本相关
 " ===========================================
 " 空格代替tabs
-set expandtab
-
+" set expandtab
+" 不用空格代替tabs
+set noexpandtab
 " 智能tab?
 set smarttab
 "tab = 4*spaces
@@ -181,14 +187,14 @@ set statusline=\ %1*\ CWD:%r%{getcwd()}/%t%h
 set statusline+=\ %2*\ Time:%{strftime(\"%Y/%m/%d\ %H:%M:%S\")}
 set statusline+=\ %3*\ Line:%l,%c
 " 状态栏颜色
-hi User1 cterm=bold ctermfg=232 ctermbg=179
-hi User2 cterm=None ctermfg=214 ctermbg=242
-hi User3 cterm=None ctermfg=251 ctermbg=240
-hi User4 cterm=bold ctermfg=169 ctermbg=239
-hi User5 cterm=None ctermfg=208 ctermbg=238
-hi User6 cterm=None ctermfg=246 ctermbg=237
-hi User7 cterm=None ctermfg=250 ctermbg=238
-hi User8 cterm=None ctermfg=249 ctermbg=240
+hi User1 cterm=bold ctermfg=232 ctermbg=179 guifg=Black     guibg=Yellow
+hi User2 cterm=None ctermfg=214 ctermbg=242 guifg=Yellow    guibg=Brown
+hi User3 cterm=None ctermfg=251 ctermbg=240 guifg=Black     guibg=DarkYellow
+hi User4 cterm=bold ctermfg=169 ctermbg=239 guifg=Black     guibg=LightYellow
+hi User5 cterm=None ctermfg=208 ctermbg=238 guifg=Black     guibg=LightYellow
+hi User6 cterm=None ctermfg=246 ctermbg=237 guifg=Black     guibg=LightYellow
+hi User7 cterm=None ctermfg=250 ctermbg=238 guifg=Black     guibg=LightYellow
+hi User8 cterm=None ctermfg=249 ctermbg=240 guifg=Black     guibg=LightYellow
 " ===========================================
 " => 函数
 " ===========================================
