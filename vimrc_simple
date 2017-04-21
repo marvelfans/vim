@@ -14,6 +14,7 @@ noremap q   <ESC>:q!<CR>
 " 行首 行尾
 noremap A   ^
 noremap E   $
+
 " ; -> :
 noremap ; :
 
@@ -35,12 +36,12 @@ inoremap <F5>   <CR>// Date: <Esc>:read !date<CR>kJ
 
 " 查找当前光标的单词，并在quickfix窗口显示在什么地方出现了
 noremap <silent><leader>g   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
+
+" 查找当前光标下的单词，支持跳转
 noremap <silent><Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr . "[\t"<CR>
 
 " 显示当前缓冲区
 noremap <F8>	:ls<CR>:let WinId = input("Which buffer: ")<Bar>exe "normal buffer " . WinId<CR>
-
-
 
 " ===========================================
 " => 基本设置
@@ -87,7 +88,6 @@ set tm=500
 set mouse=i
 " 鼠标隐藏
 set mousehide
-
 " 显示下划线(会花屏) 只在gui模式下使用
 colorscheme desert
 set background=dark
@@ -190,9 +190,9 @@ set viminfo^=%
 set laststatus=2
 
 " 状态栏显示格式 
-set statusline=\ %1*\ CWD:%r%{getcwd()}/%t%h
-set statusline+=\ %2*\ Time:%{strftime(\"%Y/%m/%d\ %H:%M:%S\")}
-set statusline+=\ %3*\ Line:%l,%c
+set statusline=\ %1*\ %{getcwd()}/%t%y
+set statusline+=\ %2*\ %{strftime(\"%Y/%m/%d\ %H:%M\")}
+set statusline+=\ %3*\ %l,%c
 " 状态栏颜色
 hi User1 cterm=bold ctermfg=232 ctermbg=179 guifg=Black     guibg=Yellow
 hi User2 cterm=None ctermfg=214 ctermbg=242 guifg=Yellow    guibg=Brown
@@ -327,15 +327,12 @@ Bundle 'vim-scripts/minibufexplorerpp'
 "=================================================
 "------插件设置-----------------------------------
 "=================================================
-
-
 " minibufexplorerpp 设置
 " 切换缓冲区
 map <C-n>	:bn<cr>
 map <C-f>	:bp<cr>
 " 关闭当前缓冲区
 map <leader>dd :Bclose<cr>
-
 
 " ----- ctags 设置
 set tags=./tags;/,~/.vimtags,tags
@@ -352,8 +349,6 @@ if isdirectory(expand(g:Tlist_path))
 
     nnoremap <silent> <leader>t :Tlist<CR>
 endif
-
-
 
 " ------------  NERDTree 设置
 " 只有nerdtree窗口时，关闭
