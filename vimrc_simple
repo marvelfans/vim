@@ -57,10 +57,10 @@ noremap <silent><Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . 
 noremap <F8>	:ls<CR>:let WinId = input("Which buffer: ")<Bar>exe "normal buffer " . WinId<CR>
 
 " 标签设置
-noremap <C-n>	:tabN<cr>
-noremap <C-f>	:tabp<cr>
-noremap te		:tabedit 
-noremap <silent><Leader>dd	:tabclose<cr>
+" noremap <C-n>	:tabN<cr>
+" noremap <C-f>	:tabp<cr>
+" noremap te		:tabedit 
+" noremap <silent><Leader>dd	:tabclose<cr>
 
 " ===========================================
 " => 基本设置
@@ -333,7 +333,7 @@ endif
 " 目录配置
 Bundle 'scrooloose/nerdtree'
 " 缓冲区设置
-" Bundle 'vim-scripts/minibufexplorerpp'
+Bundle 'vim-scripts/minibufexplorerpp'
 
 
 
@@ -342,10 +342,10 @@ Bundle 'scrooloose/nerdtree'
 "=================================================
 " minibufexplorerpp 设置
 " 切换缓冲区
-" map <C-n>	:bn<cr>
-" map <C-f>	:bp<cr>
+map <C-n>	:bn<cr>
+map <C-f>	:bp<cr>
 " 关闭当前缓冲区
-" map <leader>dd :Bclose<cr>
+map <leader>dd :Bclose<cr>
 
 " ----- ctags 设置
 set tags=./tags;/,~/.vimtags,tags
