@@ -1,3 +1,15 @@
+" 操作系统、编码设置 
+silent function! OSX()
+    return  has('macunix')
+endfunction
+silent function! LINUX()
+    return has('unix') && !has('maxunix') && !has('win32unix')
+endfunction
+silent function! WINDOWS()
+    return (has('win32') || has('win64'))
+endfunction
+
+
 " ===========================================
 " => 快捷键 
 " ===========================================
@@ -46,6 +58,7 @@ noremap <F8>	:ls<CR>:let WinId = input("Which buffer: ")<Bar>exe "normal buffer 
 " 标签设置
 noremap <C-n>	:tabN<cr>
 noremap <C-f>	:tabP<cr>
+noremap te		:tabedit 
 noremap <silent><Leader>dd	:tabclose<cr>
 
 " ===========================================
@@ -131,7 +144,11 @@ se modifiable
 
 " 使用utf8编码
 set encoding=utf-8
-set termencoding=utf-8  " 终端编码
+if WINDOWS()
+	set termencoding=gbk
+else
+	set termencoding=utf-8  " 终端编码
+endif
 set fileencoding=utf-8
 set fileencodings=utf-8,ucs-bom,chinese,cp930,GBK
 
@@ -277,16 +294,6 @@ function! <SID>BufcloseCloseIt()
    endif
 endfunction
 
-" 操作系统、编码设置 
-silent function! OSX()
-    return  has('macunix')
-endfunction
-silent function! LINUX()
-    return has('unix') && !has('maxunix') && !has('win32unix')
-endfunction
-silent function! WINDOWS()
-    return (has('win32') || has('win64'))
-endfunction
 
 " 模板函数
 function! Setfilehead()
