@@ -22,6 +22,7 @@ noremap `	:w!<cr>
 
 " 快速退出
 noremap q   <ESC>:q!<CR>
+noremap qa	<ESC>:qa!<CR>
 
 " 行首 行尾
 noremap A   ^
@@ -57,7 +58,7 @@ noremap <F8>	:ls<CR>:let WinId = input("Which buffer: ")<Bar>exe "normal buffer 
 
 " 标签设置
 noremap <C-n>	:tabN<cr>
-noremap <C-f>	:tabP<cr>
+noremap <C-f>	:tabp<cr>
 noremap te		:tabedit 
 noremap <silent><Leader>dd	:tabclose<cr>
 
