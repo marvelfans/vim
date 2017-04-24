@@ -21,8 +21,7 @@ let g:mapleader=","
 noremap `	:w!<cr>
 
 " 快速退出
-noremap <leader>q   <ESC>:q!<CR>
-noremap <leader>qa	<ESC>:qa!<CR>
+noremap q   <ESC>:q!<CR>
 
 " 行首 行尾
 noremap A   ^
