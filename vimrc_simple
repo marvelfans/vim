@@ -356,7 +356,7 @@ if isdirectory(expand(g:Tlist_path))
     let g:Tlist_Exit_OnlyWindow=1   " 如果最后只有Taglist窗口,则退出
     let g:Tlist_WinWidt=20          " 宽度
     let g:Tlist_Use_Right_Window=1  " 在右侧打开窗口
-    let g:Tlist_Auto_Open=1         " 自动打开
+    " let g:Tlist_Auto_Open=1         " 自动打开
     let g:Tlist_Process_File_Always=1 " 始终解析文件
 
     nnoremap <silent> <leader>t :Tlist<CR>
@@ -379,9 +379,9 @@ let g:NERDTreeDirArrows=0
 " vim 开启时 自动打开nerdtree
 " 并且鼠标停留在文件编辑区
 " if has('gui_running')
-	autocmd VimEnter * NERDTree
-	wincmd l
-	autocmd VimEnter * wincmd l
+"   autocmd VimEnter * NERDTree
+"   wincmd l
+"   autocmd VimEnter * wincmd l
 " endif
 
 " 只有nerdtree窗口时，关闭
