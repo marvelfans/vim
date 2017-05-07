@@ -62,6 +62,38 @@ noremap <F8>	:ls<CR>:let WinId = input("Which buffer: ")<Bar>exe "normal buffer 
 " noremap <silent><Leader>dd	:tabclose<cr>
 
 " ===========================================
+" => Bundle 及插件设置
+" ===========================================
+" 安装插件时候首先关闭文件类型检测 最后在打开 
+filetype off
+set rtp+=$HOME/.vim/bundle/Vundle.vim/
+call vundle#rc()
+" Vundle 插件管理
+Bundle 'VundleVim/Vundle.vim'
+" 语法检查
+Bundle 'scrooloose/syntastic'
+" 自动补全括号
+Bundle 'jiangmiao/auto-pairs'
+" 补全
+Bundle 'Shougo/neocomplcache'
+" 模板补全
+Bundle 'neosnippet'
+" 自动弹框
+Bundle 'AutoComplPop'
+"  Tlist
+if executable('ctags')
+    Bundle 'marvelfans/taglist.vim'
+endif
+" 目录配置
+Bundle 'scrooloose/nerdtree'
+" 缓冲区设置
+" Bundle 'vim-scripts/minibufexplorerpp'
+" Bundle 'bling/vim-bufferline'
+" 颜色主题
+Bundle 'altercation/vim-colors-solarized'
+
+
+" ===========================================
 " => 基本设置
 " ===========================================
 " 显示行号
@@ -106,13 +138,13 @@ set tm=500
 set mouse=a
 " 鼠标隐藏
 set mousehide
-" 显示下划线(会花屏) 只在gui模式下使用
-colorscheme desert
+colorscheme solarized
 set background=dark
-if has('gui_running')
+" 显示下划线(会花屏) 只在gui模式下使用
+" if has('gui_running')
 	set cul
 	highlight CursorLine  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green
-endif
+" endif
 
 " 允许光标到最后一个位置
 set virtualedit=onemore
@@ -210,11 +242,11 @@ set viminfo^=%
 
 " 总是显示状态栏
 set laststatus=2
-
 " 状态栏显示格式 
 set statusline=\ %1*\ %{getcwd()}/%t%y
 set statusline+=\ %2*\ %{strftime(\"%Y/%m/%d\ %H:%M\")}
 set statusline+=\ %3*\ %l,%c
+
 " 状态栏颜色
 hi User1 cterm=bold ctermfg=232 ctermbg=179 guifg=Black     guibg=Yellow
 hi User2 cterm=None ctermfg=214 ctermbg=242 guifg=Yellow    guibg=Brown
@@ -306,34 +338,6 @@ function! Setfilehead()
     call append(line(".")+6, '***********************************************/')
 endfunc
 
-" ===========================================
-" => Bundle 及插件设置
-" ===========================================
-" 安装插件时候首先关闭文件类型检测 最后在打开 
-filetype off
-set rtp+=$HOME/.vim/bundle/Vundle.vim/
-call vundle#rc()
-" Vundle 插件管理
-Bundle 'VundleVim/Vundle.vim'
-" 语法检查
-Bundle 'scrooloose/syntastic'
-" 自动补全括号
-Bundle 'jiangmiao/auto-pairs'
-" 补全
-Bundle 'Shougo/neocomplcache'
-" 模板补全
-Bundle 'neosnippet'
-" 自动弹框
-Bundle 'AutoComplPop'
-"  Tlist
-if executable('ctags')
-    Bundle 'marvelfans/taglist.vim'
-endif
-" 目录配置
-Bundle 'scrooloose/nerdtree'
-" 缓冲区设置
-" Bundle 'vim-scripts/minibufexplorerpp'
-
 
 
 "=================================================
@@ -345,6 +349,7 @@ map <C-n>	:bn<cr>
 map <C-f>	:bp<cr>
 " 关闭当前缓冲区
 map <leader>dd :Bclose<cr>
+let g:bufferline_echo = 1
 
 " ----- ctags 设置
 set tags=./tags;/,~/.vimtags,tags
