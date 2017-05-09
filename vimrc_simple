@@ -92,6 +92,12 @@ Bundle 'scrooloose/nerdtree'
 " 颜色主题
 Bundle 'altercation/vim-colors-solarized'
 
+" 放到前边 solarized 颜色设置
+let g:solarized_termcolors=256
+let g:solarized_termtrans=1
+let g:solarized_contrast="normal"
+let g:solarized_visibility="normal"
+color solarized
 
 " ===========================================
 " => 基本设置
@@ -172,7 +178,6 @@ if has("gui_running")
         set go=
     endif
 endif
-
 
 se modifiable
 
@@ -339,8 +344,6 @@ function! Setfilehead()
     call append(line(".")+5, '*        Return: ')
     call append(line(".")+6, '***********************************************/')
 endfunc
-
-
 
 "=================================================
 "------插件设置-----------------------------------
