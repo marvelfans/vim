@@ -165,12 +165,12 @@ set helplang=cn
 syntax enable
 
 " gui界面设置
+set t_Co=256
 if has("gui_running")
 	set guioptions-=T
 	set guioptions+=e
-	set t_Co=256
 	set guitablabel=%M\ %t
-    set guifont=Courier_New:h18
+    set guifont=Courier_New:h14
     if OSX()
         set guioptions-=T
         set guioptions-=m
