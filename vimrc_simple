@@ -145,7 +145,7 @@ set mouse=a
 " 鼠标隐藏
 set mousehide
 colorscheme solarized
-set background=dark
+set background=light
 " 显示下划线(会花屏) 只在gui模式下使用
 " if has('gui_running')
 	set cul
