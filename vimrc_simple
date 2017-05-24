@@ -150,8 +150,8 @@ set background=light
 " if has('gui_running')
 	set cul
 	highlight CursorLine  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green
-	set cuc
-	highlight CursorColumn  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green
+	" set cuc
+	" highlight CursorColumn  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green
 " endif
 
 " 允许光标到最后一个位置
