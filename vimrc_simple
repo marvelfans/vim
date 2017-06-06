@@ -157,6 +157,9 @@ set background=light
 set virtualedit=onemore
 " 中文文档
 set helplang=cn
+
+" 避免自动切换到当前文件的目录
+autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
 " ===========================================
 " => Colors and Fonts
 " ===========================================
