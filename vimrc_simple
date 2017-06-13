@@ -15,45 +15,32 @@ endfunction
 " 设置leader
 let mapleader=","
 let g:mapleader=","
-
 " 快速保存
 noremap `	:w!<cr>
-
 " 快速退出
 noremap q   <ESC>:q!<CR>
-
 " 行首 行尾
 noremap A   ^
 noremap E   $
-
 " ; -> :
 noremap ; :
-
 " 可视列模式
 noremap <F2>    <C-v>
-
 " 打开交换文件
 noremap <F7>    :vi#<cr>
-
 " 关闭quickwindow
 noremap cl   :ccl<cr>
-
 " 插入文件头 函数头
 noremap <F9>    :call Setfilehead()<cr>
-
 " 插入日期
 noremap <F5>    o// Date: <Esc>:read !date<CR>kJ
 inoremap <F5>   <CR>// Date: <Esc>:read !date<CR>kJ
-
 " 查找当前光标的单词，并在quickfix窗口显示在什么地方出现了
 noremap <silent><leader>g   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
-
 " 查找当前光标下的单词，支持跳转
 noremap <silent><Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr . "[\t"<CR>
-
 " 显示当前缓冲区
 noremap <F8>	:ls<CR>:let WinId = input("Which buffer: ")<Bar>exe "normal buffer " . WinId<CR>
-
 " 标签设置
 " noremap <C-n>	:tabN<cr>
 " noremap <C-f>	:tabp<cr>
@@ -140,11 +127,11 @@ set novisualbell
 set t_vb=
 set tm=500
 " 插入模式下可以滚屏 鼠标可用
-set mouse=a
+set mouse=i
 " 鼠标隐藏
 set mousehide
 colorscheme solarized
-set background=light
+set background=dark
 " 显示下划线(会花屏) 只在gui模式下使用
 " if has('gui_running')
 	set cul
