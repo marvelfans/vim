@@ -84,7 +84,6 @@ let g:solarized_termtrans=1
 let g:solarized_contrast="normal"
 let g:solarized_visibility="normal"
 color solarized
-
 " ===========================================
 " => 基本设置
 " ===========================================
@@ -97,13 +96,13 @@ set history=700
 filetype plugin on
 filetype indent on
 " 移动时候，距离上下的距离
-set so=5
+set so=3
 " wildmenu 命令补全时候  C-p/n
 set wildmenu
 " wildmenu中忽略的文件类型
 set wildignore=*.o,*~,~.pyc
 " 显示当前位置
-set ruler
+" set ruler
 " command bar高度
 set cmdheight=1
 " backspace可用
@@ -139,12 +138,10 @@ set background=dark
 	" set cuc
 	" highlight CursorColumn  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green
 " endif
-
 " 允许光标到最后一个位置
 set virtualedit=onemore
 " 中文文档
 set helplang=cn
-
 " 避免自动切换到当前文件的目录
 autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
 " ===========================================
@@ -152,7 +149,6 @@ autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
 " ===========================================
 " 打开语法检查
 syntax enable
-
 " gui界面设置
 set t_Co=256
 if has("gui_running")
@@ -167,9 +163,7 @@ if has("gui_running")
         set go=
     endif
 endif
-
 se modifiable
-
 " 使用utf8编码
 set encoding=utf-8
 if WINDOWS()
@@ -242,7 +236,6 @@ set laststatus=2
 set statusline=\ %1*\ %{getcwd()}/%t%y
 set statusline+=\ %2*\ %{strftime(\"%Y/%m/%d\ %H:%M\")}
 set statusline+=\ %3*\ %l,%c
-
 " 状态栏颜色
 hi User1 cterm=bold ctermfg=232 ctermbg=179 guifg=Black     guibg=Yellow
 hi User2 cterm=None ctermfg=214 ctermbg=242 guifg=Yellow    guibg=Brown
@@ -322,7 +315,6 @@ function! <SID>BufcloseCloseIt()
    endif
 endfunction
 
-
 " 模板函数
 function! Setfilehead()
     call append(line("."),  '/***********************************************')
@@ -389,7 +381,6 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 noremap     <silent><leader>e   :NERDTreeToggle<Bar>execute "normal <C-l>"<CR>
 
 " map <Leader>e :NERDTreeToggle()<CR>
-
 
 " ================================================================
 " ======= 补全设置(勿动)
