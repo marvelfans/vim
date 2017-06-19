@@ -42,10 +42,10 @@ noremap <silent><Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . 
 " 显示当前缓冲区
 noremap <F8>	:ls<CR>:let WinId = input("Which buffer: ")<Bar>exe "normal buffer " . WinId<CR>
 " 标签设置
-" noremap <C-n>	:tabN<cr>
-" noremap <C-f>	:tabp<cr>
-" noremap te		:tabedit 
-" noremap <silent><Leader>dd	:tabclose<cr>
+noremap <C-n>	:tabN<cr>
+noremap <C-f>	:tabp<cr>
+noremap te		:tabedit 
+noremap <silent><Leader>dd	:tabclose<cr>
 
 " ===========================================
 " => Bundle 及插件设置
@@ -331,11 +331,11 @@ endfunc
 "=================================================
 " minibufexplorerpp 设置
 " 切换缓冲区
-map <C-n>	:bn<cr>
-map <C-f>	:bp<cr>
-" 关闭当前缓冲区
-map <leader>dd :Bclose<cr>
-let g:bufferline_echo = 1
+" map <C-n>	:bn<cr>
+" map <C-f>	:bp<cr>
+" " 关闭当前缓冲区
+" map <leader>dd :Bclose<cr>
+" let g:bufferline_echo = 1
 
 " ----- ctags 设置
 set tags=./tags;/,~/.vimtags,tags
