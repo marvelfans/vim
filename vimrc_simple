@@ -293,26 +293,21 @@ function! <SID>BufcloseCloseIt()
      execute("bdelete! ".l:currentBufNum)
    endif
 endfunction
-
-" 关闭缓冲区 不关闭窗口
-command! Bclose call <SID>BufcloseCloseIt()
-function! <SID>BufcloseCloseIt()
-   let l:currentBufNum = bufnr("%")
-   let l:alternateBufNum = bufnr("#")
-
-   if buflisted(l:alternateBufNum)
-     buffer #
-   else
-     bnext
-   endif
-
-   if bufnr("%") == l:currentBufNum
-     new
-   endif
-
-   if buflisted(l:currentBufNum)
-     execute("bdelete! ".l:currentBufNum)
-   endif
+" 关闭所有缓冲区
+command! BcloseA call <SID>BufcloseCloseAll()
+function! <SID>BufcloseCloseAll()
+	new
+	let l:lastBufNr = bufnr("$")
+	buffer #
+	for l:bufNr in range(l:lastBufNr)
+		let l:bufNr = bufnr("%")
+		if l:bufNr == l:lastBufNr
+			continue
+		endif
+		if buflisted(l:bufNr)
+			execute("bdelete! ".l:bufNr)
+		endif
+	endfor
 endfunction
 
 " 模板函数
@@ -333,17 +328,18 @@ endfunc
 " 切换缓冲区
 map <C-n>	:bn<cr>
 map <C-f>	:bp<cr>
-" " 关闭当前缓冲区
+" 关闭当前缓冲区
 map <leader>dd :Bclose<cr>
+" 关闭所有缓冲区，包括当前窗口
+map <leader>da :BcloseA<cr>
 let g:bufferline_echo = 1
 let g:miniBufExplorerAutoStart=1
 let g:miniBufExplBuffersNeeded=2
 let g:miniBufExplSplitBelow=1
 let g:miniBufExplMinSize=1
 let g:miniBufExplUseSingleClick = 1
-hi MBEChanged guibg=darkblue ctermbg=240
-" hi MBEChanged guibg=darkblue ctermbg=240 termbg=249
-" hi link MBEVisibleChanged Error
+" hi MBEChanged guibg=darkblue ctermbg=240
+hi link MBEVisibleChanged Error
 " ----- ctags 设置
 set tags=./tags;/,~/.vimtags,tags
 
