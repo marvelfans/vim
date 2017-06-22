@@ -278,17 +278,14 @@ command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
    let l:currentBufNum = bufnr("%")
    let l:alternateBufNum = bufnr("#")
-
    if buflisted(l:alternateBufNum)
      buffer #
    else
      bnext
    endif
-
    if bufnr("%") == l:currentBufNum
      new
    endif
-
    if buflisted(l:currentBufNum)
      execute("bdelete! ".l:currentBufNum)
    endif
@@ -335,11 +332,13 @@ map <leader>da :BcloseA<cr>
 let g:bufferline_echo = 1
 let g:miniBufExplorerAutoStart=1
 let g:miniBufExplBuffersNeeded=2
-let g:miniBufExplSplitBelow=1
+" let g:miniBufExplSplitBelow=1
 let g:miniBufExplMinSize=1
 let g:miniBufExplUseSingleClick = 1
-" hi MBEChanged guibg=darkblue ctermbg=240
-hi link MBEVisibleChanged Error
+let g:miniBufExplModSelTarget=1
+" let g:miniBufExplForceSyntaxEnable=1
+hi MBEChanged cterm=bold guibg=darkblue ctermbg=darkblue
+
 " ----- ctags 设置
 set tags=./tags;/,~/.vimtags,tags
 
