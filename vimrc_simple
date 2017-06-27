@@ -73,8 +73,8 @@ endif
 " 目录配置
 Bundle 'scrooloose/nerdtree'
 " 缓冲区设置
-Bundle 'vim-scripts/minibufexplorerpp'
-" Bundle 'bling/vim-bufferline'
+" Bundle 'vim-scripts/minibufexplorerpp'
+Bundle 'bling/vim-bufferline'
 " 颜色主题
 Bundle 'altercation/vim-colors-solarized'
 
@@ -307,7 +307,7 @@ function! <SID>BufcloseCloseAll()
 	endfor
 endfunction
 
-" 模板函数
+" 模板函数-文件
 function! Setfilehead()
     call append(line("."),  '/***********************************************')
     call append(line(".")+1, '*        Author: zhaojingzhen@weidian.com')
@@ -317,7 +317,6 @@ function! Setfilehead()
     call append(line(".")+5, '*        Return: ')
     call append(line(".")+6, '***********************************************/')
 endfunc
-
 "=================================================
 "------插件设置-----------------------------------
 "=================================================
@@ -329,15 +328,23 @@ map <C-f>	:bp<cr>
 map <leader>dd :Bclose<cr>
 " 关闭所有缓冲区，包括当前窗口
 map <leader>da :BcloseA<cr>
-let g:bufferline_echo = 1
-let g:miniBufExplorerAutoStart=1
-let g:miniBufExplBuffersNeeded=2
-" let g:miniBufExplSplitBelow=1
-let g:miniBufExplMinSize=1
-let g:miniBufExplUseSingleClick = 1
-let g:miniBufExplModSelTarget=1
-" let g:miniBufExplForceSyntaxEnable=1
-hi MBEChanged cterm=bold guibg=darkblue ctermbg=darkblue
+" let g:bufferline_echo = 1
+" let g:miniBufExplorerAutoStart=1
+" let g:miniBufExplBuffersNeeded=2
+" " let g:miniBufExplSplitBelow=1
+" let g:miniBufExplMinSize=1
+" let g:miniBufExplUseSingleClick = 1
+" let g:miniBufExplModSelTarget=1
+" " let g:miniBufExplForceSyntaxEnable=1
+" hi MBEChanged cterm=bold guibg=darkblue ctermbg=darkblue
+""""""""""""""""""""""""""""""""" 
+" bufferline 设置
+""""""""""""""""""""""""""""""""" 
+let g:bufferline_echo=0
+autocmd VimEnter *
+			\ let &statusline='%{bufferline#refresh_status()}'
+			\ .bufferline#get_status_string()
+
 
 " ----- ctags 设置
 set tags=./tags;/,~/.vimtags,tags
