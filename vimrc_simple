@@ -18,34 +18,27 @@ let g:mapleader=","
 " 快速保存
 noremap `	:w!<cr>
 " 快速退出
-noremap q   <ESC>:q!<CR>
+noremap q	<ESC>:CloseBW<CR>
 " 行首 行尾
 noremap A   ^
 noremap E   $
 " ; -> :
 noremap ; :
-" 可视列模式
-noremap <F2>    <C-v>
-" 打开交换文件
-noremap <F7>    :vi#<cr>
 " 关闭quickwindow
 noremap cl   :ccl<cr>
-" 插入文件头 函数头
-noremap <F9>    :call Setfilehead()<cr>
-" 插入日期
-noremap <F5>    o// Date: <Esc>:read !date<CR>kJ
-inoremap <F5>   <CR>// Date: <Esc>:read !date<CR>kJ
-" 查找当前光标的单词，并在quickfix窗口显示在什么地方出现了
+" 查找当前光标下的单词且显示在quickfix窗口中
 noremap <silent><leader>g   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
 " 查找当前光标下的单词，支持跳转
 noremap <silent><Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr . "[\t"<CR>
-" 显示当前缓冲区
-noremap <F8>	:ls<CR>:let WinId = input("Which buffer: ")<Bar>exe "normal buffer " . WinId<CR>
-" 标签设置
-" noremap <C-n>	:tabN<cr>
-" noremap <C-f>	:tabp<cr>
-" noremap te		:tabedit 
-" noremap <silent><Leader>dd	:tabclose<cr>
+noremap <F1>	<Nop>
+noremap <F2>	:Bclose<cr>
+noremap <F3>	:BcloseA<cr>
+noremap <F4>	:vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
+" 插入日期
+noremap <F5>    o// Date: <Esc>:read !date<CR>kJ
+inoremap <F5>   <CR>// Date: <Esc>:read !date<CR>kJ
+" 文件头
+noremap <F9>    :call Setfilehead()<cr>
 
 " ===========================================
 " => Bundle 及插件设置
@@ -155,7 +148,8 @@ if has("gui_running")
 	set guioptions-=T
 	set guioptions+=e
 	set guitablabel=%M\ %t
-    set guifont=Courier_New:h14
+    " set guifont=Courier_New:h14
+    set guifont=Courier_New_Bold_Italic:h14
     if OSX()
         set guioptions-=T
         set guioptions-=m
@@ -306,7 +300,12 @@ function! <SID>BufcloseCloseAll()
 		endif
 	endfor
 endfunction
-
+" 关闭缓冲区和窗口
+command! CloseBW call <SID>CloseBuffersAndWindow()
+function! <SID>CloseBuffersAndWindow()
+	execute("BcloseA")
+	q!
+endfunction
 " 模板函数-文件
 function! Setfilehead()
     call append(line("."),  '/***********************************************')
