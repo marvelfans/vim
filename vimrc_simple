@@ -8,7 +8,6 @@ endfunction
 silent function! WINDOWS()
     return (has('win32') || has('win64'))
 endfunction
-
 " ===========================================
 " => 快捷键 
 " ===========================================
@@ -31,12 +30,6 @@ noremap <silent><leader>g   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
 " 查找当前光标下的单词，支持跳转
 noremap <silent><Leader>ff [I:let nr = input("Which one: ")<Bar>exe "normal " . nr . "[\t"<CR>
 noremap <F1>	<Nop>
-noremap <F2>	:Bclose<cr>
-noremap <F3>	:BcloseA<cr>
-noremap <F4>	:vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
-" 插入日期
-noremap <F5>    o// Date: <Esc>:read !date<CR>kJ
-inoremap <F5>   <CR>// Date: <Esc>:read !date<CR>kJ
 " 文件头
 noremap <F9>    :call Setfilehead()<cr>
 
@@ -118,6 +111,10 @@ set noerrorbells
 set novisualbell
 set t_vb=
 set tm=500
+" 使用系统剪贴板
+if has('clipboard')
+	set clipboard=unnamed
+endif
 " 插入模式下可以滚屏 鼠标可用
 set mouse=i
 " 鼠标隐藏
