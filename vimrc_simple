@@ -134,6 +134,8 @@ set virtualedit=onemore
 set helplang=cn
 " 避免自动切换到当前文件的目录
 autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
+autocmd BufEnter * if matchstrpos(getcwd(), 'jjj')[0] != '' | source .vimrc.test | endif
+
 " ===========================================
 " => Colors and Fonts
 " ===========================================
