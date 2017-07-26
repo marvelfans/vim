@@ -63,6 +63,9 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'bling/vim-bufferline'
 " 颜色主题
 Bundle 'altercation/vim-colors-solarized'
+" go-lang
+Bundle 'fatih/vim-go'
+
 
 " 放到前边 solarized 颜色设置
 let g:solarized_termcolors=256
@@ -414,7 +417,8 @@ inoremap <expr> <C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
 inoremap <expr> <C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
 
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-set completeopt=menu,preview,longest
+" set completeopt=menu,preview,longest
+set completeopt=menu,longest
 
 " neocomplcache 
 let g:acp_enableAtStartup = 0
