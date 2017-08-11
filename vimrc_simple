@@ -193,8 +193,8 @@
 		set guioptions-=T
 		set guioptions+=e
 		set guitablabel=%M\ %t
-	    " set guifont=Courier_New:h14
-	    set guifont=Courier_New_Bold_Italic:h14
+	    set guifont=Courier_New_Bold:h14
+	    " set guifont=Courier_New_Bold_Italic:h14
 	    if OSX()
 	        set guioptions-=T
 	        set guioptions-=m
