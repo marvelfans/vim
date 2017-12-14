@@ -170,6 +170,7 @@
 	" }
 	" GoLang 相关插件 {
 		Bundle 'fatih/vim-go'
+		Bundle 'nsf/gocode'
 	" }
 " }
 
@@ -180,15 +181,20 @@
 	let g:solarized_contrast="normal"
 	let g:solarized_visibility="normal"
 	colorscheme solarized
-	set background=dark
+	" set background=dark
+	set background=light
 	set t_Co=256
-	" 显示下划线(会花屏) 只在gui模式下使用
-	" if has('gui_running')
-		set cul	" 显示下划线
-		highlight CursorLine  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green	" 高亮当前行背景 而不是一个下划线
-		" set cuc " 显示竖对齐线
-		" highlight CursorColumn  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green	" 设置竖对齐线的显示样式
-	" endif
+
+	set cursorline	" 显示下划线
+	" set cursorcolumn " 显示竖对齐线
+	
+	highlight clear CursorLineNr
+	highlight clear LineNr
+	highlight clear SignColumn
+
+	" highlight CursorLine  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green	" 高亮当前行背景 而不是一个下划线
+	" highlight CursorColumn  cterm=NONE ctermbg=black ctermfg=green guibg=black guifg=green	" 设置竖对齐线的显示样式
+	
 	if has("gui_running")
 		set guioptions-=T
 		set guioptions+=e
