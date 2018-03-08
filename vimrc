@@ -181,8 +181,8 @@
 	let g:solarized_contrast="normal"
 	let g:solarized_visibility="normal"
 	colorscheme solarized
-	" set background=dark
-	set background=light
+	set background=dark
+	" set background=light
 	set t_Co=256
 
 	set cursorline	" 显示下划线
@@ -290,7 +290,7 @@
 		" 			\ .bufferline#get_status_string()
 	" }
 	" ctags 设置 {
-		set tags=./tags;/,~/.vimtags,tags
+		set tags=./tags;/,~/.vimtags,tags,/usr/bin/ctags
 	" }
 	" Tlist 设置 {
 		let g:Tlist_path = "$HOME/.vim/bundle/taglist.vim/"
