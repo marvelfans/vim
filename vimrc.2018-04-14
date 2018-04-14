@@ -98,8 +98,8 @@
 		set noswapfile
 	" }
 	" 文件格式 {	
-		" set expandtab		" 空格代替tabs
-		set noexpandtab 	" 不用空格代替tabs
+		set expandtab		" 空格代替tabs
+		" set noexpandtab 	" 不用空格代替tabs
 		set smarttab 		" 智能tab?
 		set shiftwidth=4 	"tab = 4*spaces
 		set tabstop=4
