@@ -10,9 +10,9 @@ Bundle 'ervandew/supertab'
 Bundle 'vim-syntastic/syntastic'
 Bundle 'nvie/vim-flake8'
 Bundle 'scrooloose/nerdtree'
+Bundle 'kien/ctrlp.vim'
 Bundle 'godlygeek/tabular'
 Bundle 'plasticboy/vim-markdown'
-Bundle 'tpope/vim-fugitive.git'
 Bundle 'marvelfans/vim-neatstatus'
 filetype on
 " ============================================================ "
@@ -26,7 +26,11 @@ noremap A ^
 noremap E $
 noremap ; :
 noremap <F1> <Nop>
+noremap <F2> :vi #<cr>
+noremap <F3> zR
+noremap <F4> zM
 nnoremap <space> za
+noremap <silent><leader>ff   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
 
 map <C-j> <C-W><C-J>
 map <C-k> <C-W><C-K>
@@ -112,6 +116,7 @@ set number
 highlight lineNr cterm=NONE ctermfg=249 ctermbg=179 guifg=LightYellow guibg=Grey
 set t_Co=256
 set cursorline
+set cuc
 highlight clear CursorLineNr
 highlight clear LineNr
 highlight clear SignColumn
@@ -145,3 +150,12 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 map <Leader>e :NERDTreeToggle<CR>
+
+"" ctrlp
+let g:ctrlp_user_command = 'find %s -type f'
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn|pyc)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll|pyc)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
