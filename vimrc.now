@@ -1,3 +1,4 @@
+"""" 插件
 filetype off
 set rtp+=$HOME/.vim/bundle/Vundle.vim/
 call vundle#rc()
@@ -14,9 +15,10 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'godlygeek/tabular'
 Bundle 'plasticboy/vim-markdown'
 Bundle 'marvelfans/vim-neatstatus'
+
 filetype on
 " ============================================================ "
-
+"""" 快捷键
 let mapleader=","
 let g:mapleader=","
 
@@ -32,11 +34,16 @@ noremap <F4> zM
 nnoremap <space> za
 noremap <silent><leader>ff   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
 
+" 使用pbcopy，方便对外部复制粘贴
+vmap y :w !pbcopy<cr><cr>
+nmap p :r !pbpaste<cr><cr>
+
 map <C-j> <C-W><C-J>
 map <C-k> <C-W><C-K>
 map <C-h> <C-W><C-H>
 map <C-l> <C-W><C-L>
 
+"""" 编码设置
 set encoding=utf-8
 set termencoding=utf-8
 set fileencoding=utf-8
@@ -66,10 +73,6 @@ set noerrorbells
 set novisualbell
 set t_vb=
 set tm=500
-
-if has('clipboard')
-    set clipboard=unnamed
-endif
 
 " code fold
 set fdm=indent
@@ -133,6 +136,9 @@ autocmd BufReadPost *
             \ endif
 
 "" Syntastic python
+" 超过110个字符，背景就会变成红色，对python格试很有用
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+match OverLength /\%111v.\+/
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
