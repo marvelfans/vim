@@ -35,8 +35,8 @@ nnoremap <space> za
 noremap <silent><leader>ff   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
 
 " 使用pbcopy，方便对外部复制粘贴
-vmap y :w !pbcopy<cr><cr>
-nmap p :r !pbpaste<cr><cr>
+vmap y <F5> !pbcopy<cr><cr>
+nmap p <F6> !pbpaste<cr><cr>
 
 map <C-j> <C-W><C-J>
 map <C-k> <C-W><C-K>
@@ -105,14 +105,7 @@ au BufNewFile,BufRead *.py\
        \ set autoindent
        \ set fileformat=unix
 
-if exists("tags")
-    set tags=./tags
-endif
-
 set laststatus=2
-" set statusline+=\ %t
-" set statusline+=\ [%{strftime(\"%Y/%m/%d\ %H:%M\")}]
-" set statusline+=\ [%l,%c]
 
 colorscheme molokai
 set number
@@ -123,22 +116,27 @@ set cuc
 highlight clear CursorLineNr
 highlight clear LineNr
 highlight clear SignColumn
-set guifont=Courier_New:Bold:h14
-
+set guifont=Monaco:h18
 
 syntax on
 syntax enable
  
-autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
+" autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
 autocmd BufReadPost *
             \ if line("'\"") > 0 && line("'\"") <= line("$") |
             \   exe "normal! g`\"" |
             \ endif
 
+"" tags
+if exists('tags')
+    set tags+=tags
+    set autochdir
+endif
+
 "" Syntastic python
 " 超过110个字符，背景就会变成红色，对python格试很有用
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-match OverLength /\%111v.\+/
+autocmd Filetype python highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+autocmd Filetype python  match OverLength /\%111v.\+/
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
