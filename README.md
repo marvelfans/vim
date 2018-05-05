@@ -7,8 +7,6 @@
 * `markdown`支持。
 * 主题和外观。
 * 文件查找
-* 支持`nerdtree`、`ctrlp`。
-* `statusline` 使用轻量级的`vim-neatstatus`。
 
 ## 使用
 * 拷贝本文件到自己的电脑。
