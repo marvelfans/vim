@@ -3,12 +3,13 @@ filetype off
 set rtp+=$HOME/.vim/bundle/Vundle.vim/
 call vundle#rc()
 Bundle 'VundleVim/Vundle.vim'
-Bundle 'tomasr/molokai'
+Bundle 'liuchengxu/space-vim-dark'
 Bundle 'fatih/vim-go'
 Bundle 'nsf/gocode'
 Bundle 'davidhalter/jedi-vim'  
 Bundle 'ervandew/supertab' 
 Bundle 'vim-syntastic/syntastic'
+Bundle 'python-mode/python-mode'
 Bundle 'nvie/vim-flake8'
 Bundle 'scrooloose/nerdtree'
 Bundle 'kien/ctrlp.vim'
@@ -29,14 +30,12 @@ noremap E $
 noremap ; :
 noremap <F1> <Nop>
 noremap <F2> :vi #<cr>
-noremap <F3> zR
-noremap <F4> zM
 nnoremap <space> za
 noremap <silent><leader>ff   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
 
 " 使用pbcopy，方便对外部复制粘贴
-vmap y <F5> !pbcopy<cr><cr>
-nmap p <F6> !pbpaste<cr><cr>
+vmap <F5> :w !pbcopy<cr><cr>
+nmap <F6> :r !pbpaste<cr><cr>
 
 map <C-j> <C-W><C-J>
 map <C-k> <C-W><C-K>
@@ -107,7 +106,8 @@ au BufNewFile,BufRead *.py\
 
 set laststatus=2
 
-colorscheme molokai
+colorscheme space-vim-dark
+hi Comment cterm=italic
 set number
 highlight lineNr cterm=NONE ctermfg=249 ctermbg=179 guifg=LightYellow guibg=Grey
 set t_Co=256
