@@ -9,7 +9,6 @@ Bundle 'nsf/gocode'
 Bundle 'davidhalter/jedi-vim'  
 Bundle 'ervandew/supertab' 
 Bundle 'vim-syntastic/syntastic'
-Bundle 'python-mode/python-mode'
 Bundle 'nvie/vim-flake8'
 Bundle 'scrooloose/nerdtree'
 Bundle 'kien/ctrlp.vim'
@@ -32,6 +31,9 @@ noremap <F1> <Nop>
 noremap <F2> :vi #<cr>
 nnoremap <space> za
 noremap <silent><leader>ff   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
+
+" 使用<C-g> 代替<Esc> 或 <C-[> 或 <C-c>
+ino <C-g> <C-[>
 
 " 使用pbcopy，方便对外部复制粘贴
 vmap <F5> :w !pbcopy<cr><cr>
