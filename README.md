@@ -12,6 +12,7 @@
 * 拷贝本文件到自己的电脑。
 * 选择`vimrc.now`更命并替换自己的配置文件`.vimrc`。
 * 在`$HOME`下建立`$HOME/vim/bundle/`的路径。
+* 在`$HOME/vim/bundle/`下执行`git clone https://github.com/VundleVim/Vundle.vim`。
 * 在命令行执行`vim +PluginInstall +qall`。
 
 ## 文件说明
