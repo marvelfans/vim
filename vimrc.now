@@ -3,18 +3,17 @@ filetype off
 set rtp+=$HOME/.vim/bundle/Vundle.vim/
 call vundle#rc()
 Bundle 'VundleVim/Vundle.vim'
-Bundle 'liuchengxu/space-vim-dark'
 Bundle 'fatih/vim-go'
 Bundle 'nsf/gocode'
 Bundle 'davidhalter/jedi-vim'  
 Bundle 'ervandew/supertab' 
 Bundle 'vim-syntastic/syntastic'
 Bundle 'nvie/vim-flake8'
-Bundle 'scrooloose/nerdtree'
 Bundle 'kien/ctrlp.vim'
 Bundle 'godlygeek/tabular'
 Bundle 'plasticboy/vim-markdown'
 Bundle 'marvelfans/vim-neatstatus'
+Bundle 'jnurmine/Zenburn'
 
 filetype on
 " ============================================================ "
@@ -29,18 +28,10 @@ noremap E $
 noremap ; :
 noremap <F1> <Nop>
 noremap <F2> :vi #<cr>
-nnoremap <space> za
 " 在当前文件下搜索当前光标下的word，并跳转
 noremap <silent><leader>ff   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
 " 在当前文件下搜索当前光标下的word，只是刷新quickfix
 noremap <silent><leader>gg   :vimgrep <C-R>="/".expand("<cword>")."/j"<CR> %<CR>:cw<cr>
-
-" 使用<C-g> 代替<Esc> 或 <C-[> 或 <C-c>
-ino <C-g> <C-[>
-
-" 使用pbcopy，方便对外部复制粘贴
-vmap <F5> :w !pbcopy<cr><cr>
-nmap <F6> :r !pbpaste<cr><cr>
 
 map <C-j> <C-W><C-J>
 map <C-k> <C-W><C-K>
@@ -110,7 +101,7 @@ au BufNewFile,BufRead *.py\
 
 set laststatus=2
 
-colorscheme space-vim-dark
+colorscheme zenburn
 hi Comment cterm=italic
 set number
 highlight lineNr cterm=NONE ctermfg=249 ctermbg=179 guifg=LightYellow guibg=Grey
@@ -138,11 +129,11 @@ autocmd BufReadPost *
 "" tags
 if exists('tags')
     set tags+=tags
-    set autochdir
+    " set autochdir
 endif
 
 "" Syntastic python
-" 超过110个字符，背景就会变成红色，对python格试很有用
+" 超过120个字符，背景就会变成红色，对python格试很有用
 autocmd Filetype python highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 autocmd Filetype python  match OverLength /\%121v.\+/
 set statusline+=%#warningmsg#
@@ -154,14 +145,6 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers=['pyflakes']
 let g:syntastic_python_pylint_args='--max-line-length=120 --ignore=I100, I101, I201 --exclude=.git, __pycache__, build, dist'
-
-"" NERDTree
-let g:NERDTreeDirArrowExpandable = '▸'
-let g:NERDTreeDirArrowCollapsible = '▾'
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
-map <Leader>e :NERDTreeToggle<CR>
 
 "" ctrlp
 " let g:ctrlp_user_command = 'find %s -type f'

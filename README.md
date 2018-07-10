@@ -48,9 +48,8 @@
 * fatih/vim-go
 
 ### 主题和外观
-* 主题`liuchengxu/space-vim-dark`
+* 主题`Bundle 'jnurmine/Zenburn'`
 * 状态栏`marvelfans/vim-neatstatus`
 
 ### 目录和文件索引
-* 目录树: scrooloose/nerdtree
 * 文件快速索引: kien/ctrlp.vim
