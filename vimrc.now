@@ -127,8 +127,10 @@ autocmd BufReadPost *
             \ endif
 
 "" tags
+" 如果出现重复的，使用者自己选择
+set cscopetag
 if exists('tags')
-    set tags+=tags
+    set tags=tags
     " set autochdir
 endif
 
