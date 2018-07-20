@@ -89,16 +89,6 @@ set tw=500
 set ai
 set si
 set wrap
-
-au BufNewFile,BufRead *.py\
-       \ set tabstop=4
-       \ set softtabstop=4
-       \ set shiftwidth=4
-       \ set textwidth=120
-       \ set expandtab
-       \ set autoindent
-       \ set fileformat=unix
-
 set laststatus=2
 
 colorscheme zenburn
@@ -111,7 +101,7 @@ set cuc
 highlight clear CursorLineNr
 highlight clear LineNr
 highlight clear SignColumn
-set guifont=Monaco:h18
+set guifont=Monaco:h13
 " 背景颜色无法刷新的情况
 if &term =~ '256color'  
   set t_ut=  
