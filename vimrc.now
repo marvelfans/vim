@@ -14,6 +14,7 @@ Bundle 'godlygeek/tabular'
 Bundle 'plasticboy/vim-markdown'
 Bundle 'marvelfans/vim-neatstatus'
 Bundle 'jnurmine/Zenburn'
+Bundle 'vim-gitgutter'
 
 filetype on
 " ============================================================ "
@@ -33,11 +34,6 @@ noremap <silent><leader>ff   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr
 " 在当前文件下搜索当前光标下的word，只是刷新quickfix
 noremap <silent><leader>gg   :vimgrep <C-R>="/".expand("<cword>")."/j"<CR> %<CR>:cw<cr>
 
-map <C-j> <C-W><C-J>
-map <C-k> <C-W><C-K>
-map <C-h> <C-W><C-H>
-map <C-l> <C-W><C-L>
-
 """" 编码设置
 set encoding=utf-8
 set termencoding=utf-8
@@ -45,7 +41,7 @@ set fileencoding=utf-8
 set fileencodings=utf-8,ucs-bom,chinese,cp930,GBK
 
 set nocompatible
-set history=700
+set history=4096
 set ruler
 set wildmenu
 set wildignore=*.0,*~,~.pyc
@@ -89,9 +85,9 @@ set tw=500
 set ai
 set si
 set wrap
+
 set laststatus=2
 
-colorscheme zenburn
 hi Comment cterm=italic
 set number
 highlight lineNr cterm=NONE ctermfg=249 ctermbg=179 guifg=LightYellow guibg=Grey
@@ -101,11 +97,12 @@ set cuc
 highlight clear CursorLineNr
 highlight clear LineNr
 highlight clear SignColumn
-set guifont=Monaco:h13
+set guifont=Monaco:h12
 " 背景颜色无法刷新的情况
-if &term =~ '256color'  
-  set t_ut=  
-endif  
+if &term =~ '256color'
+  set t_ut=
+endif
+colorscheme zenburn
 
 syntax on
 syntax enable
@@ -117,10 +114,8 @@ autocmd BufReadPost *
             \ endif
 
 "" tags
-" 如果出现重复的，使用者自己选择
-set cscopetag
 if exists('tags')
-    set tags=tags
+    set tags+=tags
     " set autochdir
 endif
 
@@ -146,3 +141,6 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(exe|so|dll)$',
   \ 'link': 'some_bad_symbolic_links',
   \ }
+
+"" vim-gitgutter git管理高亮
+let g:gitgutter_highlight_lines = 1
