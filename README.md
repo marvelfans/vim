@@ -40,6 +40,7 @@
 * 我是这样使用的:
     * `sudo find . -name ptags.py` 找到`ptags.py`的路径。
     * `find . -regex ".*\.py" | xargs <path-to-ptags.py>` 在当前目录下生成tags文件。
+    * 或 `find . -regex ".*\.py" | xargs etags`
 * 如果需要对单个文件生成tags文件，可以这样:
     * `sudo find . -name ptags.py` 找到`ptags.py`的路径。
     * `<path-to-ptags.py> file.py`
