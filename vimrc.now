@@ -114,8 +114,9 @@ autocmd BufReadPost *
             \ endif
 
 "" tags
+set cscopetag
 if exists('tags')
-    set tags+=tags
+    set tags=tags
     " set autochdir
 endif
 
