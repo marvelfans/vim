@@ -5,8 +5,6 @@
 let mapleader=","
 let g:mapleader=","
 
-noremap ` :w!<cr>
-noremap q :q!<cr>
 noremap A ^
 noremap E $
 noremap ; :
