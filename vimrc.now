@@ -162,6 +162,7 @@ Plug 'plasticboy/vim-markdown'
 Plug 'marvelfans/vim-neatstatus'
 Plug 'jnurmine/Zenburn'
 Plug 'vim-scripts/vim-gitgutter'
+Plug 'jlanzarotta/bufexplorer'
 call plug#end()
 
 

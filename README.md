@@ -60,6 +60,7 @@
 
 ### 目录和文件索引
 * 文件快速索引: kien/ctrlp.vim
+* buffer快速切换: jlanzarotta/bufexplorer
 
 ### git 高亮
 * 使用vim-gitgutter, 支持vim高亮
