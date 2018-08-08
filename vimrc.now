@@ -1,21 +1,12 @@
 
 """""""""""""""""""""""""""""
-"""" 编码设置
+"""" 快捷键设置
 """""""""""""""""""""""""""""
 let mapleader=","
 let g:mapleader=","
 
-noremap A ^
-noremap E $
 noremap ; :
 noremap <F1> <Nop>
-noremap <F2> :vi #<cr>
-" 在当前文件下搜索当前光标下的word，并跳转
-noremap <silent><leader>ff   :vimgrep <C-R>=expand("<cword>")<CR> %<CR>:copen<cr>
-" 在当前文件下搜索当前光标下的word，只是刷新quickfix
-noremap <silent><leader>gg   :vimgrep <C-R>="/".expand("<cword>")."/j"<CR> %<CR>:cw<cr>
-
-
 """""""""""""""""""""""""""""
 """" 编码设置
 """""""""""""""""""""""""""""
@@ -163,6 +154,7 @@ Plug 'marvelfans/vim-neatstatus'
 Plug 'jnurmine/Zenburn'
 Plug 'vim-scripts/vim-gitgutter'
 Plug 'jlanzarotta/bufexplorer'
+Plug 'mileszs/ack.vim'
 call plug#end()
 
 
@@ -214,3 +206,12 @@ let g:ctrlp_custom_ignore = {
 
 """" <vim-gitgutter> git管理高亮
 let g:gitgutter_highlight_lines = 1
+
+""" <ack> 代码搜索
+let g:ack_default_options =
+    \ " -s -H --column --smart-case --follow"
+let g:ackhighlight = 1
+:command! -nargs=1 SearchWordInCurrentFile :Ack <args> %
+:command! -nargs=1 SearchWordInCurrentDire :Ack <args> -w .
+noremap <leader>gf :SearchWordInCurrentFile <C-R>=expand("<cword>")<CR><CR>
+noremap <leader>gd :SearchWordInCurrentDire <C-R>=expand("<cword>")<CR><CR>
