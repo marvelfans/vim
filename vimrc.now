@@ -147,14 +147,11 @@ Plug 'davidhalter/jedi-vim'             " python补全
 Plug 'ervandew/supertab'
 Plug 'vim-syntastic/syntastic'
 Plug 'nvie/vim-flake8'
-Plug 'kien/ctrlp.vim'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'marvelfans/vim-neatstatus'
 Plug 'jnurmine/Zenburn'
 Plug 'vim-scripts/vim-gitgutter'
-Plug 'jlanzarotta/bufexplorer'
-Plug 'mileszs/ack.vim'
 call plug#end()
 
 
@@ -194,24 +191,3 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers=['pyflakes']
 let g:syntastic_python_pylint_args='--max-line-length=120 --ignore=I100, I101, I201 --exclude=.git, __pycache__, build, dist'
-
-"""" <ctrlp> 文件模糊搜索
-" let g:ctrlp_user_command = 'find %s -type f'
-let g:ctrlp_user_command = 'find %s ! -regex ".*\.pyc"'
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ 'link': 'some_bad_symbolic_links',
-  \ }
-
-"""" <vim-gitgutter> git管理高亮
-let g:gitgutter_highlight_lines = 1
-
-""" <ack> 代码搜索
-let g:ack_default_options =
-    \ " -s -H --column --smart-case --follow"
-let g:ackhighlight = 1
-:command! -nargs=1 SearchWordInCurrentFile :Ack <args> %
-:command! -nargs=1 SearchWordInCurrentDire :Ack <args> -w .
-noremap <leader>gf :SearchWordInCurrentFile <C-R>=expand("<cword>")<CR><CR>
-noremap <leader>gd :SearchWordInCurrentDire <C-R>=expand("<cword>")<CR><CR>
