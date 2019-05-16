@@ -44,7 +44,7 @@ set smartcase
 set hlsearch
 
 " 每插入一个字符,就高亮一个
-" set incsearch
+set incsearch
 
 " 显示匹配插号
 set showmatch
@@ -141,29 +141,29 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
-Plug 'fatih/vim-go'                     " go
-Plug 'nsf/gocode'
+" Plug 'fatih/vim-go'                     " go
+" Plug 'nsf/gocode'
 Plug 'davidhalter/jedi-vim'             " python补全 
 Plug 'ervandew/supertab'
 Plug 'vim-syntastic/syntastic'
 Plug 'nvie/vim-flake8'
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
+" Plug 'plasticboy/vim-markdown'
 Plug 'marvelfans/vim-neatstatus'
-Plug 'jnurmine/Zenburn'
-Plug 'vim-scripts/vim-gitgutter'
+" Plug 'jnurmine/Zenburn'
+" Plug 'vim-scripts/vim-gitgutter'
 call plug#end()
 
 
 """""""""""""""""""""""""""""
 """"" 界面设置
 """""""""""""""""""""""""""""
+" 高亮注释
 hi Comment cterm=italic
 set number
 highlight lineNr cterm=NONE ctermfg=249 ctermbg=179 guifg=LightYellow guibg=Grey
 set t_Co=256
-set cursorline
-set cursorcolumn
+" set cursorline
+" set cursorcolumn
 highlight clear CursorLineNr
 highlight clear LineNr
 highlight clear SignColumn
@@ -172,7 +172,7 @@ set guifont=Courier:h14
 if &term =~ '256color'
   set t_ut=
 endif
-colorscheme zenburn
+" colorscheme zenburn
 
  
 """""""""""""""""""""""""""""
