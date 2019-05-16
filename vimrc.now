@@ -158,7 +158,7 @@ call plug#end()
 """"" 界面设置
 """""""""""""""""""""""""""""
 " 高亮注释
-hi Comment cterm=italic
+" hi Comment cterm=italic
 set number
 highlight lineNr cterm=NONE ctermfg=249 ctermbg=179 guifg=LightYellow guibg=Grey
 set t_Co=256
