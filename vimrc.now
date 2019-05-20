@@ -151,6 +151,7 @@ Plug 'nvie/vim-flake8'
 Plug 'marvelfans/vim-neatstatus'
 " Plug 'jnurmine/Zenburn'
 " Plug 'vim-scripts/vim-gitgutter'
+Plug 'scrooloose/nerdtree'
 call plug#end()
 
 
@@ -191,3 +192,10 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers=['pyflakes']
 let g:syntastic_python_pylint_args='--max-line-length=120 --ignore=I100, I101, I201 --exclude=.git, __pycache__, build, dist'
+
+""" <NERDTree>
+map <Leader>e   :NERDTreeToggle<CR>
+" 某些文件不展示在nerdtree中
+let NERDTreeIgnore = ['\.pyc$', '\.swp', '\.swo']
+" 最后只剩下nerdtree的时候, 则退出
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
