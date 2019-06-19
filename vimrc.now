@@ -145,11 +145,11 @@ call plug#begin('~/.vim/plugged')
 " Plug 'nsf/gocode'
 Plug 'davidhalter/jedi-vim'             " python补全 
 Plug 'ervandew/supertab'
-Plug 'vim-syntastic/syntastic'
+" Plug 'vim-syntastic/syntastic'
 Plug 'nvie/vim-flake8'
 " Plug 'plasticboy/vim-markdown'
 Plug 'marvelfans/vim-neatstatus'
-" Plug 'jnurmine/Zenburn'
+Plug 'jnurmine/Zenburn'
 " Plug 'vim-scripts/vim-gitgutter'
 Plug 'scrooloose/nerdtree'
 call plug#end()
@@ -159,12 +159,12 @@ call plug#end()
 """"" 界面设置
 """""""""""""""""""""""""""""
 " 高亮注释
-" hi Comment cterm=italic
+hi Comment cterm=italic
 set number
 highlight lineNr cterm=NONE ctermfg=249 ctermbg=179 guifg=LightYellow guibg=Grey
 set t_Co=256
-" set cursorline
-" set cursorcolumn
+set cursorline
+set cursorcolumn
 highlight clear CursorLineNr
 highlight clear LineNr
 highlight clear SignColumn
@@ -173,7 +173,7 @@ set guifont=Courier:h14
 if &term =~ '256color'
   set t_ut=
 endif
-" colorscheme zenburn
+colorscheme zenburn
 
  
 """""""""""""""""""""""""""""
