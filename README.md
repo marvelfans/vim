@@ -74,4 +74,3 @@
 
 ### 文件浏览
 * 使用了`scrooloose/nerdtree`插件.
-

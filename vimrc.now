@@ -147,7 +147,7 @@ Plug 'davidhalter/jedi-vim'             " python补全
 Plug 'ervandew/supertab'
 " Plug 'vim-syntastic/syntastic'
 Plug 'nvie/vim-flake8'
-" Plug 'plasticboy/vim-markdown'
+Plug 'plasticboy/vim-markdown'
 Plug 'marvelfans/vim-neatstatus'
 Plug 'jnurmine/Zenburn'
 " Plug 'vim-scripts/vim-gitgutter'
