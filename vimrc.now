@@ -164,7 +164,7 @@ set number
 highlight lineNr cterm=NONE ctermfg=249 ctermbg=179 guifg=LightYellow guibg=Grey
 set t_Co=256
 set cursorline
-set cursorcolumn
+" set cursorcolumn
 highlight clear CursorLineNr
 highlight clear LineNr
 highlight clear SignColumn
@@ -173,7 +173,7 @@ set guifont=Courier:h14
 if &term =~ '256color'
   set t_ut=
 endif
-colorscheme zenburn
+" colorscheme zenburn
 
  
 """""""""""""""""""""""""""""
