@@ -64,7 +64,7 @@ set tm=500
 " set fdm=indent
 
 " 鼠标模式
-set mouse=c
+set mouse=a
 
 " 鼠标可以在行未后一个字符
 set virtualedit=onemore
@@ -109,6 +109,8 @@ set cmdheight=1
 syntax on
 syntax enable
 
+" 共享粘贴板
+set clipboard=unnamedplus,unnamed
 
 " 回到上次打开的位置
 " autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
@@ -143,7 +145,7 @@ endif
 call plug#begin('~/.vim/plugged')
 " Plug 'fatih/vim-go'                     " go
 " Plug 'nsf/gocode'
-Plug 'davidhalter/jedi-vim'             " python补全 
+" Plug 'davidhalter/jedi-vim'             " python补全 
 Plug 'ervandew/supertab'
 " Plug 'vim-syntastic/syntastic'
 Plug 'nvie/vim-flake8'
@@ -163,17 +165,18 @@ hi Comment cterm=italic
 set number
 highlight lineNr cterm=NONE ctermfg=249 ctermbg=179 guifg=LightYellow guibg=Grey
 set t_Co=256
-set cursorline
+" set cursorline
 " set cursorcolumn
 highlight clear CursorLineNr
 highlight clear LineNr
 highlight clear SignColumn
 set guifont=Courier:h14
+set guifontwide=STSong:h14
 " 背景颜色无法刷新的情况
 if &term =~ '256color'
   set t_ut=
 endif
-" colorscheme zenburn
+colorscheme zenburn
 
  
 """""""""""""""""""""""""""""
@@ -181,17 +184,17 @@ endif
 """""""""""""""""""""""""""""
 """" <Syntastic> python语法
 " 超过120个字符，背景就会变成红色，对python格试很有用
-autocmd Filetype python highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-autocmd Filetype python  match OverLength /\%121v.\+/
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers=['pyflakes']
-let g:syntastic_python_pylint_args='--max-line-length=120 --ignore=I100, I101, I201 --exclude=.git, __pycache__, build, dist'
+" autocmd Filetype python highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+" autocmd Filetype python  match OverLength /\%121v.\+/
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
+" let g:syntastic_python_checkers=['pyflakes']
+" let g:syntastic_python_pylint_args='--max-line-length=120 --ignore=I100, I101, I201 --exclude=.git, __pycache__, build, dist'
 
 """ <NERDTree>
 map <Leader>e   :NERDTreeToggle<CR>
