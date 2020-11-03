@@ -19,6 +19,10 @@ set fileencodings=utf-8,ucs-bom,chinese,cp930,GBK
 """""""""""""""""""""""""""""
 """"" 基本设置
 """""""""""""""""""""""""""""
+
+" 显示行号
+set number
+
 " 命令行数
 set history=4096
 
@@ -128,12 +132,6 @@ endif
 
 
 """""""""""""""""""""""""""""
-"""" 自定义方法
-"""""""""""""""""""""""""""""
-
-
-
-"""""""""""""""""""""""""""""
 """" vim-plug 插件管理器
 """""""""""""""""""""""""""""
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -143,16 +141,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
-" Plug 'fatih/vim-go'                     " go
-" Plug 'nsf/gocode'
-" Plug 'davidhalter/jedi-vim'             " python补全 
 Plug 'ervandew/supertab'
-" Plug 'vim-syntastic/syntastic'
-Plug 'nvie/vim-flake8'
-Plug 'plasticboy/vim-markdown'
-Plug 'marvelfans/vim-neatstatus'
-Plug 'jnurmine/Zenburn'
-" Plug 'vim-scripts/vim-gitgutter'
 Plug 'scrooloose/nerdtree'
 call plug#end()
 
@@ -162,43 +151,34 @@ call plug#end()
 """""""""""""""""""""""""""""
 " 高亮注释
 hi Comment cterm=italic
-set number
 highlight lineNr cterm=NONE ctermfg=249 ctermbg=179 guifg=LightYellow guibg=Grey
 set t_Co=256
-" set cursorline
-" set cursorcolumn
 highlight clear CursorLineNr
 highlight clear LineNr
 highlight clear SignColumn
-set guifont=Courier:h14
-set guifontwide=STSong:h14
 " 背景颜色无法刷新的情况
 if &term =~ '256color'
   set t_ut=
 endif
-colorscheme zenburn
 
  
 """""""""""""""""""""""""""""
 """"" 插件设置
 """""""""""""""""""""""""""""
-"""" <Syntastic> python语法
-" 超过120个字符，背景就会变成红色，对python格试很有用
-" autocmd Filetype python highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-" autocmd Filetype python  match OverLength /\%121v.\+/
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 0
-" let g:syntastic_python_checkers=['pyflakes']
-" let g:syntastic_python_pylint_args='--max-line-length=120 --ignore=I100, I101, I201 --exclude=.git, __pycache__, build, dist'
-
 """ <NERDTree>
-map <Leader>e   :NERDTreeToggle<CR>
+map <F1>   :NERDTreeToggle<CR>
 " 某些文件不展示在nerdtree中
 let NERDTreeIgnore = ['\.pyc$', '\.swp', '\.swo']
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
 " 最后只剩下nerdtree的时候, 则退出
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+
+" 客户端配置
+if has('gui_running')
+    color evening
+    set guifont=Courier:h16
+endif
