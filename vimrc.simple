@@ -1,105 +1,74 @@
-"""""""""""""""""""""""""""""
-"""" 快捷键设置
-"""""""""""""""""""""""""""""
 let mapleader=","
 let g:mapleader=","
 
 noremap ; :
 noremap <F1> <Nop>
+noremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
 
-"""""""""""""""""""""""""""""
-"""" 编码设置
-"""""""""""""""""""""""""""""
-set encoding=utf-8
-set termencoding=utf-8
-set fileencoding=utf-8
-set fileencodings=utf-8,ucs-bom,chinese,cp930,GBK
-
-"""""""""""""""""""""""""""""
-""""" 基本设置
-"""""""""""""""""""""""""""""
-" 显示行号
-set number
-" 命令行数
-set history=4096
-" 命令被全
-set wildmenu
-" 忽略的文件
-set wildignore=*.0,*~,~.pyc
-" 退格可用
-set backspace=eol,start,indent 
-" 以下打命令可以换行
-set whichwrap+=<,>,h,l
-" 搜索忽略大小写
-set ignorecase
-" 智能搜索 如果没有,自动上一个搜索单词
-set smartcase
-" 高亮搜索单词
-set hlsearch
-" 每插入一个字符,就高亮一个
-set incsearch
-" 显示匹配插号
-set showmatch
-" 匹配时间
-set matchtime=2
-" 不要警告声音
-set noerrorbells
-" 不要警告闪屏
-set novisualbell
-set t_vb=
-set tm=500
-" 代码折叠
-" set fdm=indent
-" 鼠标模式
-set mouse=a
-" 鼠标可以在行未后一个字符
-set virtualedit=onemore
-" 不要备份文件
-set nobackup
-" 不要临时文件
-set nowb
-" 不要交换文件
-set noswapfile
-" 用空格代替tab
-set expandtab   " noexpandtab
-" 智能插入tab
-set smarttab
-" 缩进的空格数
-set shiftwidth=4
-" tab的空格数
-set tabstop=4
-" 对于长行，自动断行
-set linebreak
-" 自动使用当前行的缩进为下行缩进
-set autoindent
-" 自动缩进
-set smartindent
-" 一直显示状态栏
-set laststatus=2
-" 命令行高度
-set cmdheight=1
-" 语法支持
-syntax on
-syntax enable
-" 共享粘贴板
-set clipboard=unnamedplus,unnamed
-" 每行超过若干字符, 更新背景颜色
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-match OverLength /\%85v.*/
-" 回到上次打开的位置
+autocmd VimEnter * delmarks 0-9
+autocmd VimEnter * delmarks .
+autocmd VimEnter * delmarks [
+autocmd VimEnter * delmarks ]
+autocmd VimEnter * delmarks \"
+autocmd VimEnter * delmarks ^
 autocmd BufReadPost *
             \ if line("'\"") > 0 && line("'\"") <= line("$") |
             \   exe "normal! g`\"" |
             \ endif
 
-" tags
+set encoding=utf-8
+set termencoding=utf-8
+set fileencoding=utf-8
+set fileencodings=utf-8,ucs-bom,chinese,cp930,GBK
+
+syntax on
+syntax enable
+
+set number
+set history=4096
+set wildmenu
+set wildignore=*.0,*~,~.pyc
+set backspace=eol,start,indent 
+set whichwrap+=<,>,h,l
+set ignorecase
+set smartcase
+set hlsearch
+set showmatch
+set matchtime=2
+set noerrorbells
+set novisualbell
+set t_vb=
+set tm=500
+set mouse=a
+set virtualedit=onemore
+set nobackup
+set nowb
+set noswapfile
+set expandtab
+set smarttab
+set shiftwidth=4
+set tabstop=4
+set linebreak
+set autoindent
+set smartindent
+set laststatus=2
+set cmdheight=1
+set clipboard=unnamedplus,unnamed
 set cscopetag
 if exists('tags')
     set tags=tags
-    " set autochdir
 endif
 
-" 客户端配置
+highlight Comment cterm=italic
+highlight lineNr cterm=NONE ctermfg=249 ctermbg=179 guifg=LightYellow guibg=Grey
+highlight clear CursorLineNr
+highlight clear LineNr
+highlight clear SignColumn
+set t_Co=256
+if &term =~ '256color'
+  set t_ut=
+endif
+
 if has('gui_running')
     color evening
     set guifont=Courier:h16

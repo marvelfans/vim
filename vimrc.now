@@ -7,6 +7,9 @@ let g:mapleader=","
 
 noremap ; :
 noremap <F1> <Nop>
+noremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
+
+
 """""""""""""""""""""""""""""
 """" 编码设置
 """""""""""""""""""""""""""""
@@ -19,6 +22,24 @@ set fileencodings=utf-8,ucs-bom,chinese,cp930,GBK
 """""""""""""""""""""""""""""
 """"" 基本设置
 """""""""""""""""""""""""""""
+" 进入vim时仅留下设置的书签
+autocmd VimEnter * delmarks 0-9
+autocmd VimEnter * delmarks .
+autocmd VimEnter * delmarks [
+autocmd VimEnter * delmarks ]
+autocmd VimEnter * delmarks \"
+autocmd VimEnter * delmarks ^
+
+" 回到上次打开的位置
+autocmd BufReadPost *
+            \ if line("'\"") > 0 && line("'\"") <= line("$") |
+            \   exe "normal! g`\"" |
+            \ endif
+
+
+" 语法支持
+syntax on
+syntax enable
 
 " 显示行号
 set number
@@ -48,7 +69,7 @@ set smartcase
 set hlsearch
 
 " 每插入一个字符,就高亮一个
-set incsearch
+" set incsearch
 
 " 显示匹配插号
 set showmatch
@@ -109,41 +130,14 @@ set laststatus=2
 " 命令行高度
 set cmdheight=1
 
-" 语法支持
-syntax on
-syntax enable
-
 " 共享粘贴板
 set clipboard=unnamedplus,unnamed
-
-" 回到上次打开的位置
-" autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | lcd %:p:h | endif
-autocmd BufReadPost *
-            \ if line("'\"") > 0 && line("'\"") <= line("$") |
-            \   exe "normal! g`\"" |
-            \ endif
 
 " tags
 set cscopetag
 if exists('tags')
     set tags=tags
-    " set autochdir
 endif
-
-
-"""""""""""""""""""""""""""""
-"""" vim-plug 插件管理器
-"""""""""""""""""""""""""""""
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-call plug#begin('~/.vim/plugged')
-Plug 'ervandew/supertab'
-Plug 'scrooloose/nerdtree'
-call plug#end()
 
 
 """""""""""""""""""""""""""""
@@ -161,19 +155,32 @@ if &term =~ '256color'
   set t_ut=
 endif
 
+
+"""""""""""""""""""""""""""""
+"""" vim-plug 插件管理器
+"""""""""""""""""""""""""""""
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+Plug 'ervandew/supertab'
+Plug 'scrooloose/nerdtree'
+call plug#end()
+
  
 """""""""""""""""""""""""""""
 """"" 插件设置
 """""""""""""""""""""""""""""
 """ <NERDTree>
 map <F1>   :NERDTreeToggle<CR>
-" 某些文件不展示在nerdtree中
 let NERDTreeIgnore = ['\.pyc$', '\.swp', '\.swo']
 let g:NERDTreeDirArrowExpandable = '▸'
 let g:NERDTreeDirArrowCollapsible = '▾'
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
-" 最后只剩下nerdtree的时候, 则退出
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 
