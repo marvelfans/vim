@@ -1,15 +1,3 @@
-
-"""""""""""""""""""""""""""""
-"""" 快捷键设置
-"""""""""""""""""""""""""""""
-let mapleader=","
-let g:mapleader=","
-
-noremap ; :
-noremap <F1> <Nop>
-noremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
-
-
 """""""""""""""""""""""""""""
 """" 编码设置
 """""""""""""""""""""""""""""
@@ -41,6 +29,11 @@ autocmd BufReadPost *
 syntax on
 syntax enable
 
+" terminal size
+if version >= 800
+    set termwinsize=15x0
+endif
+
 " 显示行号
 set number
 
@@ -60,7 +53,7 @@ set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
 
 " 搜索忽略大小写
-set ignorecase
+" set ignorecase
 
 " 智能搜索 如果没有,自动上一个搜索单词
 set smartcase
@@ -141,6 +134,25 @@ endif
 
 
 """""""""""""""""""""""""""""
+"""" vim-plug 插件管理器
+"""""""""""""""""""""""""""""
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+Plug 'preservim/nerdtree'
+Plug 'ervandew/supertab'
+Plug 'jnurmine/Zenburn'
+Plug 'fatih/vim-go'
+Plug 'dgryski/vim-godef'
+Plug 'davidhalter/jedi-vim'
+call plug#end()
+
+
+"""""""""""""""""""""""""""""
 """"" 界面设置
 """""""""""""""""""""""""""""
 " 高亮注释
@@ -155,37 +167,46 @@ if &term =~ '256color'
   set t_ut=
 endif
 
+" 主题设置与高行当前行与列
+color zenburn
+set cuc
+set cul
+
+" """ <vim-go>
+let g:go_code_completion_enabled = 1
+let g:go_auto_type_info = 1
+let g:go_updatetime = 500
+let g:go_auto_sameids = 1
+let g:go_fmt_comand = "gofmt"
+let g:syntastic_go_checkers = ['golint', 'govet']
+let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['go']}
+let g:go_list_type = "quickfix"
+
+""" <vim-godef>
+" 使用Ctrl+[跳转到定义处
+" autocmd FileType go nnoremap <buffer> <C-[> :call GodefUnderCursor()<cr>
+let g:godef_split=3
+let g:godef_same_file_window=1
+
+""" <NerdTree>
+nnoremap <F1> <Nop>
+nnoremap <F2> :NERDTreeToggle<CR>
+
+""" <jedi-vim>
+" <Leader>d 跳转到定义处
+autocmd FileType python setlocal completeopt-=preview
+let g:jedi#popup_on_dot=0
+let g:SuperTabDefaultCompletionType="context"
+
+
 
 """""""""""""""""""""""""""""
-"""" vim-plug 插件管理器
+"""" 快捷键设置
 """""""""""""""""""""""""""""
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
+let mapleader=","
+let g:mapleader=","
 
-call plug#begin('~/.vim/plugged')
-Plug 'ervandew/supertab'
-Plug 'scrooloose/nerdtree'
-call plug#end()
-
- 
-"""""""""""""""""""""""""""""
-""""" 插件设置
-"""""""""""""""""""""""""""""
-""" <NERDTree>
-map <F1>   :NERDTreeToggle<CR>
-let NERDTreeIgnore = ['\.pyc$', '\.swp', '\.swo']
-let g:NERDTreeDirArrowExpandable = '▸'
-let g:NERDTreeDirArrowCollapsible = '▾'
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-
-" 客户端配置
-if has('gui_running')
-    color evening
-    set guifont=Courier:h16
-endif
+noremap ; :
+noremap <F1> <Nop>
+" noremap <F2> :belowright term 
+noremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
