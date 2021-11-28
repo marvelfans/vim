@@ -40,7 +40,7 @@ set number
 " 命令行数
 set history=4096
 
-" 命令被全
+" 命令补全
 set wildmenu
 
 " 忽略的文件
@@ -65,10 +65,13 @@ set hlsearch
 " set incsearch
 
 " 显示匹配插号
-set showmatch
+" set showmatch
 
 " 匹配时间
-set matchtime=2
+" set matchtime=2
+
+" 解决一下有些卡顿的问题
+set lazyredraw
 
 " 不要警告声音
 set noerrorbells
@@ -148,16 +151,10 @@ Plug 'ervandew/supertab'
 Plug 'jnurmine/Zenburn'
 Plug 'fatih/vim-go'
 Plug 'dgryski/vim-godef'
-Plug 'davidhalter/jedi-vim'
 call plug#end()
 
 
-"""""""""""""""""""""""""""""
-""""" 界面设置
-"""""""""""""""""""""""""""""
 " 高亮注释
-hi Comment cterm=italic
-highlight lineNr cterm=NONE ctermfg=249 ctermbg=179 guifg=LightYellow guibg=Grey
 set t_Co=256
 highlight clear CursorLineNr
 highlight clear LineNr
@@ -168,15 +165,32 @@ if &term =~ '256color'
 endif
 
 " 主题设置与高行当前行与列
-color zenburn
-set cuc
-set cul
+" color zenburn
+set cursorline
+" set cursorcolumn
+" 
+hi Comment          guifg=#7f9f7f   ctermfg=108
+hi CursorColumn     guibg=#121212   ctermbg=233     cterm=none
+hi CursorLine       guibg=#121212   gui=bold        ctermbg=233     cterm=bold
+hi CursorLineNr     guifg=#f2f3bb   guibg=#161616   ctermfg=229     ctermbg=233     cterm=none
+hi StatusLine       guifg=#313633   guibg=#ccdc90   ctermfg=236     ctermbg=186
+hi Search           guifg=#ffffe0   guibg=#284f28   ctermfg=230     ctermbg=22
+hi LineNr           guifg=#5d6262   guibg=#353535   ctermfg=240     ctermbg=236
+hi Visual           guifg=#000000   guibg=#71d3b4   gui=none        ctermfg=16  ctermbg=79  cterm=bold
+hi VisualNOS        guifg=#333333   guibg=#f18c96   gui=bold,underline  ctermfg=236     ctermbg=210     cterm=bold
+hi Directory        guifg=#9fafaf   gui=bold        ctermfg=109 cterm=bold
+hi DiffAdd          guifg=#709080   guibg=#313c36   gui=bold    ctermfg=66  ctermbg=237 cterm=bold
+hi DiffChange       guibg=#333333   ctermbg=23
+hi DiffDelete       guifg=#333333   guibg=#464646   ctermfg=236     ctermbg=238
+hi DiffText         guifg=#ecbcbc   guibg=#41363c   gui=bold        ctermfg=217 ctermbg=237 cterm=bold
+
+
 
 " """ <vim-go>
 let g:go_code_completion_enabled = 1
 let g:go_auto_type_info = 1
 let g:go_updatetime = 500
-let g:go_auto_sameids = 1
+let g:go_auto_sameids = 0
 let g:go_fmt_comand = "gofmt"
 let g:syntastic_go_checkers = ['golint', 'govet']
 let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['go']}
@@ -191,12 +205,8 @@ let g:godef_same_file_window=1
 """ <NerdTree>
 nnoremap <F1> <Nop>
 nnoremap <F2> :NERDTreeToggle<CR>
+nnoremap <F3> :NERDTreeToggle<CR>
 
-""" <jedi-vim>
-" <Leader>d 跳转到定义处
-autocmd FileType python setlocal completeopt-=preview
-let g:jedi#popup_on_dot=0
-let g:SuperTabDefaultCompletionType="context"
 
 
 
