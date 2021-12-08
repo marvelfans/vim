@@ -49,7 +49,7 @@ set wildignore=*.0,*~,~.pyc
 " 退格可用
 set backspace=eol,start,indent 
 
-" 以下打命令可以换行
+" 以下命令可以换行
 set whichwrap+=<,>,h,l
 
 " 搜索忽略大小写
@@ -61,16 +61,16 @@ set smartcase
 " 高亮搜索单词
 set hlsearch
 
-" 每插入一个字符,就高亮一个
+" 每插入一个字符,就高亮一个 => 匹配影响速度
 " set incsearch
 
-" 显示匹配插号
+" 显示匹配插号 => 匹配影响速度
 " set showmatch
 
-" 匹配时间
+" 匹配时间 => 匹配影响速度
 " set matchtime=2
 
-" 解决一下有些卡顿的问题
+"
 set lazyredraw
 
 " 不要警告声音
@@ -148,13 +148,14 @@ endif
 call plug#begin('~/.vim/plugged')
 Plug 'preservim/nerdtree'
 Plug 'ervandew/supertab'
-Plug 'jnurmine/Zenburn'
+" Plug 'jnurmine/Zenburn'
 Plug 'fatih/vim-go'
 Plug 'dgryski/vim-godef'
+Plug 'jlanzarotta/bufexplorer'
 call plug#end()
 
 
-" 高亮注释
+""""  外观相关设置
 set t_Co=256
 highlight clear CursorLineNr
 highlight clear LineNr
@@ -168,7 +169,8 @@ endif
 " color zenburn
 set cursorline
 " set cursorcolumn
-" 
+
+" 自定义颜色 插件匹配高亮影响速度(配置DarkBackGround使用) 
 hi Comment          guifg=#7f9f7f   ctermfg=108
 hi CursorColumn     guibg=#121212   ctermbg=233     cterm=none
 hi CursorLine       guibg=#121212   gui=bold        ctermbg=233     cterm=bold
@@ -184,13 +186,11 @@ hi DiffChange       guibg=#333333   ctermbg=23
 hi DiffDelete       guifg=#333333   guibg=#464646   ctermfg=236     ctermbg=238
 hi DiffText         guifg=#ecbcbc   guibg=#41363c   gui=bold        ctermfg=217 ctermbg=237 cterm=bold
 
-
-
-" """ <vim-go>
+""" <vim-go>
 let g:go_code_completion_enabled = 1
 let g:go_auto_type_info = 1
 let g:go_updatetime = 500
-let g:go_auto_sameids = 0
+let g:go_auto_sameids = 0       " => 影响速度
 let g:go_fmt_comand = "gofmt"
 let g:syntastic_go_checkers = ['golint', 'govet']
 let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['go']}
@@ -203,11 +203,26 @@ let g:godef_split=3
 let g:godef_same_file_window=1
 
 """ <NerdTree>
+" 允许的最大尺寸, 解决和bufExplore冲突的问题
+let g:NERDTreeWinSize=50
+let g:NERDTreeWinSizeMax=60
+" 不显示的文件
+let NERDTreeIgnore=['.pyc$']
+" exit when only nerdtree win exists
+autocmd bufenter * if(winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" shortcut key
 nnoremap <F1> <Nop>
 nnoremap <F2> :NERDTreeToggle<CR>
-nnoremap <F3> :NERDTreeToggle<CR>
 
-
+""" bufexplore
+let g:bufExplorerDefaultHelp=0
+" 显示最近使用最多的
+let g:bufExplorerSortBy='mru'
+" 在下边显示
+let g:bufExplorerSplitBelow=1
+" 将路径和文件名显示到一起
+let g:bufExplorerSplitOutPathName=0
+nnoremap <F3> :ToggleBufExplorer<CR>
 
 
 """""""""""""""""""""""""""""
@@ -218,5 +233,11 @@ let g:mapleader=","
 
 noremap ; :
 noremap <F1> <Nop>
-" noremap <F2> :belowright term 
+" 使用*高亮当前KeyWord, 但不执行跳转
 noremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
+" 多个vim-pane之间切换 
+noremap <C-h> <C-w>h
+" 和tmux冲突
+" noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l

@@ -1,28 +1,25 @@
-let mapleader=","
-let g:mapleader=","
+set encoding=utf-8
+set termencoding=utf-8
+set fileencoding=utf-8
+set fileencodings=utf-8,ucs-bom,chinese,cp930,GBK
 
-noremap ; :
-noremap <F1> <Nop>
-noremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
-
+" 进入vim时仅留下设置的书签
 autocmd VimEnter * delmarks 0-9
 autocmd VimEnter * delmarks .
 autocmd VimEnter * delmarks [
 autocmd VimEnter * delmarks ]
 autocmd VimEnter * delmarks \"
 autocmd VimEnter * delmarks ^
+
 autocmd BufReadPost *
             \ if line("'\"") > 0 && line("'\"") <= line("$") |
             \   exe "normal! g`\"" |
             \ endif
 
-set encoding=utf-8
-set termencoding=utf-8
-set fileencoding=utf-8
-set fileencodings=utf-8,ucs-bom,chinese,cp930,GBK
 
 syntax on
 syntax enable
+
 
 set number
 set history=4096
@@ -30,11 +27,20 @@ set wildmenu
 set wildignore=*.0,*~,~.pyc
 set backspace=eol,start,indent 
 set whichwrap+=<,>,h,l
-set ignorecase
+
+" 搜索忽略大小写
+" set ignorecase
+" 智能搜索 如果没有,自动上一个搜索单词
 set smartcase
+" 高亮搜索单词
 set hlsearch
-set showmatch
-set matchtime=2
+" 每插入一个字符,就高亮一个 => 匹配影响速度
+" set incsearch
+" 显示匹配插号 => 匹配影响速度
+" set showmatch
+" 匹配时间 => 匹配影响速度
+" set matchtime=2
+set lazyredraw
 set noerrorbells
 set novisualbell
 set t_vb=
@@ -44,7 +50,7 @@ set virtualedit=onemore
 set nobackup
 set nowb
 set noswapfile
-set expandtab
+set expandtab   " noexpandtab
 set smarttab
 set shiftwidth=4
 set tabstop=4
@@ -52,24 +58,48 @@ set linebreak
 set autoindent
 set smartindent
 set laststatus=2
-set cmdheight=1
-set clipboard=unnamedplus,unnamed
-set cscopetag
-if exists('tags')
-    set tags=tags
-endif
-
-highlight Comment cterm=italic
-highlight lineNr cterm=NONE ctermfg=249 ctermbg=179 guifg=LightYellow guibg=Grey
+set t_Co=256
 highlight clear CursorLineNr
 highlight clear LineNr
 highlight clear SignColumn
-set t_Co=256
+" 背景颜色无法刷新的情况
 if &term =~ '256color'
   set t_ut=
 endif
 
-if has('gui_running')
-    color evening
-    set guifont=Courier:h16
-endif
+" 主题设置与高行当前行与列
+set cursorline
+
+" 自定义颜色 插件匹配高亮影响速度(配置DarkBackGround使用) 
+hi Comment          guifg=#7f9f7f   ctermfg=108
+hi CursorColumn     guibg=#121212   ctermbg=233     cterm=none
+hi CursorLine       guibg=#121212   gui=bold        ctermbg=233     cterm=bold
+hi CursorLineNr     guifg=#f2f3bb   guibg=#161616   ctermfg=229     ctermbg=233     cterm=none
+hi StatusLine       guifg=#313633   guibg=#ccdc90   ctermfg=236     ctermbg=186
+hi Search           guifg=#ffffe0   guibg=#284f28   ctermfg=230     ctermbg=22
+hi LineNr           guifg=#5d6262   guibg=#353535   ctermfg=240     ctermbg=236
+hi Visual           guifg=#000000   guibg=#71d3b4   gui=none        ctermfg=16  ctermbg=79  cterm=bold
+hi VisualNOS        guifg=#333333   guibg=#f18c96   gui=bold,underline  ctermfg=236     ctermbg=210     cterm=bold
+hi Directory        guifg=#9fafaf   gui=bold        ctermfg=109 cterm=bold
+hi DiffAdd          guifg=#709080   guibg=#313c36   gui=bold    ctermfg=66  ctermbg=237 cterm=bold
+hi DiffChange       guibg=#333333   ctermbg=23
+hi DiffDelete       guifg=#333333   guibg=#464646   ctermfg=236     ctermbg=238
+hi DiffText         guifg=#ecbcbc   guibg=#41363c   gui=bold        ctermfg=217 ctermbg=237 cterm=bold
+
+
+"""""""""""""""""""""""""""""
+"""" 快捷键设置
+"""""""""""""""""""""""""""""
+let mapleader=","
+let g:mapleader=","
+
+noremap ; :
+noremap <F1> <Nop>
+" 使用*高亮当前KeyWord, 但不执行跳转
+noremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
+" 多个vim-pane之间切换 
+noremap <C-h> <C-w>h
+" 和tmux冲突
+" noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
