@@ -152,6 +152,7 @@ Plug 'ervandew/supertab'
 Plug 'fatih/vim-go'
 Plug 'dgryski/vim-godef'
 Plug 'jlanzarotta/bufexplorer'
+Plug 'simeji/winresizer'
 call plug#end()
 
 
@@ -223,6 +224,10 @@ let g:bufExplorerSplitBelow=1
 " 将路径和文件名显示到一起
 let g:bufExplorerSplitOutPathName=0
 nnoremap <F3> :ToggleBufExplorer<CR>
+
+""" winresizer 调整窗口大小
+""" 在tmux中鼠标不能拖动调整大小了,添加该插件补充该功能
+nnoremap <F4> :WinResizerStartResize<CR>
 
 
 """""""""""""""""""""""""""""
