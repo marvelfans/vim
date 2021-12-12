@@ -1,19 +1,4 @@
-"""""""""""""""""""""""""""""
-"""" 基本信息获取
-"""""""""""""""""""""""""""""
-let g:isWinows = 0
-let g:isLinux = 0
-if(has("win32") || has("win64") || has("win95") || has("win16"))
-    let g:isWinows = 1
-else
-    let g:isLinux = 1
-endif
-
-let g:isGUI = 0
-if(has("gui_running"))
-    let g:isGUI = 1
-endif
-
+set nocompatible
 
 """""""""""""""""""""""""""""
 """" vim-plug 插件管理器
@@ -27,7 +12,7 @@ endif
 call plug#begin('~/.vim/plugged')
 Plug 'preservim/nerdtree'
 Plug 'ervandew/supertab'
-" Plug 'jnurmine/Zenburn'
+Plug 'jnurmine/Zenburn'
 Plug 'fatih/vim-go'
 Plug 'dgryski/vim-godef'
 Plug 'jlanzarotta/bufexplorer'
@@ -207,14 +192,19 @@ set laststatus=2
 set cmdheight=1
 
 " 共享粘贴板
-set clipboard=unnamedplus,unnamed
+" set clipboard=unnamedplus,unnamed
 
-" tags
-set cscopetag
-if exists('tags')
-    set tags=tags
-endif
+" 当文件修改时, 自动载入
+set autoread
 
+" viminfo保存vim状态的记录文件
+" <20 每个寄存器最多保存100行
+" '10 保存最近50个文件的标记
+" /10 保存搜索历史条数
+" :20 保存最近20个命令
+" h 载入viminfo时,关闭hlsearch高亮
+" s10 最多保存10个寄存器
+set viminfo=<20,'10,/10,:20,h,s10
 
 
 """""""""""""""""""""""""""""
@@ -251,11 +241,6 @@ hi DiffDelete       guifg=#333333   guibg=#464646   ctermfg=236     ctermbg=238
 hi DiffText         guifg=#ecbcbc   guibg=#41363c   gui=bold        ctermfg=217 ctermbg=237 cterm=bold
 
 
-if g:isGUI == 1
-    set guifont="Monaco:h12"
-endif
-
-
 """""""""""""""""""""""""""""
 """" 快捷键设置
 """""""""""""""""""""""""""""
@@ -284,6 +269,7 @@ nnoremap <F2> :NERDTreeToggle<CR>
 
 " buffer管理插件
 nnoremap <F3> :ToggleBufExplorer<CR>
+nnoremap <Leader>t :ToggleBufExplorer<CR>
 
 " 调整窗口大小插件
 nnoremap <Leader>w :WinResizerStartResize<CR>
