@@ -3,14 +3,6 @@ set termencoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8,ucs-bom,chinese,cp930,GBK
 
-" 进入vim时仅留下设置的书签
-autocmd VimEnter * delmarks 0-9
-autocmd VimEnter * delmarks .
-autocmd VimEnter * delmarks [
-autocmd VimEnter * delmarks ]
-autocmd VimEnter * delmarks \"
-autocmd VimEnter * delmarks ^
-
 autocmd BufReadPost *
             \ if line("'\"") > 0 && line("'\"") <= line("$") |
             \   exe "normal! g`\"" |
