@@ -9,19 +9,41 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+
+"""""""""""""""""""""""""""""
+"""" 开始处理插件
+"""""""""""""""""""""""""""""
 call plug#begin('~/.vim/plugged')
-Plug 'preservim/nerdtree'
+
+
+" ---------------------------
+" 基础增强插件
+" ---------------------------
+Plug 'tweekmonster/startuptime.vim'
 Plug 'ervandew/supertab'
+
+" ---------------------------
+" 目录树 
+" ---------------------------
+Plug 'preservim/nerdtree'
+
+" 允许的最大尺寸, 解决和bufExplore冲突的问题
+let g:NERDTreeWinSize=35
+" 过滤文件
+let NERDTreeIgnore=['.pyc$']
+autocmd bufenter * if(winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" ---------------------------
+" 一个比较不错的主题
+" ---------------------------
 Plug 'jnurmine/Zenburn'
+
+" ---------------------------
+" go插件
+" ---------------------------
 Plug 'fatih/vim-go'
 Plug 'dgryski/vim-godef'
-Plug 'jlanzarotta/bufexplorer'
-Plug 'simeji/winresizer'
-Plug 'tweekmonster/startuptime.vim'
-call plug#end()
 
-
-""" <vim-go>
 let g:go_code_completion_enabled = 1
 let g:go_auto_type_info = 1
 let g:go_updatetime = 500
@@ -31,22 +53,17 @@ let g:syntastic_go_checkers = ['golint', 'govet']
 let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['go']}
 let g:go_list_type = "quickfix"
 
-""" <vim-godef>
 " 使用Ctrl+[跳转到定义处
 " autocmd FileType go nnoremap <buffer> <C-[> :call GodefUnderCursor()<cr>
 let g:godef_split=3
 let g:godef_same_file_window=1
 
-""" <NerdTree>
-" 允许的最大尺寸, 解决和bufExplore冲突的问题
-let g:NERDTreeWinSize=35
-" 不显示的文件
-let NERDTreeIgnore=['.pyc$']
-" show marks
-" exit when only nerdtree win exists
-autocmd bufenter * if(winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-""" bufexplore
+" ---------------------------
+" 显示最近缓冲区的插件
+" ---------------------------
+Plug 'jlanzarotta/bufexplorer'
+
 let g:bufExplorerDefaultHelp=0
 " 显示最近使用最多的
 let g:bufExplorerSortBy='mru'
@@ -55,12 +72,33 @@ let g:bufExplorerSplitBelow=1
 " 将路径和文件名显示到一起
 let g:bufExplorerSplitOutPathName=1
 
-""" winresizer 调整窗口大小
-""" 在tmux中鼠标不能拖动调整大小了,添加该插件补充该功能
+
+" ---------------------------
+" 快速调节每个窗口大小
+" ---------------------------
+Plug 'simeji/winresizer'
 let g:winresizer_start_key='<C-i>'
 let g:winresizer_horiz_resize=2
 let g:winresizer_vert_resize=2
 
+" ---------------------------
+" 文件模糊搜索
+" ---------------------------
+Plug 'ctrlpvim/ctrlp.vim'
+
+let g:ctrlp_cmd ='CtrlP'
+let g:ctrlp_custom_ignore = {
+            \ 'dir': '\v(venv|env|apitest)',
+            \ 'file': '\v\.(exe|so|dll)$',
+            \ }
+let g:ctrlp_map = '<Leader>s'
+
+
+""" 插件结束
+call plug#end()
+"""""""""""""""""""""""""""""
+"""" 插件处理结束
+"""""""""""""""""""""""""""""
 
 
 """""""""""""""""""""""""""""
@@ -75,14 +113,6 @@ set fileencodings=utf-8,ucs-bom,chinese,cp930,GBK
 """""""""""""""""""""""""""""
 """"" 基本设置
 """""""""""""""""""""""""""""
-" 进入vim时仅留下设置的书签
-autocmd VimEnter * delmarks 0-9
-autocmd VimEnter * delmarks .
-autocmd VimEnter * delmarks [
-autocmd VimEnter * delmarks ]
-autocmd VimEnter * delmarks \"
-autocmd VimEnter * delmarks ^
-
 " 回到上次打开的位置
 autocmd BufReadPost *
             \ if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -220,7 +250,7 @@ if &term =~ '256color'
 endif
 
 " 主题设置与高行当前行与列
-" color zenburn
+color zenburn
 set cursorline
 " set cursorcolumn
 
@@ -239,6 +269,79 @@ hi DiffAdd          guifg=#709080   guibg=#313c36   gui=bold    ctermfg=66  cter
 hi DiffChange       guibg=#333333   ctermbg=23
 hi DiffDelete       guifg=#333333   guibg=#464646   ctermfg=236     ctermbg=238
 hi DiffText         guifg=#ecbcbc   guibg=#41363c   gui=bold        ctermfg=217 ctermbg=237 cterm=bold
+
+
+" ---------------
+" tab显示设置
+" ---------------
+" Rename tabs to show tab# and # of viewports 
+if exists("+showtabline") 
+    function! MyTabLine() 
+        let s = '' 
+        let wn = '' 
+        let t = tabpagenr() 
+        let i = 1 
+        while i <= tabpagenr('$') 
+            let buflist = tabpagebuflist(i) 
+            let winnr = tabpagewinnr(i) 
+            let s .= '%' . i . 'T' 
+            let s .= (i == t ? '%1*' : '%2*') 
+            let s .= ' ' 
+            let wn = tabpagewinnr(i,'$') 
+
+            let s .= (i== t ? '%#TabNumSel#' : '%#TabNum#') 
+            let s .= i 
+            if tabpagewinnr(i,'$') > 1 
+                let s .= '.' 
+                let s .= (i== t ? '%#TabWinNumSel#' : '%#TabWinNum#') 
+                let s .= (tabpagewinnr(i,'$') > 1 ? wn : '') 
+            end 
+
+            let s .= ' %*' 
+            let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#') 
+            let bufnr = buflist[winnr - 1] 
+            let file = bufname(bufnr) 
+            let buftype = getbufvar(bufnr, 'buftype') 
+            if buftype == 'nofile' 
+                if file =~ '\/.' 
+                    let file = substitute(file, '.*\/\ze.', '', '') 
+                endif 
+            else 
+                let file = fnamemodify(file, ':p:t') 
+            endif 
+            if file == '' 
+                let file = '[No Name]' 
+            endif 
+            let s .= file 
+            let s .= (i == t ? '%m' : '') 
+            let i = i + 1 
+        endwhile 
+        let s .= '%T%#TabLineFill#%=' 
+        return s 
+    endfunction 
+endif 
+
+function MyTabLabel(n)
+    let buflist = tabpagebuflist(a:n)
+    let winnr = tabpagewinnr(a:n)
+    return bufname(buflist[winnr - 1])
+endfunction
+
+hi TabLineSel term=bold cterm=bold ctermfg=16 ctermbg=229
+hi TabWinNumSel term=bold cterm=bold ctermfg=90 ctermbg=229
+hi TabNumSel term=bold cterm=bold ctermfg=16 ctermbg=229
+hi TabLine term=underline ctermfg=16 ctermbg=145
+hi TabWinNum term=bold cterm=bold ctermfg=90 ctermbg=145
+hi TabNum term=bold cterm=bold ctermfg=16 ctermbg=145
+" 最多可以显示9个tab
+set tabpagemax=9
+" 需要的时候才展示
+set tabline=1
+set tabline=%!MyTabLine()
+
+" quickfix窗口设置
+hi QuickFixLine ctermbg=Yellow guibg=Yellow
+
 
 
 """""""""""""""""""""""""""""
@@ -273,3 +376,18 @@ nnoremap <Leader>t :ToggleBufExplorer<CR>
 
 " 调整窗口大小插件
 nnoremap <Leader>w :WinResizerStartResize<CR>
+
+" tab快速定位
+" Alt键输出方式, insert模式下, Ctrl+v 然后 Alt+key
+nnoremap 1 1gt
+nnoremap 2 2gt
+nnoremap 3 3gt
+nnoremap 4 4gt
+nnoremap 5 5gt
+nnoremap 6 6gt
+nnoremap 7 7gt
+nnoremap 8 8gt
+nnoremap 9 9gt
+
+" <F12>唤起最近命令列表
+nnoremap <F12> q:
