@@ -242,9 +242,6 @@ set viminfo=<20,'10,/10,:20,h,s10
 """" 外观相关设置
 """""""""""""""""""""""""""""
 set t_Co=256
-highlight clear CursorLineNr
-highlight clear LineNr
-highlight clear SignColumn
 " 背景颜色无法刷新的情况
 if &term =~ '256color'
   set t_ut=
