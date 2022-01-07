@@ -25,7 +25,7 @@ Plug 'ervandew/supertab'
 " ---------------------------
 " 目录树 
 " ---------------------------
-Plug 'preservim/nerdtree'
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 
 " 允许的最大尺寸, 解决和bufExplore冲突的问题
 let g:NERDTreeWinSize=35
@@ -138,8 +138,9 @@ set history=4096
 " 命令补全
 set wildmenu
 
-" 忽略的文件
-set wildignore=*.0,*~,~.pyc
+" 忽略的文件(vimgrep会使用该设置)
+set wildignore+=*.0,*~,~.pyc
+set wildignore+=*/venv/*
 
 " 退格可用
 set backspace=eol,start,indent 
@@ -250,11 +251,11 @@ if &term =~ '256color'
 endif
 
 " 主题设置与高行当前行与列
-color zenburn
+" color zenburn
 set cursorline
 " set cursorcolumn
 
-" 自定义颜色 插件匹配高亮影响速度(配置DarkBackGround使用) 
+" 自定义颜色 插件匹配高亮影响速度(配置深色主题使用) 
 hi Comment          guifg=#7f9f7f   ctermfg=108
 hi CursorColumn     guibg=#121212   ctermbg=233     cterm=none
 hi CursorLine       guibg=#121212   gui=bold        ctermbg=233     cterm=bold
@@ -340,7 +341,7 @@ set tabline=1
 set tabline=%!MyTabLine()
 
 " quickfix窗口设置
-hi QuickFixLine ctermbg=Yellow guibg=Yellow
+" hi QuickFixLine ctermbg=Yellow guibg=Yellow
 
 
 
