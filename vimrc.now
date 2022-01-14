@@ -37,6 +37,7 @@ autocmd bufenter * if(winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTa
 " 一个比较不错的主题
 " ---------------------------
 Plug 'jnurmine/Zenburn'
+Plug 'morhetz/gruvbox'
 
 " ---------------------------
 " go插件
@@ -247,9 +248,11 @@ if &term =~ '256color'
   set t_ut=
 endif
 
+set background=dark
+
 " 主题设置与高行当前行与列
-" color zenburn
 set cursorline
+color gruvbox
 " set cursorcolumn
 
 " 自定义颜色 插件匹配高亮影响速度(配置深色主题使用) 
