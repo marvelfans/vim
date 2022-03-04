@@ -62,6 +62,11 @@ let g:godef_same_file_window=1
 
 
 " ---------------------------
+" python插件
+" ---------------------------
+" Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
+
+" ---------------------------
 " 显示最近缓冲区的插件
 " ---------------------------
 Plug 'jlanzarotta/bufexplorer'
@@ -94,6 +99,12 @@ let g:ctrlp_custom_ignore = {
             \ 'file': '\v\.(exe|so|dll)$',
             \ }
 let g:ctrlp_map = '<Leader>s'
+
+
+" ---------------------------
+" tagbar 显示tag
+" ---------------------------
+Plug 'majutsushi/tagbar'
 
 
 """ 插件结束
@@ -142,7 +153,9 @@ set wildmenu
 
 " 忽略的文件(vimgrep会使用该设置)
 set wildignore+=*.0,*~,~.pyc
+set wildignore+=tags
 set wildignore+=*/venv/*
+set wildignore+=*/env/*
 
 " 退格可用
 set backspace=eol,start,indent 
@@ -168,7 +181,7 @@ set hlsearch
 " 匹配时间 => 匹配影响速度
 " set matchtime=2
 
-"
+" 懒加载，提升速度
 set lazyredraw
 
 " 不要警告声音
@@ -218,7 +231,7 @@ set autoindent
 " 自动缩进
 set smartindent
 
-" 一直显示状态栏
+" 显示状态栏
 set laststatus=2
 
 " 命令行高度
@@ -230,6 +243,10 @@ set cmdheight=1
 " 当文件修改时, 自动载入
 set autoread
 
+" 设置折叠方式
+" manual手工定义,indent缩进,expr表达式,syntax语法,diff对未更改的折叠,marker对标志折叠
+" set foldmethod=syntax
+
 " viminfo保存vim状态的记录文件
 " <20 每个寄存器最多保存100行
 " '10 保存最近50个文件的标记
@@ -239,6 +256,11 @@ set autoread
 " s10 最多保存10个寄存器
 set viminfo=<20,'10,/10,:20,h,s10
 
+" 指定tag文件
+set tags+=tags
+
+" 设置path, 添加当前目录
+set path+=./**
 
 """""""""""""""""""""""""""""
 """" 外观相关设置
@@ -249,12 +271,14 @@ if &term =~ '256color'
   set t_ut=
 endif
 
-set background=dark
+" set background=dark
+set background=light
 
 " 主题设置与高行当前行与列
 set cursorline
-color solarized
 " set cursorcolumn
+" color solarized
+" color gruvbox
 
 " 自定义颜色 插件匹配高亮影响速度(配置深色主题使用) 
 hi Comment          guifg=#7f9f7f   ctermfg=108
@@ -375,6 +399,10 @@ nnoremap <F2> :NERDTreeToggle<CR>
 " buffer管理插件
 nnoremap <F3> :ToggleBufExplorer<CR>
 nnoremap <Leader>t :ToggleBufExplorer<CR>
+
+" tagbar 插件快捷键
+nnoremap <F4> :TagbarToggle<CR>
+
 
 " 调整窗口大小插件
 nnoremap <Leader>w :WinResizerStartResize<CR>
