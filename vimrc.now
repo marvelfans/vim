@@ -38,13 +38,11 @@ autocmd bufenter * if(winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTa
 " ---------------------------
 Plug 'jnurmine/Zenburn'
 Plug 'morhetz/gruvbox'
-Plug 'altercation/vim-colors-solarized'
 
 " ---------------------------
 " go插件
 " ---------------------------
 Plug 'fatih/vim-go'
-Plug 'dgryski/vim-godef'
 
 let g:go_code_completion_enabled = 1
 let g:go_auto_type_info = 1
@@ -54,11 +52,6 @@ let g:go_fmt_comand = "gofmt"
 let g:syntastic_go_checkers = ['golint', 'govet']
 let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['go']}
 let g:go_list_type = "quickfix"
-
-" 使用Ctrl+[跳转到定义处
-" autocmd FileType go nnoremap <buffer> <C-[> :call GodefUnderCursor()<cr>
-let g:godef_split=3
-let g:godef_same_file_window=1
 
 
 " ---------------------------
@@ -243,6 +236,9 @@ set cmdheight=1
 " 当文件修改时, 自动载入
 set autoread
 
+" 当切换buffer/tab时, 自动保存
+set autowriteall
+
 " 设置折叠方式
 " manual手工定义,indent缩进,expr表达式,syntax语法,diff对未更改的折叠,marker对标志折叠
 " set foldmethod=syntax
@@ -260,7 +256,7 @@ set viminfo=<20,'10,/10,:20,h,s10
 set tags+=tags
 
 " 设置path, 添加当前目录
-set path+=./**
+" set path+=./**
 
 """""""""""""""""""""""""""""
 """" 外观相关设置
@@ -271,103 +267,14 @@ if &term =~ '256color'
   set t_ut=
 endif
 
-" set background=dark
-set background=light
+set background=dark
+" set background=light
 
 " 主题设置与高行当前行与列
 set cursorline
-" set cursorcolumn
-" color solarized
-" color gruvbox
-
-" 自定义颜色 插件匹配高亮影响速度(配置深色主题使用) 
-hi Comment          guifg=#7f9f7f   ctermfg=108
-hi CursorColumn     guibg=#121212   ctermbg=233     cterm=none
-hi CursorLine       guibg=#121212   gui=bold        ctermbg=233     cterm=bold
-hi CursorLineNr     guifg=#f2f3bb   guibg=#161616   ctermfg=229     ctermbg=233     cterm=none
-hi StatusLine       guifg=#313633   guibg=#ccdc90   ctermfg=236     ctermbg=186
-hi Search           guifg=#ffffe0   guibg=#284f28   ctermfg=230     ctermbg=22
-hi LineNr           guifg=#5d6262   guibg=#353535   ctermfg=240     ctermbg=236
-hi Visual           guifg=#000000   guibg=#71d3b4   gui=none        ctermfg=16  ctermbg=79  cterm=bold
-hi VisualNOS        guifg=#333333   guibg=#f18c96   gui=bold,underline  ctermfg=236     ctermbg=210     cterm=bold
-hi Directory        guifg=#9fafaf   gui=bold        ctermfg=109 cterm=bold
-hi DiffAdd          guifg=#709080   guibg=#313c36   gui=bold    ctermfg=66  ctermbg=237 cterm=bold
-hi DiffChange       guibg=#333333   ctermbg=23
-hi DiffDelete       guifg=#333333   guibg=#464646   ctermfg=236     ctermbg=238
-hi DiffText         guifg=#ecbcbc   guibg=#41363c   gui=bold        ctermfg=217 ctermbg=237 cterm=bold
-
-
-" ---------------
-" tab显示设置
-" ---------------
-" Rename tabs to show tab# and # of viewports 
-if exists("+showtabline") 
-    function! MyTabLine() 
-        let s = '' 
-        let wn = '' 
-        let t = tabpagenr() 
-        let i = 1 
-        while i <= tabpagenr('$') 
-            let buflist = tabpagebuflist(i) 
-            let winnr = tabpagewinnr(i) 
-            let s .= '%' . i . 'T' 
-            let s .= (i == t ? '%1*' : '%2*') 
-            let s .= ' ' 
-            let wn = tabpagewinnr(i,'$') 
-
-            let s .= (i== t ? '%#TabNumSel#' : '%#TabNum#') 
-            let s .= i 
-            if tabpagewinnr(i,'$') > 1 
-                let s .= '.' 
-                let s .= (i== t ? '%#TabWinNumSel#' : '%#TabWinNum#') 
-                let s .= (tabpagewinnr(i,'$') > 1 ? wn : '') 
-            end 
-
-            let s .= ' %*' 
-            let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#') 
-            let bufnr = buflist[winnr - 1] 
-            let file = bufname(bufnr) 
-            let buftype = getbufvar(bufnr, 'buftype') 
-            if buftype == 'nofile' 
-                if file =~ '\/.' 
-                    let file = substitute(file, '.*\/\ze.', '', '') 
-                endif 
-            else 
-                let file = fnamemodify(file, ':p:t') 
-            endif 
-            if file == '' 
-                let file = '[No Name]' 
-            endif 
-            let s .= file 
-            let s .= (i == t ? '%m' : '') 
-            let i = i + 1 
-        endwhile 
-        let s .= '%T%#TabLineFill#%=' 
-        return s 
-    endfunction 
-endif 
-
-function MyTabLabel(n)
-    let buflist = tabpagebuflist(a:n)
-    let winnr = tabpagewinnr(a:n)
-    return bufname(buflist[winnr - 1])
-endfunction
-
-hi TabLineSel term=bold cterm=bold ctermfg=16 ctermbg=229
-hi TabWinNumSel term=bold cterm=bold ctermfg=90 ctermbg=229
-hi TabNumSel term=bold cterm=bold ctermfg=16 ctermbg=229
-hi TabLine term=underline ctermfg=16 ctermbg=145
-hi TabWinNum term=bold cterm=bold ctermfg=90 ctermbg=145
-hi TabNum term=bold cterm=bold ctermfg=16 ctermbg=145
-" 最多可以显示9个tab
-set tabpagemax=9
-" 需要的时候才展示
-set tabline=1
-set tabline=%!MyTabLine()
-
-" quickfix窗口设置
-" hi QuickFixLine ctermbg=Yellow guibg=Yellow
-
+set cursorcolumn
+color gruvbox
+" color zenburn
 
 
 """""""""""""""""""""""""""""
@@ -403,21 +310,8 @@ nnoremap <Leader>t :ToggleBufExplorer<CR>
 " tagbar 插件快捷键
 nnoremap <F4> :TagbarToggle<CR>
 
-
 " 调整窗口大小插件
 nnoremap <Leader>w :WinResizerStartResize<CR>
-
-" tab快速定位
-" Alt键输出方式, insert模式下, Ctrl+v 然后 Alt+key
-nnoremap 1 1gt
-nnoremap 2 2gt
-nnoremap 3 3gt
-nnoremap 4 4gt
-nnoremap 5 5gt
-nnoremap 6 6gt
-nnoremap 7 7gt
-nnoremap 8 8gt
-nnoremap 9 9gt
 
 " <F12>唤起最近命令列表
 nnoremap <F12> q:
