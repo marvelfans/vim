@@ -1,8 +1,7 @@
-set nocompatible
-
-"""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """" vim-plug 插件管理器
-"""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 进入Vim时无如没有Plug, 执行下载安装
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -10,40 +9,29 @@ if empty(glob('~/.vim/autoload/plug.vim'))
 endif
 
 
-"""""""""""""""""""""""""""""
-"""" 开始处理插件
-"""""""""""""""""""""""""""""
+""" 开始管理插件
 call plug#begin('~/.vim/plugged')
 
+"""" 插件列表
+Plug 'tweekmonster/startuptime.vim'                         " 用来统计vim启动时间
+Plug 'ervandew/supertab'                                    " 增强Tab键
+Plug 'morhetz/gruvbox'                                      " 一个主题
+Plug 'jlanzarotta/bufexplorer'                              " buf浏览, 快速查看缓冲区, 用来替换原生的ls/buffers命令
+Plug 'simeji/winresizer'                                    " 快速调整一个window的大小
+Plug 'ctrlpvim/ctrlp.vim'                                   " 模糊搜索, 对项目了解足够时, 比nerdtree方便
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }       " 显示目录结构
+Plug 'preservim/tagbar'                                     " 将当前buffer生成的tag放到内存中展示, 用来快速了解项目
+Plug 'fatih/vim-go'                                         " go支持
 
-" ---------------------------
-" 基础增强插件
-" ---------------------------
-Plug 'tweekmonster/startuptime.vim'
-Plug 'ervandew/supertab'
-
-" ---------------------------
-" 目录树 
-" ---------------------------
-Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
-
-" 允许的最大尺寸, 解决和bufExplore冲突的问题
-let g:NERDTreeWinSize=35
-" 过滤文件
-let NERDTreeIgnore=['.pyc$']
+""""" 插件设置
+"" NerdTree插件
+let g:NERDTreeWinSize=35                " 允许的最大尺寸
+let NERDTreeIgnore=['.pyc$']            " 不显示的文件类型
+" 当为最一个窗口时, 退出
 autocmd bufenter * if(winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+nnoremap <F2> :NERDTreeToggle<CR>       " <F2> 打开目录窗口
 
-" ---------------------------
-" 一些比较不错的主题
-" ---------------------------
-Plug 'jnurmine/Zenburn'
-Plug 'morhetz/gruvbox'
-
-" ---------------------------
-" go插件
-" ---------------------------
-Plug 'fatih/vim-go'
-
+"" Vim-go插件
 let g:go_code_completion_enabled = 1
 let g:go_auto_type_info = 1
 let g:go_updatetime = 500
@@ -53,39 +41,22 @@ let g:syntastic_go_checkers = ['golint', 'govet']
 let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['go']}
 let g:go_list_type = "quickfix"
 
-
-" ---------------------------
-" python插件
-" ---------------------------
-" Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
-
-" ---------------------------
-" 显示最近缓冲区的插件
-" ---------------------------
-Plug 'jlanzarotta/bufexplorer'
-
+"" BufExplorer插件
 let g:bufExplorerDefaultHelp=0
-" 显示最近使用最多的
-let g:bufExplorerSortBy='mru'
-" 在下边显示
-let g:bufExplorerSplitBelow=1
-" 将路径和文件名显示到一起
-let g:bufExplorerSplitOutPathName=1
+let g:bufExplorerSortBy='mru'                       " 根据most-recent-use来显示
+let g:bufExplorerSplitBelow=1                       " 在下边显示
+let g:bufExplorerSplitOutPathName=1                 " 将路径和文件名显示到一起
 
+" 自定义LS/Buffer命令
+command LS      :call BufExplorer()
+command Buffer  :call BufExplorer()
 
-" ---------------------------
-" 快速调节每个窗口大小
-" ---------------------------
-Plug 'simeji/winresizer'
-let g:winresizer_start_key='<C-i>'
+"" WinResizer插件
+let g:winresizer_start_key='<Leader>w'
 let g:winresizer_horiz_resize=2
 let g:winresizer_vert_resize=2
 
-" ---------------------------
-" 文件模糊搜索
-" ---------------------------
-Plug 'ctrlpvim/ctrlp.vim'
-
+"" Ctrlp插件
 let g:ctrlp_cmd ='CtrlP'
 let g:ctrlp_custom_ignore = {
             \ 'dir': '\v(venv|env|apitest)',
@@ -93,225 +64,121 @@ let g:ctrlp_custom_ignore = {
             \ }
 let g:ctrlp_map = '<Leader>s'
 
+"" TagBar插件
+nnoremap <F3> :TagbarToggle<CR>                     " <F3>打开TagBar
 
-" ---------------------------
-" tagbar 显示tag
-" ---------------------------
-Plug 'majutsushi/tagbar'
-
-
-""" 插件结束
-call plug#end()
-"""""""""""""""""""""""""""""
 """" 插件处理结束
-"""""""""""""""""""""""""""""
+call plug#end()
 
 
-"""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""" 基本设置
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""" 通用设置
+let mapleader=","                       " 定义leader键
+set nocompatible                        " 设置不兼容原始vi模式
+filetype on                             " 开启文件类型检测
+filetype plugin on                      " 设置加载对应文件类型的插件
+syntax enable                           " 开启语法高亮功能
+syntax on                               " 自动语法高亮
+set t_Co=256                            " 开启256色支持
+" 解决在Tmux下显示异常问题
+if &term =~ '256color'
+    set t_ut=
+endif
+set t_ut=
+set splitbelow                          " 新分割的窗口在下边
+set splitright                          " 新分割的窗口在右边
+" set showcmd                             " 在命令行最后位置显示命令, 如果visual模式, 显示选择行数(如果可能会影响速度)
+set whichwrap+=<,>,h,l                  " 设置光标跨行
+set virtualedit=block,onemore           " 光标可以出现在最后一个字符的后面
+set history=128                         " 保存的命令数量
+set noerrorbells                        " 不要警告声
+set novisualbell                        " 不要警告花屏
+set mouse=a                             " 设置所有模式鼠标可用
+set clipboard=unnamedplus,unnamed       " 共享粘贴板
+set viminfo=<20,'10,/10,:20,h,s10       " viminfo保存数量, 过大会影响速度
+" 打开文件自动定位到最后编辑的位置
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g'\"" | endif
+
 """" 编码设置
-"""""""""""""""""""""""""""""
 set encoding=utf-8
 set termencoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8,ucs-bom,chinese,cp930,GBK
+set helplang=cn
+
+"""" 缩进设置与排版设置
+" set fdm=indent                        " 代码折叠方式
+set nofoldenable                        " 禁用折叠代码
+filetype indent on                      " 根据不同语言, 智能缩进
+set expandtab                           " 用空格代替tab
+" set noexpandtab                       " 不用空格代替tab
+set tabstop=4                           " tab空格数量
+set shiftwidth=4                        " 缩进空格数量
+set smarttab                            " 根据tabstop和softtabstop插入tab, 需要expandtab打开
+set autoindent                          " 使用当前缩进, 为下行缩进
+set smartindent                         " 智能缩进, 根据语言有关, 比如{,:等. 需要autoindent打开
+set linebreak                           " 对于长行, 自动断行
+set backspace=eol,start,indent          " 删除(退格)键可以换行删除
+
+"""" 代码补全
+set wildmenu                            " vim自身命令行模式智能补全
+set completeopt-=preview                " 补全时不显示窗口, 只显示补全列表
+
+"""" 搜索设置
+set hlsearch                            " 高亮显示搜索结果
+set incsearch                           " 开启实时搜索功能
+set ignorecase                          " 搜索时大小写不敏感
+
+"""" 缓存设置
+set nobackup                            " 设置不备份
+set noswapfile                          " 禁止生成临时文件
+set autoread                            " 文件在vim之外修改, 自动读入
+set autowrite                           " 设置自动保存
+set autowriteall                        " 切换缓冲区/Tab时, 自动保存
+set confirm                             " 在处理未保存文件时, 弹出确认
+
+"""" 界面设置
+set number                              " 显示行号
+set numberwidth=4                       " 设置行号宽度
+set laststatus=2                        " 一直显示状态栏
+set cmdheight=1                         " 命令行的高度
+set showmatch                           " 显示匹配的括号(文件过大时, 会影响匹配速度)
+set background=dark                     " 设置深色模式
+" set background=light                  " 设置浅色模式
+set cursorline                          " 亮亮光标所在行
+set cursorcolumn                        " 高亮光标所在列
+color gruvbox                           " 下载的主题插件
 
 
-"""""""""""""""""""""""""""""
-""""" 基本设置
-"""""""""""""""""""""""""""""
-" 回到上次打开的位置
-autocmd BufReadPost *
-            \ if line("'\"") > 0 && line("'\"") <= line("$") |
-            \   exe "normal! g`\"" |
-            \ endif
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""" 自定义设置
+""""" 以下设置可能会根据不同项目而不同
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+"""" 使用*高亮当前KeyWord, 但不执行跳转
+noremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
 
-" 语法支持
-syntax on
-syntax enable
-
-" terminal size
-if version >= 800
-    set termwinsize=15x0
-endif
-
-" 显示行号
-set number
-
-" 命令行数
-set history=4096
-
-" 命令补全
-set wildmenu
-
-" 忽略的文件(vimgrep会使用该设置)
+"""" 忽略的文件(vimgrep会使用该设置)
 set wildignore+=*.0,*~,~.pyc
 set wildignore+=tags
 set wildignore+=*/venv/*
 set wildignore+=*/env/*
 
-" 退格可用
-set backspace=eol,start,indent 
-
-" 以下命令可以换行
-set whichwrap+=<,>,h,l
-
-" 搜索忽略大小写
-" set ignorecase
-
-" 智能搜索 如果没有,自动上一个搜索单词
-set smartcase
-
-" 高亮搜索单词
-set hlsearch
-
-" 每插入一个字符,就高亮一个 => 匹配影响速度
-" set incsearch
-
-" 显示匹配插号 => 匹配影响速度
-" set showmatch
-
-" 匹配时间 => 匹配影响速度
-" set matchtime=2
-
-" 懒加载，提升速度
-set lazyredraw
-
-" 不要警告声音
-set noerrorbells
-
-" 不要警告闪屏
-set novisualbell
-set t_vb=
-set tm=500
-
-" 代码折叠
-" set fdm=indent
-
-" 鼠标模式
-set mouse=a
-
-" 鼠标可以在行未后一个字符
-set virtualedit=onemore
-
-" 不要备份文件
-set nobackup
-
-" 不要临时文件
-set nowb
-
-" 不要交换文件
-set noswapfile
-
-" 用空格代替tab
-set expandtab   " noexpandtab
-
-" 智能插入tab
-set smarttab
-
-" 缩进的空格数
-set shiftwidth=4
-
-" tab的空格数
-set tabstop=4
-
-" 对于长行，自动断行
-set linebreak
-
-" 自动使用当前行的缩进为下行缩进
-set autoindent
-
-" 自动缩进
-set smartindent
-
-" 显示状态栏
-set laststatus=2
-
-" 命令行高度
-set cmdheight=1
-
-" 共享粘贴板
-" set clipboard=unnamedplus,unnamed
-
-" 当文件修改时, 自动载入
-set autoread
-
-" 当切换buffer/tab时, 自动保存
-set autowriteall
-
-" 设置折叠方式
-" manual手工定义,indent缩进,expr表达式,syntax语法,diff对未更改的折叠,marker对标志折叠
-" set foldmethod=syntax
-
-" viminfo保存vim状态的记录文件
-" <20 每个寄存器最多保存100行
-" '10 保存最近50个文件的标记
-" /10 保存搜索历史条数
-" :20 保存最近20个命令
-" h 载入viminfo时,关闭hlsearch高亮
-" s10 最多保存10个寄存器
-set viminfo=<20,'10,/10,:20,h,s10
-
-" 指定tag文件
+"""" 指定tag文件
 set tags+=tags
 
-" 设置path, 添加当前目录
-" set path+=./**
 
-"""""""""""""""""""""""""""""
-"""" 外观相关设置
-"""""""""""""""""""""""""""""
-set t_Co=256
-" 背景颜色无法刷新的情况
-if &term =~ '256color'
-  set t_ut=
-endif
-
-set background=dark
-" set background=light
-
-" 主题设置与高行当前行与列
-set cursorline
-set cursorcolumn
-color gruvbox
-" color zenburn
-
-
-"""""""""""""""""""""""""""""
-"""" 快捷键设置
-"""""""""""""""""""""""""""""
-let mapleader=","
-let g:mapleader=","
-
-" cancel <F1> HelpPage
-nnoremap <F1> <Nop>
-
-" 使用;代替:
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""" 自定义快捷键
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 使用;代替: (同一个键, 不使用空格)
 noremap ; :
-
-" 使用*高亮当前KeyWord, 但不执行跳转
-noremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
 
 " 多个vim-pane之间切换 
 noremap <C-h> <C-w>h
-" 和tmux冲突
-" noremap <C-j> <C-w>j
+" noremap <C-j> <C-w>j                  " 和Tmux快捷键冲突
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
-
-""" 插件快捷键
-" NerdTree
-nnoremap <F2> :NERDTreeToggle<CR>
-
-" buffer管理插件
-nnoremap <F3> :ToggleBufExplorer<CR>
-nnoremap <Leader>t :ToggleBufExplorer<CR>
-
-" tagbar 插件快捷键
-nnoremap <F4> :TagbarToggle<CR>
-
-" 调整窗口大小插件
-nnoremap <Leader>w :WinResizerStartResize<CR>
-
-" <F12>唤起最近命令列表
-nnoremap <F12> q:
