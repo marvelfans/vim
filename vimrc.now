@@ -152,23 +152,41 @@ set cursorline                          " 亮亮光标所在行
 set cursorcolumn                        " 高亮光标所在列
 color gruvbox                           " 下载的主题插件
 
+"""" 自定义指令
+" 使用*高亮当前KeyWord, 但不执行跳转
+noremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"" 自定义设置
 """"" 以下设置可能会根据不同项目而不同
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"""" 使用*高亮当前KeyWord, 但不执行跳转
-noremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
-
 """" 忽略的文件(vimgrep会使用该设置)
 set wildignore+=*.0,*~,~.pyc
 set wildignore+=tags
+set wildignore+=cscope.*
 set wildignore+=*/venv/*
 set wildignore+=*/env/*
 
 """" 指定tag文件
-set tags+=tags
+if filereadable("tags")
+    set tags+=tags
+endif
+
+"""" 指定cscope文件
+if has("cscope")
+    set csto=0
+    set cst
+    set nocsverb
+    set cscopequickfix=c-,d-,e-,g-,i-,s-,t-
+    if filereadable("cscope.out")
+        cs add cscope.out
+    endif
+    set csverb
+endif
+
+" 使用相对行号, 方便跳转
+set relativenumber
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
