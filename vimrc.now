@@ -49,7 +49,6 @@ let g:bufExplorerSplitOutPathName=1                 " 将路径和文件名显�
 
 " 自定义LS/Buffer命令
 command LS      :call BufExplorer()
-command Buffer  :call BufExplorer()
 
 "" WinResizer插件
 let g:winresizer_start_key='<Leader>w'
@@ -167,6 +166,7 @@ set wildignore+=tags
 set wildignore+=cscope.*
 set wildignore+=*/venv/*
 set wildignore+=*/env/*
+set wildignore+=*/vendor/*
 
 """" 指定tag文件
 if filereadable("tags")
@@ -186,7 +186,10 @@ if has("cscope")
 endif
 
 " 使用相对行号, 方便跳转
-set relativenumber
+" set relativenumber
+
+" 自定义命令, 方便跳转Tab
+command -nargs=1 T :tabn<args>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
