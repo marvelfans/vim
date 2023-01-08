@@ -15,7 +15,8 @@ call plug#begin('~/.vim/plugged')
 """" 插件列表
 Plug 'tweekmonster/startuptime.vim'                         " 用来统计vim启动时间
 Plug 'ervandew/supertab'                                    " 增强Tab键
-Plug 'morhetz/gruvbox'                                      " 一个主题
+Plug 'sickill/vim-monokai' 									" 一个主题
+Plug 'altercation/vim-colors-solarized' 					" 一个经典主题
 Plug 'jlanzarotta/bufexplorer'                              " buf浏览, 快速查看缓冲区, 用来替换原生的ls/buffers命令
 Plug 'simeji/winresizer'                                    " 快速调整一个window的大小
 Plug 'ctrlpvim/ctrlp.vim'                                   " 模糊搜索, 对项目了解足够时, 比nerdtree方便
@@ -62,8 +63,13 @@ let g:ctrlp_custom_ignore = {
             \ 'file': '\v\.(exe|so|dll)$',
             \ }
 let g:ctrlp_map = '<Leader>s'
+" 取消<F1>帮助
+map <F1> <Nop>
+" 使用<F1>或<Leader>s唤起CtrlP
+nnoremap <F1> :CtrlP<CR>
 
 "" TagBar插件
+let g:tagbar_autopreview = 0
 nnoremap <F3> :TagbarToggle<CR>                     " <F3>打开TagBar
 
 """" 插件处理结束
@@ -73,6 +79,15 @@ call plug#end()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"" 基本设置
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"""" 忽略的文件(vimgrep会使用该设置)
+set wildignore=*.0,*~,~.pyc
+set wildignore+=tags
+set wildignore+=cscope.*
+set wildignore+=*/venv/*
+set wildignore+=*/env/*
+set wildignore+=*/vendor/*
+set wildignore+=*/cmd/cmd
 
 """" 通用设置
 let mapleader=","                       " 定义leader键
@@ -112,8 +127,8 @@ set helplang=cn
 " set fdm=indent                        " 代码折叠方式
 set nofoldenable                        " 禁用折叠代码
 filetype indent on                      " 根据不同语言, 智能缩进
-set expandtab                           " 用空格代替tab
-" set noexpandtab                       " 不用空格代替tab
+" set expandtab                           " 用空格代替tab
+set noexpandtab                       " 不用空格代替tab
 set tabstop=4                           " tab空格数量
 set shiftwidth=4                        " 缩进空格数量
 set smarttab                            " 根据tabstop和softtabstop插入tab, 需要expandtab打开
@@ -124,7 +139,7 @@ set backspace=eol,start,indent          " 删除(退格)键可以换行删除
 
 """" 代码补全
 set wildmenu                            " vim自身命令行模式智能补全
-set completeopt-=preview                " 补全时不显示窗口, 只显示补全列表
+set completeopt=menu,popup            " 补全时不显示窗口, 只显示补全列表
 
 """" 搜索设置
 set hlsearch                            " 高亮显示搜索结果
@@ -140,49 +155,27 @@ set autowriteall                        " 切换缓冲区/Tab时, 自动保存
 set confirm                             " 在处理未保存文件时, 弹出确认
 
 """" 界面设置
+" set colorcolumn=120 					" 在<column>处显示竖线
 set number                              " 显示行号
 set numberwidth=4                       " 设置行号宽度
-set laststatus=2                        " 一直显示状态栏
+set laststatus=2                        " 显示状态栏
 set cmdheight=1                         " 命令行的高度
 set showmatch                           " 显示匹配的括号(文件过大时, 会影响匹配速度)
 set background=dark                     " 设置深色模式
 " set background=light                  " 设置浅色模式
 set cursorline                          " 亮亮光标所在行
 set cursorcolumn                        " 高亮光标所在列
-color gruvbox                           " 下载的主题插件
-
-"""" 自定义指令
-" 使用*高亮当前KeyWord, 但不执行跳转
-noremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
+colorscheme solarized
+" colorscheme monokai
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"" 自定义设置
 """"" 以下设置可能会根据不同项目而不同
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"""" 忽略的文件(vimgrep会使用该设置)
-set wildignore+=*.0,*~,~.pyc
-set wildignore+=tags
-set wildignore+=cscope.*
-set wildignore+=*/venv/*
-set wildignore+=*/env/*
-set wildignore+=*/vendor/*
-
 """" 指定tag文件
 if filereadable("tags")
     set tags+=tags
-endif
-
-"""" 指定cscope文件
-if has("cscope")
-    set csto=0
-    set cst
-    set nocsverb
-    set cscopequickfix=c-,d-,e-,g-,i-,s-,t-
-    if filereadable("cscope.out")
-        cs add cscope.out
-    endif
-    set csverb
 endif
 
 " 使用相对行号, 方便跳转
@@ -190,6 +183,9 @@ endif
 
 " 自定义命令, 方便跳转Tab
 command -nargs=1 T :tabn<args>
+
+" 使用*高亮当前KeyWord, 但不执行跳转
+noremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
