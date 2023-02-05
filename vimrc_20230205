@@ -1,4 +1,52 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""" 插件安装与设置
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+
+""""""" 基本功能插件
+Plug 'ervandew/supertab'                                    " 增强Tab键
+Plug 'simeji/winresizer'                                    " 快速调整一个window的大小
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }       " 显示目录结构
+""""""" 主题插件
+Plug 'sickill/vim-monokai'
+Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
+""""""" 功能插件
+Plug 'preservim/tagbar'
+Plug 'fatih/vim-go'
+
+""""""" NerdTree插件
+let g:NERDTreeWinSize=35
+let g:NERDTreeIgnore=['.pyc$']
+autocmd bufenter * 
+	\ if(winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+""""""" vim-go插件
+let g:go_code_completion_enabled = 1
+let g:go_auto_type_info = 1
+let g:go_updatetime = 500
+let g:go_auto_sameids = 0       " => 影响速度
+let g:go_fmt_comand = "gofmt"
+let g:syntastic_go_checkers = ['golint', 'govet']
+let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['go']}
+let g:go_list_type = "quickfix"
+
+""""""" winresizer插件
+let g:winresizer_start_key='<Leader>w'
+let g:winresizer_horiz_resize=2
+let g:winresizer_vert_resize=2
+
+""""""" tagbar插件
+let g:tagbar_autopreview = 0
+
+
+call plug#end()
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""" 基本设置
 set encoding=utf-8
 set termencoding=utf-8
@@ -55,9 +103,7 @@ set confirm                             " 在处理未保存文件时, 弹出确
 
 " 读入文件时，跳转到上次读入的位置
 autocmd BufReadPost * 
-	\ if line("'\"") > 1 && line("'\"") <= line("$") | 
-	\ 	execute "normal! g'\"" | 
-	\ endif
+	\ if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g'\"" | endif
 
 " 使用*/#查找时, 只高亮不跳转
 nnoremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
@@ -72,22 +118,9 @@ set laststatus=2
 set showmatch
 set cursorline
 set background=dark
-color murphy
-
-hi Comment          guifg=#7f9f7f   ctermfg=108
-hi CursorColumn     guibg=#121212   ctermbg=233     cterm=none
-hi CursorLine       guibg=#121212   gui=bold        ctermbg=233     cterm=bold
-hi CursorLineNr     guifg=#f2f3bb   guibg=#161616   ctermfg=229     ctermbg=233     cterm=none
-hi StatusLine       guifg=#313633   guibg=#ccdc90   ctermfg=236     ctermbg=186
-hi Search           guifg=#ffffe0   guibg=#284f28   ctermfg=230     ctermbg=22
-hi LineNr           guifg=#5d6262   guibg=#353535   ctermfg=240     ctermbg=236
-hi Visual           guifg=#000000   guibg=#71d3b4   gui=none        ctermfg=16  ctermbg=79  cterm=bold
-hi VisualNOS        guifg=#333333   guibg=#f18c96   gui=bold,underline  ctermfg=236     ctermbg=210     cterm=bold
-hi Directory        guifg=#9fafaf   gui=bold        ctermfg=109 cterm=bold
-hi DiffAdd          guifg=#709080   guibg=#313c36   gui=bold    ctermfg=66  ctermbg=237 cterm=bold
-hi DiffChange       guibg=#333333   ctermbg=23
-hi DiffDelete       guifg=#333333   guibg=#464646   ctermfg=236     ctermbg=238
-hi DiffText         guifg=#ecbcbc   guibg=#41363c   gui=bold        ctermfg=217 ctermbg=237 cterm=bold
+" colorscheme monokai
+colorscheme gruvbox
+" colorscheme solarized
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""" 自定义快捷键
@@ -96,6 +129,8 @@ let mapleader=","
 nnoremap ; :
 
 nnoremap <F1> <Nop>
+nnoremap <F2> :NERDTreeToggle<CR>
+nnoremap <F3> :TagbarToggle<CR>
 
 noremap <C-h> <C-w>h
 " noremap <C-j> <C-w>j                  " 和tmux快捷键冲突
