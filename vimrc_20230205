@@ -1,12 +1,33 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""" 插件安装与设置
-if empty(glob('~/.vim/autoload/plug.vim'))
-	silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-		\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-	autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+"""""""  操作系统与终端类型判断
+let g:is_windows=0
+let g:is_linux=0
+if has("win32") || has("win64")
+	let g:is_windows=1
+else
+	let g:is_linux=1
 endif
 
-call plug#begin('~/.vim/plugged')
+let g:is_gui=0
+if has("gui_running")
+	let g:is_gui=1
+endif
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""" 插件安装与设置
+if g:is_linux == 1
+	if empty(glob('~/.vim/autoload/plug.vim'))
+		silent !curl -fLo '~/.vim/autoload/plug.vim' --create-dirs 
+			\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+		autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+	endif
+
+	call plug#begin(glob('~/.vim/plugged'))
+else
+	call plug#begin(glob('~/vimfiles/plugged'))
+endif
+
 
 """"""" 基本功能插件
 Plug 'ervandew/supertab'                                    " 增强Tab键
@@ -50,6 +71,7 @@ let g:tagbar_autopreview = 0
 call plug#end()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""" 基本设置
+set modifiable
 set encoding=utf-8
 set termencoding=utf-8
 set fileencoding=utf-8
@@ -126,12 +148,14 @@ set background=dark
 colorscheme gruvbox
 " colorscheme solarized
 
+""""""" windows下单独设置字体
+if g:is_windows == 1 && g:is_gui == 1
+	set guifont=Cascadia_Mono:h11:cANSI:qDRAFT
+endif
+
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""" 自定义快捷键
-let mapleader=","
-
-nnoremap ; :
-
+"""""""  快捷键设置
 nnoremap <F1> <Nop>
 nnoremap <F2> :NERDTreeToggle<CR>
 nnoremap <F3> :TagbarToggle<CR>
@@ -140,3 +164,4 @@ noremap <C-h> <C-w>h
 " noremap <C-j> <C-w>j                  " 和tmux快捷键冲突
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
+
