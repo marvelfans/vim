@@ -84,7 +84,7 @@ set backspace=eol,start,indent
 
 " 命令补全
 set wildmenu
-set wildmode=longest:list
+set wildmode=list:full
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -141,6 +141,12 @@ set autowrite
 syntax enable
 syntax on
 
+" 搜索匹配忽略文件
+set wildignore+=*.so,*.swp,*.zip,*.pyc
+if g:is_windows == 1
+	set wildignore+=*.exe
+endif
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""" 插件设置
@@ -176,7 +182,6 @@ Plug 'morhetz/gruvbox'
 
 " 目录插件
 Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
-
 let g:NERDTreeWinSize=35
 let g:NERDTreeIgnore=['.pyc$']
 autocmd bufenter * 
@@ -187,7 +192,6 @@ autocmd bufenter *
 
 " vim-go插件
 Plug 'fatih/vim-go'
-
 let g:go_code_completion_enabled = 1
 let g:go_auto_type_info = 1
 let g:go_updatetime = 500
@@ -200,7 +204,6 @@ let g:go_list_type = "quickfix"
 
 " 快速设置window的大小
 Plug 'simeji/winresizer'
-
 let g:winresizer_start_key='<Leader>w'
 let g:winresizer_horiz_resize=2
 let g:winresizer_vert_resize=2
@@ -208,7 +211,26 @@ let g:winresizer_vert_resize=2
 
 " tagbar插件
 Plug 'preservim/tagbar'
-let g:tagbar_autopreview = 0
+let g:tagbar_autopreview=0
+
+
+" ctrlp插件
+Plug 'kien/ctrlp.vim'
+let g:ctrlp_cmd='CtrlP'
+let g:ctrlp_map='<C-p>'
+let g:ctrlp_working_path_mode='ra'
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+			\ 'dir':  '\v[\/]\.(git|hg|svn)$',
+			\ 'file': '\v\.(exe|so|dll)$',
+			\ 'link': 'some_bad_symbolic_links',
+			\ }
+" if g:is_linux == 1
+" 	let g:ctrlp_user_command='find %s -type f'
+" else
+" 	let g:ctrlp_user_command='dir %s /-n /b /s /a-d'
+" endif
+
 
 
 call plug#end()
