@@ -18,14 +18,13 @@ endif
 """"""" 插件安装与设置
 if g:is_linux == 1
 	if empty(glob('~/.vim/autoload/plug.vim'))
-		silent !curl -fLo '~/.vim/autoload/plug.vim' --create-dirs 
+		silent !curl -fLo '~/.vim/autoload/plug.vim' --create-dirs
 			\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 		autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 	endif
-
-	call plug#begin(glob('~/.vim/plugged'))
+	call plug#begin('~/.vim/plugged')
 else
-	call plug#begin(glob('~/vimfiles/plugged'))
+	call plug#begin('~/vimfiles/plugged')
 endif
 
 
@@ -145,24 +144,27 @@ set showmatch
 set cursorline
 set background=dark
 " colorscheme monokai
-colorscheme gruvbox
-" colorscheme solarized
+" colorscheme gruvbox
+colorscheme solarized
 
-""""""" windows下单独设置字体
+""""""" windows下单独设置的外观
 if g:is_windows == 1 && g:is_gui == 1
 	set guifont=Cascadia_Mono:h11:cANSI:qDRAFT
+	set guioptions-=T
+	"set guioptions+=m
 endif
-
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""  快捷键设置
-nnoremap ; :
+noremap ; :
 nnoremap <F1> <Nop>
 nnoremap <F2> :NERDTreeToggle<CR>
 nnoremap <F3> :TagbarToggle<CR>
 
 noremap <C-h> <C-w>h
-" noremap <C-j> <C-w>j                  " 和tmux快捷键冲突
+if g:is_gui == 1
+	noremap <C-j> <C-w>j                  " 和tmux快捷键冲突
+endif
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 
