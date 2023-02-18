@@ -1,0 +1,269 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""  全局变量设置
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" 操作系统与终端类型
+let g:is_windows=0
+let g:is_linux=0
+if has("win32") || has("win64")
+	let g:is_windows=1
+else
+	let g:is_linux=1
+endif
+
+let g:is_gui=0
+if has("gui_running")
+	let g:is_gui=1
+endif
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""" 全局设置
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" 文件类型检测
+filetype on                             " 开启文件类型检测
+
+" 根据文件类型加载插件
+filetype plugin on                      " 设置加载对应文件类型的插件
+
+
+" 开启256色
+set t_Co=256                            " 开启256色支持
+if &term =~ '256color'
+    set t_ut=
+endif
+
+" 高亮查找内容
+set hlsearch
+
+" 时实搜索
+set incsearch
+
+" 忽略大小写
+set ignorecase
+
+" 显示括号匹配
+set showmatch
+
+" 上下文行数
+set scrolloff=5
+
+" 虚拟编辑
+set virtualedit=block,onemore
+
+" 不兼容vi模式
+set nocompatible
+
+" 分隔的窗口在下方 
+set splitbelow
+
+" 分隔的窗口在右边
+set splitright
+
+" 保存的命令数量
+set history=32
+
+" 不要警告花屏
+set novisualbell
+
+" 鼠标模式
+set mouse=a
+
+" 粘贴板
+set clipboard=unnamedplus,unnamed
+
+" viminfo设置
+set viminfo=<20,'10,/10,:20,h,s10
+
+" 禁用折叠
+set nofoldenable
+
+" 可换行删除
+set backspace=eol,start,indent
+
+" 命令补全
+set wildmenu
+set wildmode=longest:list
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""" 文件设置
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" 显示行号
+set number
+set numberwidth=4
+
+" 显示相对行号
+"set relativenumber
+
+" 开启换行
+set wrap
+set whichwrap+=<,>,h,l
+
+" 词尾换行
+set linebreak
+
+" 是否开启制表符扩展
+" set expandtab
+set noexpandtab
+
+" 制表符设置
+set tabstop=4
+set shiftwidth=4
+
+" 缩进设置
+set smarttab
+set autoindent
+set smartindent
+
+" 文件内容、文件格式及编码可修改
+set modifiable
+
+" 文件编码设置
+set encoding=utf-8
+set termencoding=utf-8
+set fileencoding=utf-8
+set fileencodings=utf-8,ucs-bom,chinese,cp930,GBK
+set helplang=cn
+
+" 不需要要备份文件
+set nobackup
+
+" 不需要临时文件
+set noswapfile
+
+" 自动保存(切换缓冲区时触发)
+set autowrite
+
+" 开启语法
+syntax enable
+syntax on
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""" 插件设置
+"
+" 说明 
+" Windows下, 先使用Powershell参考Readme, 安装vim-plug到 $HOME/vimfiles/autoload 下
+" 然后再启动vim安装插件
+"
+" Linux下, 可直接启动Vim，会自动安装
+"
+if g:is_linux == 1
+	if empty(glob('~/.vim/autoload/plug.vim'))
+		silent !curl -fLo '~/.vim/autoload/plug.vim' --create-dirs
+			\ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+		autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+	endif
+	call plug#begin('~/.vim/plugged')
+else
+	call plug#begin('~/vimfiles/plugged')
+endif
+
+
+""""""" 基本功能插件
+" 增加tab功能
+Plug 'ervandew/supertab'
+
+
+" 主题插件系列
+Plug 'sickill/vim-monokai'
+Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
+
+
+" 目录插件
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
+
+let g:NERDTreeWinSize=35
+let g:NERDTreeIgnore=['.pyc$']
+autocmd bufenter * 
+	\ if(winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | 
+		\ q | 
+	\ endif
+
+
+" vim-go插件
+Plug 'fatih/vim-go'
+
+let g:go_code_completion_enabled = 1
+let g:go_auto_type_info = 1
+let g:go_updatetime = 500
+let g:go_auto_sameids = 0       " => 影响速度
+let g:go_fmt_comand = "gofmt"
+let g:syntastic_go_checkers = ['golint', 'govet']
+let g:syntastic_mode_map = {'mode': 'active', 'passive_filetypes': ['go']}
+let g:go_list_type = "quickfix"
+
+
+" 快速设置window的大小
+Plug 'simeji/winresizer'
+
+let g:winresizer_start_key='<Leader>w'
+let g:winresizer_horiz_resize=2
+let g:winresizer_vert_resize=2
+
+
+" tagbar插件
+Plug 'preservim/tagbar'
+let g:tagbar_autopreview = 0
+
+
+call plug#end()
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""" 自定义命令设置
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" 读入文件时，跳转到上次读入的位置
+autocmd BufReadPost * 
+	\ if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g'\"" | endif
+
+" 使用*/#查找时, 只高亮不跳转
+nnoremap * :let @/=expand('<cword>')<CR>:set hlsearch<CR>
+nnoremap # :let @/=expand('<cword>')<CR>:set hlsearch<CR>
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""" 界面设置
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" 一直显示状态栏
+set laststatus=2
+
+" 高亮光标所在行
+set cursorline
+
+" 背景色设置为黑色
+set background=dark
+
+" 主题设置(需插件支持)
+" colorscheme monokai
+colorscheme gruvbox
+" colorscheme solarized
+
+" windows下单独设置的外观
+if g:is_windows == 1 && g:is_gui == 1
+	set guifont=Cascadia_Mono:h11:cANSI:qDRAFT
+	set guioptions-=T
+	"set guioptions+=m
+endif
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""  键盘映射
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap ; :
+nnoremap <F1> <Nop>
+nnoremap <F2> :NERDTreeToggle<CR>
+nnoremap <F3> :TagbarToggle<CR>
+
+" 窗口快捷键
+" 插入模式下, 先Ctrl-v，再输入Alt-<key>
+nnoremap h <C-w>h
+nnoremap j <C-w>j
+nnoremap k <C-w>k
+nnoremap l <C-w>l
