@@ -265,7 +265,10 @@ nnoremap # :let @/=expand('<cword>')<CR>:set hlsearch<CR>
 """"""" 界面设置
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 预览窗口大小
-set previewheight=25
+set previewheight=20
+
+" 设置terminal高度
+set termwinsize=20x0
 
 " 一直显示状态栏
 set laststatus=2
